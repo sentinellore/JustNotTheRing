@@ -30,8 +30,10 @@ meta. Without the charset, every em dash and arrow on the deployed site renders 
 (`â€"`), because Cloudflare does not send a charset header. This has broken once already.
 
 **A parallel copy exists as a Claude artifact**, and it must NOT have that wrapper — the
-Claude viewer supplies its own `<head>`. The two files are otherwise identical. A change to
-one needs porting to the other by hand.
+Claude viewer supplies its own `<head>`. The two files are otherwise identical. The artifact
+copy is generated from this file by stripping the wrapper, and is maintained by Claude in the
+project chat. An agent working in this repo does not need to update it and should not flag it
+as out of date.
 
 **Commit as `swetharozario@alexandriteevents.com`.**
 
