@@ -6,24 +6,23 @@ outreach kit.
 
 ## What it is
 
-One file. `index.html` contains all markup, styles and JavaScript. There is no build step,
-no package manager, no server code and no dependencies to install.
+One file. `public/index.html` contains all markup, styles and JavaScript. There is no build
+step, no package manager, no server code and no dependencies to install.
 
 ## Running it locally
 
-Open `index.html` in a browser. That's it.
+Open `public/index.html` in a browser. That's it.
 
 ## Deploying
 
-Any static host works. The site needs nothing but the ability to serve one HTML file.
+Deployed to Cloudflare as a Worker with static assets. `wrangler.jsonc` points at
+`public/`, there is no `main` entry and no build step — Cloudflare uploads the
+directory and serves it.
 
-**GitHub Pages** — push this repo, then Settings → Pages → Source: "Deploy from a branch",
-branch `main`, folder `/ (root)`. Live at `https://<user>.github.io/<repo>/` in a minute or two.
+Pushes to `main` redeploy automatically. To deploy by hand: `npx wrangler deploy`.
 
-**Netlify / Vercel / Cloudflare Pages** — connect the repo and deploy. Leave the build command
-empty and set the output directory to the repo root.
-
-A custom domain works on all four; none of them need configuration beyond a DNS record.
+The site is a single static file, so it will also run on any other static host
+(Netlify, Vercel, GitHub Pages) by serving `public/` as the web root.
 
 ## Two things to know
 
@@ -37,12 +36,14 @@ That feature calls `window.claude.use("sample")`, which exists only when the pag
 claude.ai. Hosted anywhere else, the page detects its absence and says so, and everything else
 on the page — the quiz, the diamond bench, the budget and timeline tools, the flight and hotel
 searches, the outreach email generator — works normally, since all of it runs locally in the
-browser. To get AI suggestions on your own domain you'd need a small backend endpoint that
-calls an LLM API with your own key, and to point that part of the page at it.
+browser. To get AI suggestions on your own domain, add a Worker function to this project — the
+site is already on Cloudflare Workers, so that means a `main` entry in `wrangler.jsonc` alongside
+the static assets. The function calls an LLM API with your own key, and the page calls the
+function instead of `window.claude`.
 
 ## Structure
 
-Everything lives in `index.html`:
+Everything lives in `public/index.html`:
 
 - **Styles** — CSS custom properties on `:root`, redefined for dark mode under both
   `prefers-color-scheme` and `[data-theme="dark"]`. Change the palette in one place.
