@@ -2250,7 +2250,9 @@ var SPEC_REC={
 };
 
 /* ---- Shareable plan links ----
-   We encode the computed axis scores, never the answers, and never the free text.
+   The payload lives in the URL fragment, which browsers never send to a server, so a plan
+   link reaches nobody but the person holding it. We encode the computed axis scores plus the
+   city, never the answers, and never the free text.
    composeResult() is a pure function of the tally, so a link reproduces the exact same
    recommendation while carrying nothing a person wrote about their partner. */
 var restoredTally=null;
@@ -2268,12 +2270,14 @@ function b64d(s){
 function planLink(t){
   try{
     var code=b64e(JSON.stringify({t:t, c:cityAnswer||undefined}));
-    return location.origin+location.pathname+"?plan="+code;
+    return location.origin+location.pathname+"#plan="+code;
   }catch(err){ return ""; }
 }
 function readPlanFromUrl(){
   try{
-    var code=new URLSearchParams(location.search).get("plan");
+    var h=location.hash||"";
+    if(h.indexOf("#plan=")!==0) return null;
+    var code=h.slice(6);
     if(!code) return null;
     var obj=JSON.parse(b64d(code));
     if(!obj || typeof obj.t!=="object" || obj.t===null) return null;
@@ -2376,7 +2380,7 @@ function composeResult(forced){
           '<input class="field" id="shareUrl" readonly value="'+esc(planLink(t))+'" aria-label="Link to this plan">'+
           '<button class="btn ghost" id="shareCopy" type="button">Copy link</button>'+
         '</div>'+
-        '<p class="tiny" style="margin-top:10px"><b>The link carries your scores, not your words.</b> Anything you typed in your own words stays on this device and never travels. Before you email it anywhere, check the inbox is yours alone.</p>'+
+        '<p class="tiny" style="margin-top:10px"><b>The link carries your scores and the city you named — never anything you wrote about your partner.</b> It sits after the # in the address, which browsers never send to a server, so it reaches nobody but you. Before you email it anywhere, check that the inbox is yours alone.</p>'+
       '</div>'+
       '<div class="quiz-foot">'+
         '<button class="btn" data-go="diamonds">Now learn the 4Cs</button>'+
@@ -2407,7 +2411,7 @@ function renderQ(){
     });
     $("restart").addEventListener("click",function(){
       qi=0; answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill(""); restoredTally=null;
-      if(location.search) history.replaceState({}, "", location.pathname+location.hash);
+      if((location.hash||"").indexOf("#plan=")===0) history.replaceState({}, "", location.pathname+"#quiz");
       $("quizStage").className="quiz-body";
       renderQ();
       window.scrollTo({top:0,behavior:"smooth"});
