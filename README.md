@@ -2,8 +2,8 @@
 
 An engagement planning site: a relationship quiz that produces a location, a proposal method
 and a ring specification, with a shareable plan link that reopens the result; an interactive
-4Cs grading bench; a trip planner; a venue outreach kit; "Who to hire", on the vendors worth
-booking, what they cost and what to ask them; and "What to say", on the words themselves.
+4Cs grading bench; a trip planner; a venue outreach kit; "Who to hire", on who to hire, what
+they cost and what to ask them; and "What to say", on the words themselves.
 
 ## What it is
 
