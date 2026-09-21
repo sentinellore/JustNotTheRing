@@ -9,9 +9,11 @@ JavaScript in one file, roughly 2,500 lines. There is no build step, no bundler,
 package.json and no dependencies. Cloudflare uploads `public/` and serves it.
 
 ```
+.gitignore
+CLAUDE.md             this file
+README.md
 wrangler.jsonc        name, compatibility_date, assets → ./public
 public/index.html     the whole site
-README.md
 ```
 
 ## Hard constraints
@@ -31,8 +33,7 @@ meta. Without the charset, every em dash and arrow on the deployed site renders 
 Claude viewer supplies its own `<head>`. The two files are otherwise identical. A change to
 one needs porting to the other by hand.
 
-**Commit as `swetharozario@alexandriteevents.com`.** Not the personal gmail address. The
-history was rewritten once to remove it.
+**Commit as `swetharozario@alexandriteevents.com`.**
 
 ## Deploying
 
