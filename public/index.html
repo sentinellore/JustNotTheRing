@@ -1,8 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A planning guide for the proposal: a relationship quiz that recommends a location, a method and a ring spec, plus interactive guides to the 4Cs, settings, budget and timing.">
 <title>Just Not The Ring</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
+/* ---- document reset (supplied by the host when embedded; explicit when self-hosted) ---- */
+:root{
+  color-scheme: light dark;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+img{max-width:100%}
 /* ============ TOKENS ============ */
 :root{
   --bg:#EEF0F3;
@@ -457,7 +470,8 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
   *{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
 </style>
-
+</head>
+<body>
 <header id="topbar">
   <div class="bar-inner">
     <button class="mark" data-go="home">Just <em>Not</em> The Ring</button>
@@ -2400,3 +2414,5 @@ renderQ();
 
 })();
 </script>
+</body>
+</html>
