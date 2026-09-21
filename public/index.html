@@ -498,9 +498,11 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       <button data-go="quiz">Quiz</button>
       <button data-go="locations">Locations</button>
       <button data-go="trip">Trip</button>
+      <button data-go="hire">Hire</button>
       <button data-go="diamonds">Diamonds</button>
       <button data-go="rings">Rings</button>
       <button data-go="how">How</button>
+      <button data-go="words">Words</button>
       <button data-go="when">When</button>
     </nav>
   </div>
@@ -545,7 +547,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       </aside>
     </div>
 
-    <h2 style="margin:clamp(44px,7vw,72px) 0 20px">Seven things to decide</h2>
+    <h2 style="margin:clamp(44px,7vw,72px) 0 20px">Nine things to decide</h2>
     <div class="index-grid">
       <button class="idx-card" data-go="quiz">
         <span class="eyebrow"><span class="n">01</span> — The quiz</span>
@@ -565,26 +567,38 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
         <p>Describe what you picture and get destinations that actually deliver it, whether your dates are right for the season, flight and hotel searches already filled in, and the email that gets a yes from the venue.</p>
         <span class="go">Build the trip →</span>
       </button>
+      <button class="idx-card" data-go="hire">
+        <span class="eyebrow"><span class="n">04</span> — Who to hire</span>
+        <h3>The people who help</h3>
+        <p>Photographers, picnic setups, flowers, musicians, drones. What each one costs, the questions that separate the good ones from the rest, and searches that find them near you.</p>
+        <span class="go">See who to hire →</span>
+      </button>
       <button class="idx-card" data-go="diamonds">
-        <span class="eyebrow"><span class="n">04</span> — Diamonds</span>
+        <span class="eyebrow"><span class="n">05</span> — Diamonds</span>
         <h3>Understand the 4Cs</h3>
         <p>An interactive grading bench. Click through every cut, color and clarity grade and watch a real stone change — with a verdict on each about where money is worth spending.</p>
         <span class="go">Open the bench →</span>
       </button>
       <button class="idx-card" data-go="rings">
-        <span class="eyebrow"><span class="n">05</span> — The ring</span>
+        <span class="eyebrow"><span class="n">06</span> — The ring</span>
         <h3>Setting, metal, size, budget</h3>
         <p>The stone gets the attention and the setting does the work. Match the ring to their actual hands, get the size without asking, and see what a number really buys.</p>
         <span class="go">Compare settings →</span>
       </button>
       <button class="idx-card" data-go="how">
-        <span class="eyebrow"><span class="n">06</span> — How</span>
+        <span class="eyebrow"><span class="n">07</span> — How</span>
         <h3>Eight ways to do it</h3>
         <p>Ordered from most private to most public. Find where your partner sits on that line, then the logistics for the hour before — and the two questions worth settling early.</p>
         <span class="go">Read the methods →</span>
       </button>
+      <button class="idx-card" data-go="words">
+        <span class="eyebrow"><span class="n">08</span> — What to say</span>
+        <h3>The actual words</h3>
+        <p>Three sentences, not a speech. The shape that works, the five ways it goes sideways, and the mistake nearly everyone makes — forgetting to actually ask.</p>
+        <span class="go">Read it before the day →</span>
+      </button>
       <button class="idx-card" data-go="when">
-        <span class="eyebrow"><span class="n">07</span> — When</span>
+        <span class="eyebrow"><span class="n">09</span> — When</span>
         <h3>Pick a date, work backwards</h3>
         <p>Most of what goes wrong is a lead time somebody didn't know about. Enter a target date and get the twelve milestones that have to happen, each with a real deadline.</p>
         <span class="go">Build the timeline →</span>
@@ -744,7 +758,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     <div class="view-foot">
       <button class="btn ghost" data-go="home">← Home</button>
       <div class="spacer"></div>
-      <button class="btn" data-go="diamonds">Next: Diamonds →</button>
+      <button class="btn" data-go="trip">Next: The trip →</button>
     </div>
   </div>
 </section>
@@ -811,6 +825,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
         <button class="modechip" type="button" data-kind="restaurant">Restaurant</button>
         <button class="modechip" type="button" data-kind="venue">Garden, park or museum</button>
         <button class="modechip" type="button" data-kind="photo">Photographer</button>
+        <button class="modechip" type="button" data-kind="picnic">Picnic or setup company</button>
         <button class="modechip" type="button" data-kind="charter">Boat, guide or private hire</button>
       </div>
 
@@ -853,6 +868,81 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     <div class="view-foot">
       <button class="btn ghost" data-go="locations">← Locations</button>
       <div class="spacer"></div>
+      <button class="btn" data-go="hire">Next: Who to hire →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= HIRE ======================= -->
+<section class="view" id="view-hire" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow"><span class="n">04</span> — Who to hire</span>
+      <h2>The people who make it look effortless</h2>
+      <p class="lede">We don't keep a directory. Listings go stale in every city at once, and a paid listing is an advert wearing a recommendation's clothes. What follows is what each of these people costs, what to ask them, and a search that finds them near you.</p>
+    </div>
+
+    <div class="loc-grid">
+      <article class="loc">
+        <h4>Proposal photographer</h4>
+        <p>Roughly $300–800 for thirty to sixty minutes. The one worth paying for, because it's the only thing you cannot go back and get.</p>
+        <p class="small"><b>Ask:</b> Have you shot at this spot before? Does it need a permit, and will you handle it? Where will you stand and which way should I face? What will you wear so you read as a tourist? How soon do I get two or three images I can send my family that night? What happens if we're late, or it rains?</p>
+        <div class="meta"><span class="chip on">Book this first</span><span class="chip gold">6+ weeks in season</span></div>
+      </article>
+      <article class="loc">
+        <h4>Picnic and setup company</h4>
+        <p>The "luxury picnic" business exists in most cities now — rugs, low tables, cushions, lanterns, flowers. Roughly $250–800 depending on scale and how far they travel.</p>
+        <p class="small"><b>Ask:</b> How long does setup take and when do you arrive? Do you need vehicle access to the spot? Who stays on site, and where will they wait? What's the rain policy and how late can I move it? Are you handling the park permit or am I? Who packs it down, and when?</p>
+        <div class="meta"><span class="chip">Needs vehicle access</span><span class="chip">Rain plan essential</span></div>
+      </article>
+      <article class="loc">
+        <h4>Flowers and installation</h4>
+        <p>An arch, a petal path, a wall of stems. Anywhere from $200 for something small to well over $1,500 installed. Beautiful in photographs, and the first thing wind ruins.</p>
+        <p class="small"><b>Ask:</b> How long before do you install, and can it stand unattended? Will it survive the wind at this spot? Do you come back for it, and is that in the price? What happens to it afterwards — can we take any of it home?</p>
+        <div class="meta"><span class="chip">Wind risk</span><span class="chip">Removal often extra</span></div>
+      </article>
+      <article class="loc">
+        <h4>A musician</h4>
+        <p>A solo guitarist, violinist or cellist, typically $200–600 for an hour. Extraordinary in the right setting and deeply awkward in the wrong one — a string player in an empty park announces that something is happening.</p>
+        <p class="small"><b>Ask:</b> Do you need power? Can you start on a signal rather than at a time? What's your rain plan? How far will you stand from us?</p>
+        <div class="meta"><span class="chip">Telegraphs the moment</span></div>
+      </article>
+      <article class="loc">
+        <h4>A drone operator</h4>
+        <p>Spectacular footage, and the category with actual legal exposure. In the US commercial drone work requires an FAA Part 107 certificate, US national parks ban drones outright, and many city and state parks do too.</p>
+        <p class="small"><b>Ask:</b> Can you send me your Part 107 certificate? Who is checking the airspace for this location and date? Is this park one that permits drones — in writing, not "it should be fine"?</p>
+        <div class="meta"><span class="chip gold">Check the rules first</span><span class="chip">Banned in US national parks</span></div>
+      </article>
+      <article class="loc">
+        <h4>A private chef or chef's table</h4>
+        <p>Dinner at home cooked by someone else, or a table in the kitchen at a restaurant. Prices vary enormously by city and menu, so get a quote rather than a guess.</p>
+        <p class="small"><b>Ask:</b> Will you be in the room at the moment, or out of sight? Can dinner pause on a signal? Do you bring everything, and what does my kitchen need to have?</p>
+        <div class="meta"><span class="chip">Very private</span><span class="chip">Quote, don't assume</span></div>
+      </article>
+    </div>
+
+    <div class="callout">
+      <span class="eyebrow">Four things that apply to all of them</span>
+      <p><b>Book the photographer first.</b> Everyone else can usually be found at two weeks' notice. Good proposal photographers cannot, and between Thanksgiving and Valentine's Day they are gone months ahead.</p>
+      <p><b>Ask who is handling the permit, and get the answer in writing.</b> Vendors will often say it's fine. "Fine" is not a permit, and it is you who gets moved on.</p>
+      <p><b>Pay deposits by credit card, not bank transfer.</b> A card gives you a route to a refund if someone vanishes. This is a category with a lot of one-person businesses and a few that are not businesses at all.</p>
+      <p><b>Prices here are US ballparks and move a great deal by city.</b> Treat them as orientation for whether a quote is sane, not as what you should pay.</p>
+    </div>
+
+    <div style="margin-top:44px">
+      <span class="eyebrow">Find them near you</span>
+      <h3 style="margin:12px 0 12px">The searches that surface the right people</h3>
+      <p class="small" style="max-width:62ch;margin-bottom:20px">Type your city and open a few. Then email two or three of each — the outreach kit in the Trip section writes the message, including the questions above.</p>
+      <div class="lens">
+        <input class="field" id="hireCity" type="text" placeholder="City or region" autocomplete="address-level2">
+        <button class="btn" id="hireBtn" type="button">Show me</button>
+      </div>
+      <div id="hireOut"></div>
+    </div>
+
+    <div class="view-foot">
+      <button class="btn ghost" data-go="trip">← The trip</button>
+      <div class="spacer"></div>
       <button class="btn" data-go="diamonds">Next: Diamonds →</button>
     </div>
   </div>
@@ -862,7 +952,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
 <section class="view" id="view-diamonds" hidden>
   <div class="wrap">
     <div class="view-head">
-      <span class="eyebrow"><span class="n">04</span> — Diamonds</span>
+      <span class="eyebrow"><span class="n">05</span> — Diamonds</span>
       <h2>The four Cs, ranked by how much they matter</h2>
       <p class="lede">Cut, Color, Clarity, Carat. They are not equally important and they don't cost the same. Move through each one — the stone on the left updates, and the panel tells you where the money is worth spending and where it is quietly wasted.</p>
     </div>
@@ -991,7 +1081,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     </div>
 
     <div class="view-foot">
-      <button class="btn ghost" data-go="locations">← Locations</button>
+      <button class="btn ghost" data-go="hire">← Who to hire</button>
       <div class="spacer"></div>
       <button class="btn" data-go="rings">Next: The ring →</button>
     </div>
@@ -1002,7 +1092,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
 <section class="view" id="view-rings" hidden>
   <div class="wrap">
     <div class="view-head">
-      <span class="eyebrow"><span class="n">05</span> — The ring</span>
+      <span class="eyebrow"><span class="n">06</span> — The ring</span>
       <h2>Setting, metal, size, budget</h2>
       <p class="lede">The stone gets all the attention and the setting does all the work. This is where you match the ring to their actual hands and actual week.</p>
     </div>
@@ -1174,7 +1264,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
 <section class="view" id="view-how" hidden>
   <div class="wrap">
     <div class="view-head">
-      <span class="eyebrow"><span class="n">06</span> — How</span>
+      <span class="eyebrow"><span class="n">07</span> — How</span>
       <h2>Eight ways to actually do it</h2>
       <p class="lede">The method matters more than the venue. These run from most private to most public — find where your partner sits on that line and don't drift past it to impress anyone else.</p>
     </div>
@@ -1245,6 +1335,93 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     <div class="view-foot">
       <button class="btn ghost" data-go="rings">← The ring</button>
       <div class="spacer"></div>
+      <button class="btn" data-go="words">Next: What to say →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= WORDS ======================= -->
+<section class="view" id="view-words" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow"><span class="n">08</span> — What to say</span>
+      <h2>You will not remember a speech</h2>
+      <p class="lede">Every other part of this is planning. This part is thirty seconds long, happens once, and is the only bit you cannot outsource. The good news is that the bar is far lower than you think, and almost everything that goes wrong here goes wrong the same way.</p>
+    </div>
+
+    <div class="grid g2">
+      <div class="card" style="padding:26px">
+        <span class="eyebrow">The shape that works</span>
+        <h3 style="margin:12px 0 14px">Three sentences, in this order</h3>
+        <ul class="moves">
+          <li data-n="1"><b>One specific thing about them.</b> Not "you're amazing" — the actual thing. The way they call their sister every time they drive home. What they did the week your dad was in hospital. Specific is what makes someone cry; general is what makes them wait politely for you to finish.</li>
+          <li data-n="2"><b>What you want.</b> Plainly, in your own words. "I want to do the rest of it with you" beats anything you could borrow from a film.</li>
+          <li data-n="3"><b>The question, out loud.</b> "Will you marry me?" Said, not implied.</li>
+        </ul>
+        <p class="small" style="margin-top:16px">That's it. Under thirty seconds. You are not performing — you are asking someone something, and they are extremely on your side.</p>
+      </div>
+
+      <div class="card" style="padding:26px">
+        <span class="eyebrow">The mistake nearly everyone makes</span>
+        <h3 style="margin:12px 0 12px">They never actually ask</h3>
+        <p class="small">It happens constantly. Someone delivers the whole thing, holds out the ring, and then trails off — and the other person is left standing there working out whether a question has occurred. Sometimes minutes pass. Sometimes they have to ask <em>"are you asking me?"</em>, which is not the memory anyone wanted.</p>
+        <p class="small" style="margin-top:12px">Say the words. Whatever else you forget, the last four are the ones that matter.</p>
+        <div class="verdict care" style="margin-top:8px">Say it out loud</div>
+      </div>
+    </div>
+
+    <h3 style="margin:40px 0 16px">The other five ways it goes sideways</h3>
+    <div class="how-list">
+      <article class="how"><span class="idx">01</span><div>
+        <h4>The toast</h4>
+        <p>Listing their achievements as though you're at the wedding already. It sounds like an introduction, not a proposal, and it puts them in the audience rather than in the moment with you.</p>
+      </div></article>
+      <article class="how"><span class="idx">02</span><div>
+        <h4>The apology</h4>
+        <p>"I know this isn't much, and I know I should have…" Nerves make people undersell. Nobody has ever wanted their proposal to open with a disclaimer.</p>
+      </div></article>
+      <article class="how"><span class="idx">03</span><div>
+        <h4>The essay</h4>
+        <p>Four minutes of material while they stand there holding their own face. Long does not read as sincere; it reads as rehearsed, and it gives them nothing to do. Anything you cut, you can say over dinner afterwards.</p>
+      </div></article>
+      <article class="how"><span class="idx">04</span><div>
+        <h4>The riddle</h4>
+        <p>An elaborate setup they have to decode. Scavenger hunts and clues are wonderful as the journey — but the arrival should be unmistakable. Never make someone guess whether this is the thing.</p>
+      </div></article>
+      <article class="how"><span class="idx">05</span><div>
+        <h4>The pressure</h4>
+        <p>"Everyone's here, so…" — said in a room of people, with a phone up. Even as a joke it converts a question into an obligation. If a sentence would land differently in private, don't use it in public.</p>
+      </div></article>
+    </div>
+
+    <div class="grid g2" style="margin-top:28px">
+      <div class="card" style="padding:26px">
+        <span class="eyebrow">If it goes wrong in your head</span>
+        <h3 style="margin:12px 0 12px">Have one sentence memorized, and only one</h3>
+        <p class="small">Memorize the last line. Nothing else. If you blank on everything in the middle, you can still land it — and people who blank and then simply say "I had a whole thing, but: will you marry me?" tend to get the better story out of it.</p>
+        <p class="small" style="margin-top:12px"><b>If you cry, keep going.</b> Nobody in the history of this has minded. It is not a performance with marks for composure.</p>
+        <p class="small" style="margin-top:12px"><b>Then stop talking.</b> The ten seconds after the question belong to them. Don't fill the silence, don't explain, don't add a footnote about the ring. Let them answer.</p>
+      </div>
+      <div class="card" style="padding:26px">
+        <span class="eyebrow">Practice, once</span>
+        <h3 style="margin:12px 0 12px">Out loud, in the car</h3>
+        <p class="small">In your head does not count. Sentences that are fine in your head fall apart in a mouth, and you want to find that out on a Tuesday rather than at the top of a hill. Say it once, alone, at normal speaking volume.</p>
+        <p class="small" style="margin-top:12px">Once is enough. Rehearse it twenty times and you'll deliver it like a reading.</p>
+        <h4 style="margin-top:18px">On the knee</h4>
+        <p class="small" style="margin-top:7px">Entirely optional, and nobody minds either way. If you're going to: decide beforehand which knee, and look at the ground first. Wet grass, gravel and sand are all worse than they look, and the deciding factor is usually what you're wearing.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="eyebrow">Three that worked, in different registers</span>
+      <p><b>Plain.</b> "I think about you when nothing's happening. Just doing the dishes, driving to work — you're the thing my head goes to. I want that for the rest of my life. Will you marry me?"</p>
+      <p><b>Specific.</b> "You drove four hours to sit in a hospital corridor with me and you never once made it about you. I knew then. I've known since. Will you marry me?"</p>
+      <p><b>Light.</b> "I had a speech. It was very good. I've forgotten all of it except the important part — will you marry me?"</p>
+    </div>
+
+    <div class="view-foot">
+      <button class="btn ghost" data-go="how">← How</button>
+      <div class="spacer"></div>
       <button class="btn" data-go="when">Next: When →</button>
     </div>
   </div>
@@ -1254,7 +1431,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
 <section class="view" id="view-when" hidden>
   <div class="wrap">
     <div class="view-head">
-      <span class="eyebrow"><span class="n">07</span> — When</span>
+      <span class="eyebrow"><span class="n">09</span> — When</span>
       <h2>Pick a date, work backwards</h2>
       <p class="lede">Most of what goes wrong is a lead time somebody didn't know about. Enter your target date and we'll lay out what has to happen and by when.</p>
     </div>
@@ -1284,7 +1461,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     </div>
 
     <div class="view-foot">
-      <button class="btn ghost" data-go="how">← How</button>
+      <button class="btn ghost" data-go="words">← What to say</button>
       <div class="spacer"></div>
       <button class="btn" data-go="quiz">Take the quiz →</button>
     </div>
@@ -1323,7 +1500,7 @@ function $(id){ return document.getElementById(id); }
 /* ============================================================
    ROUTING — one view at a time
    ============================================================ */
-var VIEWS=["home","quiz","locations","trip","diamonds","rings","how","when"];
+var VIEWS=["home","quiz","locations","trip","hire","diamonds","rings","how","words","when"];
 function showView(name, push){
   if(VIEWS.indexOf(name)<0) name="home";
   VIEWS.forEach(function(v){ $("view-"+v).hidden = (v!==name); });
@@ -2026,6 +2203,20 @@ function buildNote(){
 "6. Is there anything I should bring or avoid bringing?\n\n"+
 "Please keep it off any confirmation my partner might see — I'm the only one who should get the details."+sign};
 
+  t.picnic={
+    subject:"Proposal setup on "+when,
+    body:hi+
+"I am planning to propose to my partner on "+when+" at around "+time+", and I would like to book a setup with "+place+".\n\n"+
+"A few things I need to get straight before I book:\n\n"+
+"1. What time would you arrive, and how long does setup take? I need to know exactly when the spot is ready.\n"+
+"2. Do you need vehicle access to the location, and can you tell me whether this particular spot allows it?\n"+
+"3. Are you handling the park or venue permit, or is that mine to arrange? I would rather ask than assume.\n"+
+"4. Who stays on site while we are there, and where will they wait? I want it to feel like we are alone.\n"+
+"5. What is your weather policy, and how late can I move the date?\n"+
+"6. Who packs everything down, and how long after are you gone?\n\n"+
+"I am also booking a photographer, so if you have worked with anyone locally I would be glad of a name.\n\n"+
+"Please keep it off anything my partner might see — I am the only one who should get the details."+sign};
+
   return t[NOTE_KIND]||t.hotel;
 }
 function renderNote(){
@@ -2066,6 +2257,34 @@ $("noteCopy").addEventListener("click",function(){
   $("noteDate").value=out.toISOString().slice(0,10);
   renderNote();
 })();
+
+/* ============================================================
+   WHO TO HIRE — searches only, never a directory
+   ============================================================ */
+var HIRE_TERMS=[
+  {t:"proposal photographer", l:"Proposal photographers"},
+  {t:"luxury picnic company", l:"Picnic and setup"},
+  {t:"event florist", l:"Florists"},
+  {t:"solo violinist for hire", l:"Musicians"},
+  {t:"drone photography service", l:"Drone operators"},
+  {t:"private chef", l:"Private chefs"}
+];
+function renderHire(city){
+  if(!city){ $("hireOut").innerHTML=""; return; }
+  var links=HIRE_TERMS.map(function(x){
+    return '<a class="lenslink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+
+      enc(x.t+" near "+city)+'">'+PIN+esc(x.l)+'</a>';
+  }).join("");
+  $("hireOut").innerHTML=
+    '<div class="card" style="padding:22px;margin-top:20px">'+
+      '<span class="eyebrow">Near '+esc(city)+'</span>'+
+      '<p class="small" style="margin-top:11px">Email two or three of each rather than one. In this category the good ones are booked and the available ones are sometimes available for a reason.</p>'+
+      '<div class="lenslinks">'+links+'</div>'+
+      '<p class="tiny" style="margin-top:15px">Opens Google Maps in a new tab. We take no fee from anyone listed there, because we are not listing anyone — these are plain searches.</p>'+
+    '</div>';
+}
+$("hireBtn").addEventListener("click",function(){ renderHire($("hireCity").value.trim()); });
+$("hireCity").addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); $("hireBtn").click(); } });
 
 /* ============================================================
    TIMELINE
