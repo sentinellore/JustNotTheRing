@@ -7,6 +7,6 @@
     "binding": "ASSETS"
   },
   "vars": {
-    "MAIL_FROM": "Just Not The Ring <hello@justnotthering.com>"
+    "MAIL_FROM": "Just Not The Ring <onboarding@resend.dev>"
   }
 }
