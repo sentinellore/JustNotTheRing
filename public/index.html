@@ -2122,18 +2122,26 @@ function tripBrief(){
 }
 /* Every link below opens a real search on the site named. Nothing is fetched or
    priced here — the page has no network access and will never show a made-up fare. */
+/* The date fields open on a sample window, so someone who changes the outbound
+   date and not the return can leave a return that falls BEFORE it. Booking and
+   Airbnb accept that silently and return nothing useful, so drop it instead of
+   sending a range that cannot exist. ISO dates compare correctly as strings. */
+function validBack(b){
+  return (b.back && b.out && b.back > b.out) ? b.back : "";
+}
 function bookingLinks(dest, b){
-  var out=[], d=dest||b.where||b.want;
+  /* No b.want fallback: a wish sentence is not a destination. See renderTripLinks. */
+  var out=[], d=dest||b.where, back=validBack(b);
   if(!d) return out;
   var fl = b.from
-    ? "https://www.google.com/travel/flights?q="+enc("Flights from "+b.from+" to "+d+(b.out?" on "+b.out:"")+(b.back?" through "+b.back:""))
+    ? "https://www.google.com/travel/flights?q="+enc("Flights from "+b.from+" to "+d+(b.out?" on "+b.out:"")+(back?" through "+back:""))
     : "https://www.google.com/travel/flights?q="+enc("Flights to "+d+(b.out?" on "+b.out:""));
   out.push({group:"Flights", links:[ln(fl,"Google Flights")]});
   var stay=[];
   stay.push(ln("https://www.booking.com/searchresults.html?ss="+enc(d)+
-    (b.out?"&checkin="+b.out:"")+(b.back?"&checkout="+b.back:"")+"&group_adults=2&no_rooms=1&group_children=0","Booking.com"));
+    (b.out?"&checkin="+b.out:"")+(back?"&checkout="+back:"")+"&group_adults=2&no_rooms=1&group_children=0","Booking.com"));
   stay.push(ln("https://www.airbnb.com/s/"+enc(d)+"/homes?adults=2"+
-    (b.out?"&checkin="+b.out:"")+(b.back?"&checkout="+b.back:""),"Airbnb"));
+    (b.out?"&checkin="+b.out:"")+(back?"&checkout="+back:""),"Airbnb"));
   stay.push(ln("https://www.google.com/travel/search?q="+enc("hotels in "+d),"Google Hotels"));
   out.push({group:"Stays", links:stay});
   return out;
@@ -2152,8 +2160,17 @@ function timingLinks(dest, b){
 }
 function renderTripLinks(){
   var b=tripBrief();
-  var dest=b.where||b.want;
-  if(!dest){ $("tripLinks").innerHTML=""; return; }
+  /* Only a real destination builds a search. Falling back to the wish sentence
+     produced links like "Flights to see the northern lights on 14 June" — a
+     useless search, and it quietly sent that sentence to Google, Booking and
+     Airbnb while the privacy page said these links carry "your city". */
+  var dest=b.where;
+  if(!dest){
+    $("tripLinks").innerHTML = b.want
+      ? '<p class="tiny">Name a destination above and these become live searches with your dates already in them. Until then there is nothing to search for — “'+esc(b.want)+'” is a wish, not a place.</p>'
+      : "";
+    return;
+  }
   var groups=bookingLinks(dest,b);
   groups.push({group:"Timing", links:timingLinks(dest,b)});
   $("tripLinks").innerHTML=
@@ -2161,6 +2178,9 @@ function renderTripLinks(){
       return '<div class="linkrow"><span class="lr-label">'+esc(g.group)+'</span>'+
         '<div class="lr-links">'+g.links.join("")+'</div></div>';
     }).join("")+'</div>'+
+    (b.back && !validBack(b)
+      ? '<p class="tiny" style="margin-top:11px;color:var(--warn)">Your return date is before your outbound one, so it has been left out of these searches. Fix the dates above and it comes back.</p>'
+      : '')+
     '<p class="tiny" style="margin-top:11px">Each opens a live search with your dates already in it. This page has no connection to those sites and never shows a price of its own — anything you see on cost comes from them, not from here.</p>';
 }
 
