@@ -301,6 +301,12 @@ h1 .it{font-style:italic;color:var(--accent)}
 .share{margin-top:26px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);padding:20px 22px}
 .share-row{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:13px}
 .share-row input{font-family:var(--mono);font-size:.84rem}
+.mailrow{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.mailrow input[type=email]{font-family:var(--body);font-size:.97rem}
+.optin{display:flex;gap:10px;align-items:flex-start;margin-top:13px;font-size:.92rem;line-height:1.5;color:var(--ink-2);cursor:pointer}
+.optin input{margin-top:3px;width:17px;height:17px;flex:none;accent-color:var(--accent)}
+#planMsg.ok{color:var(--good)}
+#planMsg.bad{color:var(--crit)}
 @media (max-width:640px){.share-row{grid-template-columns:1fr}}
 .watch{border-left:3px solid var(--warn);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
 .note-good{border-left:3px solid var(--good);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
@@ -947,7 +953,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     <div class="loc-grid">
       <article class="loc">
         <h4>Proposal photographer</h4>
-        <p>Most US sessions run $400–1,500, and nearly half of couples who hire one budget over $1,000. Published rates step up with session length — commonly around $425 for half an hour and $525 for an hour — and specialists in expensive cities go well above the range. The one worth paying for, because it is the only thing you cannot go back and get.</p>
+        <p>Most US sessions run $400–1,500, and nearly half of couples who hire one budget over $1,000. Price does not track session length the way you would expect: a sought-after specialist in an expensive city can charge more for fifteen minutes than a national booking service charges for a full hour. Judge the photographer, not the clock. This is the one worth paying for, because it is the only thing you cannot go back and get.</p>
         <p class="small"><b>Ask:</b> Have you shot at this spot before? Does it need a permit, and will you handle it? Where will you stand and which way should I face? What will you wear so you read as a tourist? How soon do I get two or three images I can send my family that night? What happens if we're late, or it rains?</p>
         <div class="meta"><span class="chip on">Book this first</span><span class="chip gold">6+ weeks in season</span></div>
       </article>
@@ -2586,6 +2592,12 @@ function planLink(t){
     return location.origin+location.pathname+"#plan="+code;
   }catch(err){ return ""; }
 }
+function currentPlanCode(){
+  var box=$("shareUrl");
+  var v=box?box.value:"";
+  var i=v.indexOf("#plan=");
+  return i<0 ? "" : v.slice(i+6);
+}
 function readPlanFromUrl(){
   try{
     var h=location.hash||"";
@@ -2694,6 +2706,15 @@ function composeResult(forced){
           '<button class="btn ghost" id="shareCopy" type="button">Copy link</button>'+
         '</div>'+
         '<p class="tiny" style="margin-top:10px"><b>The link carries your scores and the city you named — never anything you wrote about your partner.</b> It sits after the # in the address, which browsers never send to a server, so it reaches nobody but you. Before you email it anywhere, check that the inbox is yours alone.</p>'+
+        '<div class="mailrow">'+
+          '<label class="eyebrow" for="planEmail">Or have it emailed to you</label>'+
+          '<div class="share-row" style="margin-top:11px">'+
+            '<input class="field" id="planEmail" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">'+
+            '<button class="btn" id="planSend" type="button">Send it</button>'+
+          '</div>'+
+          '<label class="optin"><input type="checkbox" id="planOptIn"><span>Also hear from us about proposal planning. Leave it unticked and we keep no record of your address at all.</span></label>'+
+          '<p class="tiny" id="planMsg">One email, carrying the same link. <b>Check the inbox is yours alone</b> — a plan sitting in a shared inbox is how a surprise stops being one.</p>'+
+        '</div>'+
       '</div>'+
       '<div class="quiz-foot">'+
         '<button class="btn" data-go="diamonds">Now learn the 4Cs</button>'+
@@ -2721,6 +2742,39 @@ function renderQ(){
         }
       }catch(err){}
       box.select(); done(false);
+    });
+    var sendBtn=$("planSend");
+    if(sendBtn) sendBtn.addEventListener("click",function(){
+      var box=$("planEmail"), msg=$("planMsg"), note=$("planOptIn");
+      var addr=(box.value||"").trim();
+      msg.className="tiny";
+      if(addr.indexOf("@")<1 || addr.length>254){
+        msg.className="tiny bad"; msg.textContent="That does not look like an email address.";
+        box.focus(); return;
+      }
+      sendBtn.disabled=true; sendBtn.textContent="Sending…";
+      msg.className="tiny"; msg.textContent="Sending…";
+      fetch("/api/plan-email",{
+        method:"POST",
+        headers:{"content-type":"application/json"},
+        body:JSON.stringify({ email:addr, plan:currentPlanCode(), optIn: !!(note && note.checked) })
+      }).then(function(r){
+        if(r.ok){
+          msg.className="tiny ok";
+          msg.textContent="Sent. If it is not there in a minute, check the spam folder — and delete it if that inbox is shared.";
+          box.value="";
+        } else if(r.status===503){
+          msg.className="tiny bad"; msg.textContent="Email is not switched on yet. Copy the link above instead.";
+        } else if(r.status===404 || r.status===405){
+          msg.className="tiny bad"; msg.textContent="Email only works on justnotthering.com. Copy the link above instead.";
+        } else {
+          msg.className="tiny bad"; msg.textContent="That did not send. Try again in a moment, or copy the link above.";
+        }
+      }).catch(function(){
+        msg.className="tiny bad"; msg.textContent="Could not reach the server. Copy the link above instead.";
+      }).then(function(){
+        sendBtn.disabled=false; sendBtn.textContent="Send it";
+      });
     });
     $("restart").addEventListener("click",function(){
       qi=0; answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill(""); restoredTally=null;
