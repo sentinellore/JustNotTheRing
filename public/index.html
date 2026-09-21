@@ -142,6 +142,31 @@ b,strong{font-weight:600;color:var(--ink)}
 .bar-nav button:hover{color:var(--ink);background:var(--surface-3)}
 .bar-nav button[aria-current="page"]{color:var(--accent);background:var(--accent-soft);font-weight:500}
 
+.menu-btn{
+  display:none;align-items:center;gap:9px;margin-left:auto;font:inherit;font-size:.9rem;font-weight:600;
+  color:var(--ink);background:var(--surface);border:1px solid var(--line-2);border-radius:999px;
+  padding:9px 16px;cursor:pointer;min-height:44px;
+}
+.menu-btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.nav-panel{
+  display:none;border-top:1px solid var(--line);background:var(--bg);
+  padding:8px 14px 16px;max-width:1060px;margin-inline:auto;
+}
+.nav-panel button{
+  display:flex;align-items:center;gap:14px;width:100%;min-height:50px;text-align:left;
+  font:inherit;font-size:1.02rem;font-weight:500;color:var(--ink);background:none;border:0;
+  border-bottom:1px solid var(--line);padding:6px 4px;cursor:pointer;
+}
+.nav-panel button:last-child{border-bottom:0}
+.nav-panel button:hover{color:var(--accent-ink)}
+.nav-panel button[aria-current="page"]{color:var(--accent)}
+.nav-panel .np-n{font-family:var(--mono);font-size:.76rem;color:var(--gold);width:24px;flex:none}
+@media (max-width:900px){
+  .bar-nav{display:none}
+  .menu-btn{display:inline-flex}
+  .nav-panel{display:block}
+}
+
 /* ============ VIEWS ============ */
 .view{padding-block:clamp(38px,6vw,68px) clamp(46px,7vw,80px);animation:fade .26s ease-out}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -505,7 +530,23 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       <button data-go="words">Words</button>
       <button data-go="when">When</button>
     </nav>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="navPanel">
+      <svg id="menuOpen" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+      <svg id="menuClose" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" hidden><path d="M5 5l14 14M19 5L5 19"></path></svg>
+      <span>Menu</span>
+    </button>
   </div>
+  <nav class="nav-panel" id="navPanel" aria-label="All sections" hidden>
+    <button data-go="quiz"><span class="np-n">01</span>The quiz</button>
+    <button data-go="locations"><span class="np-n">02</span>Locations</button>
+    <button data-go="trip"><span class="np-n">03</span>The trip</button>
+    <button data-go="hire"><span class="np-n">04</span>Who to hire</button>
+    <button data-go="diamonds"><span class="np-n">05</span>Diamonds</button>
+    <button data-go="rings"><span class="np-n">06</span>The ring</button>
+    <button data-go="how"><span class="np-n">07</span>How</button>
+    <button data-go="words"><span class="np-n">08</span>What to say</button>
+    <button data-go="when"><span class="np-n">09</span>When</button>
+  </nav>
 </header>
 
 <main>
@@ -1504,7 +1545,7 @@ var VIEWS=["home","quiz","locations","trip","hire","diamonds","rings","how","wor
 function showView(name, push){
   if(VIEWS.indexOf(name)<0) name="home";
   VIEWS.forEach(function(v){ $("view-"+v).hidden = (v!==name); });
-  [].slice.call(document.querySelectorAll(".bar-nav button")).forEach(function(b){
+  [].slice.call(document.querySelectorAll(".bar-nav button, .nav-panel button")).forEach(function(b){
     if(b.getAttribute("data-go")===name) b.setAttribute("aria-current","page");
     else b.removeAttribute("aria-current");
   });
@@ -1515,8 +1556,35 @@ document.addEventListener("click",function(e){
   var t=e.target.closest("[data-go]");
   if(!t) return;
   e.preventDefault();
+  closeMenu();
   showView(t.getAttribute("data-go"));
 });
+
+/* --- the small-screen menu --- */
+function menuEls(){ return {b:$("menuBtn"), p:$("navPanel"), o:$("menuOpen"), c:$("menuClose")}; }
+function setMenu(open){
+  var m=menuEls();
+  if(!m.b||!m.p) return;
+  m.p.hidden=!open;
+  m.b.setAttribute("aria-expanded", open?"true":"false");
+  if(m.o) m.o.hidden=open;
+  if(m.c) m.c.hidden=!open;
+  m.b.querySelector("span").textContent = open?"Close":"Menu";
+}
+function closeMenu(){ var m=menuEls(); if(m.p && !m.p.hidden) setMenu(false); }
+(function(){
+  var m=menuEls();
+  if(!m.b) return;
+  m.b.addEventListener("click",function(e){ e.stopPropagation(); setMenu(m.p.hidden); });
+  document.addEventListener("click",function(e){
+    if(m.p.hidden) return;
+    if(m.p.contains(e.target) || m.b.contains(e.target)) return;
+    setMenu(false);
+  });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape" && !m.p.hidden){ setMenu(false); m.b.focus(); }
+  });
+})();
 function hashView(){ return (location.hash||"#home").slice(1); }
 function isPlanHash(){ return hashView().indexOf("plan=")===0; }
 window.addEventListener("popstate",function(){ if(!isPlanHash()) showView(hashView(), false); });
