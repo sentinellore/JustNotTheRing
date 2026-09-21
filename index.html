@@ -1,0 +1,2402 @@
+<title>Just Not The Ring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#EEF0F3;
+  --surface:#FFFFFF;
+  --surface-2:#F7F8FA;
+  --surface-3:#E4E7EC;
+  --ink:#10151B;
+  --ink-2:#39424E;
+  --ink-3:#5C6672;
+  --line:#D6DAE0;
+  --line-2:#BBC2CC;
+  --accent:#2F5480;
+  --accent-ink:#1F3A57;
+  --accent-deep:#23415F;
+  --accent-soft:#E4EBF4;
+  --gold:#7E6116;
+  --gold-soft:#F4EEDC;
+  --good:#2F6B47;
+  --warn:#7D5210;
+  --crit:#8A2F2A;
+  --shadow:0 1px 2px rgba(16,21,27,.06), 0 10px 26px -14px rgba(16,21,27,.20);
+  --shadow-lift:0 2px 5px rgba(16,21,27,.07), 0 20px 44px -20px rgba(16,21,27,.30);
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:"IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E141B;
+    --surface:#161E27;
+    --surface-2:#1C2631;
+    --surface-3:#26323F;
+    --ink:#EEF3F8;
+    --ink-2:#BCC7D4;
+    --ink-3:#93A0AE;
+    --line:#2C3846;
+    --line-2:#3C4A5B;
+    --accent:#8FB3DF;
+    --accent-ink:#C3D6EE;
+    --accent-deep:#A6C4E8;
+    --accent-soft:#1C2B3B;
+    --gold:#DCBE68;
+    --gold-soft:#2C2617;
+    --good:#7CC69C;
+    --warn:#DCAE5F;
+    --crit:#E68880;
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 12px 30px -16px rgba(0,0,0,.75);
+    --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 22px 50px -22px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E141B;
+  --surface:#161E27;
+  --surface-2:#1C2631;
+  --surface-3:#26323F;
+  --ink:#EEF3F8;
+  --ink-2:#BCC7D4;
+  --ink-3:#93A0AE;
+  --line:#2C3846;
+  --line-2:#3C4A5B;
+  --accent:#8FB3DF;
+  --accent-ink:#C3D6EE;
+  --accent-deep:#A6C4E8;
+  --accent-soft:#1C2B3B;
+  --gold:#DCBE68;
+  --gold-soft:#2C2617;
+  --good:#7CC69C;
+  --warn:#DCAE5F;
+  --crit:#E68880;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 12px 30px -16px rgba(0,0,0,.75);
+  --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 22px 50px -22px rgba(0,0,0,.85);
+}
+
+/* ============ BASE ============ */
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--body);font-size:17px;line-height:1.65;margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px;margin-inline:auto;padding-inline:22px}
+
+h1,h2,h3,h4{margin:0;text-wrap:balance;font-family:var(--display);font-weight:500;color:var(--ink)}
+h1{font-size:clamp(2.3rem,5.6vw,3.7rem);line-height:1.08;letter-spacing:-.012em}
+h2{font-size:clamp(1.8rem,3.8vw,2.5rem);line-height:1.14;letter-spacing:-.008em}
+h3{font-size:clamp(1.2rem,2.2vw,1.42rem);line-height:1.28}
+h4{font-family:var(--body);font-size:1.02rem;font-weight:600;line-height:1.4;letter-spacing:0}
+p{margin:0}
+a{color:var(--accent);text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+b,strong{font-weight:600;color:var(--ink)}
+
+.eyebrow{
+  font-family:var(--mono);font-size:.74rem;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--ink-3);font-weight:500;
+}
+.eyebrow .n{color:var(--gold)}
+.lede{font-size:1.16rem;color:var(--ink-2);line-height:1.62}
+.small{font-size:.97rem;color:var(--ink-2);line-height:1.62}
+.tiny{font-family:var(--mono);font-size:.75rem;color:var(--ink-3);letter-spacing:.02em;line-height:1.5}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ============ TOP BAR ============ */
+#topbar{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+  background:color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+}
+.bar-inner{max-width:1060px;margin-inline:auto;padding:11px 22px;display:flex;align-items:center;gap:20px}
+.mark{
+  font-family:var(--display);font-size:1.12rem;font-weight:500;letter-spacing:-.005em;
+  white-space:nowrap;text-decoration:none;color:var(--ink);background:none;border:0;
+  cursor:pointer;padding:4px 0;flex:none;
+}
+.mark em{font-style:italic;color:var(--accent)}
+.bar-nav{display:flex;gap:2px;margin-left:auto;min-width:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.bar-nav::-webkit-scrollbar{display:none}
+.bar-nav button{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-2);background:none;border:0;cursor:pointer;padding:8px 11px;border-radius:4px;
+  white-space:nowrap;
+}
+.bar-nav button:hover{color:var(--ink);background:var(--surface-3)}
+.bar-nav button[aria-current="page"]{color:var(--accent);background:var(--accent-soft);font-weight:500}
+
+/* ============ VIEWS ============ */
+.view{padding-block:clamp(38px,6vw,68px) clamp(46px,7vw,80px);animation:fade .26s ease-out}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.view-head{max-width:64ch;margin-bottom:34px}
+.view-head h2{margin-top:12px}
+.view-head .lede{margin-top:16px}
+.view-foot{
+  margin-top:clamp(40px,6vw,64px);padding-top:26px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;
+}
+.view-foot .spacer{flex:1}
+
+/* ============ BUTTONS ============ */
+.btn{
+  font-family:var(--body);font-size:.95rem;font-weight:600;
+  padding:12px 22px;border-radius:4px;border:1px solid var(--accent);
+  background:var(--accent);color:#fff;cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:9px;transition:background .15s,border-color .15s;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn:not(.ghost){color:#0E141B}}
+:root[data-theme="dark"] .btn:not(.ghost){color:#0E141B}
+.btn:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn.ghost:hover{background:var(--surface);border-color:var(--ink-3)}
+.btn[disabled]{opacity:.42;cursor:not-allowed}
+.linkbtn{background:none;border:0;font:inherit;font-size:.95rem;color:var(--ink-3);cursor:pointer;padding:6px 2px}
+.linkbtn:hover{color:var(--ink)}
+.field{
+  font:inherit;font-size:1rem;padding:12px 14px;border:1px solid var(--line-2);
+  border-radius:4px;background:var(--surface);color:var(--ink);width:100%;
+}
+.field::placeholder{color:var(--ink-3)}
+
+/* ============ HOME ============ */
+.hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(30px,5vw,60px);align-items:end}
+.hero-kicker{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.hero-kicker .rule{height:1px;flex:1;background:var(--gold);opacity:.5;max-width:110px}
+h1 .it{font-style:italic;color:var(--accent)}
+.hero-sub{margin-top:22px;max-width:48ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:11px;margin-top:28px}
+.spectrum{
+  height:9px;border-radius:99px;margin-bottom:16px;border:1px solid var(--line-2);
+  background:linear-gradient(90deg,#F6FBFF 0%,#F9FCFD 18%,#FCFCF4 42%,#FBF5DC 62%,#F4E7B2 82%,#EDDA8C 100%);
+}
+.stat-stack{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.stat{background:var(--surface);padding:14px 16px}
+.stat b{font-family:var(--mono);font-size:1.34rem;font-weight:500;display:block;letter-spacing:-.02em;color:var(--ink)}
+.stat span{font-size:.88rem;color:var(--ink-2);line-height:1.5;display:block;margin-top:3px}
+
+.index-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(266px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.idx-card{
+  background:var(--surface);padding:24px 24px 22px;text-align:left;border:0;font:inherit;
+  color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:9px;
+  transition:background .15s;min-height:100%;
+}
+.idx-card:hover{background:var(--accent-soft)}
+.idx-card h3{font-size:1.3rem}
+.idx-card p{font-size:.95rem;color:var(--ink-2);line-height:1.6}
+.idx-card .go{
+  margin-top:auto;padding-top:12px;font-family:var(--mono);font-size:.74rem;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
+}
+.starter{margin-top:clamp(40px,6vw,60px);background:var(--surface);border:1px solid var(--line-2);border-radius:6px;box-shadow:var(--shadow);padding:clamp(24px,4vw,34px)}
+
+/* ============ QUIZ ============ */
+#quizpanel{background:var(--surface);border:1px solid var(--line-2);border-radius:6px;box-shadow:var(--shadow-lift);overflow:hidden}
+.quiz-top{display:flex;align-items:center;gap:16px;padding:15px 24px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.progress{flex:1;height:4px;background:var(--surface-3);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);width:11%;transition:width .35s cubic-bezier(.2,.7,.3,1)}
+.quiz-body{padding:clamp(26px,4vw,40px)}
+.q-prompt{font-family:var(--display);font-size:clamp(1.5rem,3.2vw,2.05rem);line-height:1.2;letter-spacing:-.006em;color:var(--ink)}
+.q-note{margin-top:11px;font-size:.97rem;color:var(--ink-3);line-height:1.55}
+.opts{display:grid;gap:10px;margin-top:26px}
+.opt{
+  display:flex;gap:15px;align-items:flex-start;text-align:left;width:100%;
+  background:var(--surface);border:1px solid var(--line-2);border-radius:5px;
+  padding:15px 17px;cursor:pointer;font:inherit;font-size:1rem;color:var(--ink);
+  transition:border-color .13s, background .13s;line-height:1.5;
+}
+.opt:hover{border-color:var(--accent);background:var(--accent-soft)}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.opt .key{
+  font-family:var(--mono);font-size:.78rem;color:var(--ink-3);
+  border:1px solid var(--line-2);border-radius:4px;width:24px;height:24px;
+  display:grid;place-items:center;flex:none;line-height:1;margin-top:1px;
+}
+.opt[aria-pressed="true"] .key{border-color:var(--accent);color:var(--accent-ink);font-weight:500}
+.quiz-foot{display:flex;align-items:center;gap:14px;margin-top:28px}
+.quiz-foot .spacer{flex:1}
+.opt-other{border-style:dashed;color:var(--ink-2)}
+.opt-other[aria-pressed="true"]{border-style:solid;color:var(--ink)}
+.own-wrap{margin-top:16px;padding:18px;border:1px solid var(--line);border-radius:5px;background:var(--surface-2)}
+.own-wrap textarea{resize:vertical;min-height:76px;line-height:1.55;font-family:var(--body)}
+.own-echo{margin-top:24px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:20px 24px;background:var(--surface-2)}
+.own-echo blockquote{margin:14px 0 0;font-family:var(--display);font-size:1.1rem;line-height:1.5;color:var(--ink)}
+.own-echo blockquote .oq{display:block;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+
+.result-head{padding:clamp(26px,4vw,36px);background:linear-gradient(180deg,var(--accent-soft),transparent);border-bottom:1px solid var(--line)}
+.rec-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-block:1px solid var(--line)}
+.rec{background:var(--surface);padding:22px 24px}
+.rec .eyebrow{display:block;margin-bottom:10px}
+.rec h3{font-size:1.24rem;line-height:1.26}
+.rec p{margin-top:10px;font-size:.95rem;color:var(--ink-2);line-height:1.58}
+.spec-line{
+  font-family:var(--mono);font-size:.88rem;line-height:1.8;background:var(--surface-2);
+  border:1px solid var(--line-2);border-radius:5px;padding:15px 17px;margin-top:14px;
+  color:var(--ink);overflow-x:auto;
+}
+.spec-line .tag{color:var(--gold);font-weight:500}
+.moves{display:grid;gap:12px;margin:8px 0 0;padding:0;list-style:none}
+.moves li{display:flex;gap:13px;font-size:.98rem;color:var(--ink-2);line-height:1.58}
+.moves li::before{
+  content:attr(data-n);font-family:var(--mono);font-size:.76rem;color:var(--accent-ink);
+  background:var(--accent-soft);border-radius:4px;width:23px;height:23px;flex:none;
+  display:grid;place-items:center;margin-top:3px;font-weight:500;
+}
+.watch{border-left:3px solid var(--warn);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
+.note-good{border-left:3px solid var(--good);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
+
+/* ============ SHARED BLOCKS ============ */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;min-width:0}
+.grid{display:grid;gap:15px}
+.grid>*{min-width:0}
+.tablewrap{max-width:100%}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+
+.chip{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;
+  border:1px solid var(--line-2);color:var(--ink-3);border-radius:99px;padding:4px 10px;
+}
+.chip.on{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.chip.gold{border-color:var(--gold);color:var(--gold);background:var(--gold-soft)}
+.meta{display:flex;flex-wrap:wrap;gap:7px}
+
+.callout{
+  border:1px solid var(--line);border-left:3px solid var(--gold);background:var(--surface);
+  border-radius:0 6px 6px 0;padding:20px 24px;margin-top:24px;
+}
+.callout .eyebrow{color:var(--gold);display:block;margin-bottom:9px}
+.callout p{font-size:.99rem;color:var(--ink-2);line-height:1.64}
+.callout p + p{margin-top:11px}
+
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:580px;font-size:.97rem}
+th,td{text-align:left;padding:14px 17px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55}
+thead th{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:500;background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;color:var(--ink)}
+td{color:var(--ink-2)}
+.mohs{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+
+/* ============ LOCATIONS ============ */
+.loc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(262px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.loc{background:var(--surface);padding:24px;display:flex;flex-direction:column;gap:10px}
+.loc h4{font-family:var(--display);font-weight:500;font-size:1.26rem;line-height:1.24}
+.loc p{font-size:.95rem;color:var(--ink-2);line-height:1.6}
+.loc .meta{margin-top:auto;padding-top:12px}
+
+.lens{display:grid;grid-template-columns:1fr auto;gap:11px;max-width:540px}
+.lensmodes{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.modechip{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;background:var(--surface);
+  border:1px solid var(--line-2);color:var(--ink-2);border-radius:99px;padding:7px 14px;cursor:pointer;
+  transition:border-color .13s,background .13s,color .13s;
+}
+.modechip:hover{border-color:var(--accent);color:var(--ink)}
+.modechip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink);font-weight:500}
+.lenslinks{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.lenslink{
+  font-size:.94rem;text-decoration:none;color:var(--ink);background:var(--surface);
+  border:1px solid var(--line-2);border-radius:99px;padding:8px 15px;
+  display:inline-flex;align-items:center;gap:8px;transition:border-color .13s,background .13s;
+}
+.lenslink:hover{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+
+/* ============ TRIP ============ */
+.brief-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.bf{display:flex;flex-direction:column;gap:7px;min-width:0}
+.bf-wide{grid-column:span 4}
+.bf label{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3)}
+.bf .opt-note{text-transform:none;letter-spacing:0;color:var(--ink-3);opacity:.8}
+select.field{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px}
+
+.linkset{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:20px}
+.linkrow{background:var(--surface);padding:18px 20px;display:grid;grid-template-columns:148px 1fr;gap:16px;align-items:start}
+.linkrow .lr-label{font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);padding-top:8px}
+.linkrow .lr-links{display:flex;flex-wrap:wrap;gap:8px}
+
+.dest{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:24px;margin-top:15px}
+.dest-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px}
+.dest-top h4{font-family:var(--display);font-weight:500;font-size:1.44rem}
+.dest-top .code{font-family:var(--mono);font-size:.78rem;color:var(--ink-3);border:1px solid var(--line-2);border-radius:4px;padding:2px 8px}
+.dest p{font-size:.97rem;color:var(--ink-2);line-height:1.62;margin-top:10px}
+.dest .season{margin-top:14px;padding:13px 16px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line);font-size:.94rem;color:var(--ink-2);line-height:1.55}
+.dest .season b{display:block;font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);margin-bottom:4px;font-weight:500}
+.dest .spot{margin-top:14px;border-left:3px solid var(--accent);padding-left:15px}
+.dest .spot .lbl{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--accent-ink);display:block;margin-bottom:4px}
+.dest .lr-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+
+.note-out{margin-top:20px;border:1px solid var(--line-2);border-radius:6px;background:var(--surface);padding:20px}
+.note-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.note-body{font-family:var(--mono);font-size:.86rem;line-height:1.7;resize:vertical;min-height:300px}
+
+.thinking{display:inline-flex;align-items:center;gap:9px;color:var(--ink-3)}
+.thinking i{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
+
+@media (max-width:760px){
+  .brief-grid{grid-template-columns:repeat(2,1fr)}
+  .bf-wide{grid-column:span 2}
+  .linkrow{grid-template-columns:1fr;gap:10px}
+  .linkrow .lr-label{padding-top:0}
+}
+
+/* ============ DIAMOND BENCH ============ */
+.bench{display:grid;grid-template-columns:minmax(0,310px) minmax(0,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.stage{background:var(--surface-2);padding:26px 22px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.stage-art{width:100%;max-width:224px;aspect-ratio:1;display:grid;place-items:center}
+.stage-art svg{width:100%;height:100%}
+.report{width:100%;font-family:var(--mono);font-size:.84rem;line-height:2;border-top:1px solid var(--line);padding-top:14px;margin:0}
+.report div{display:flex;justify-content:space-between;gap:12px}
+.report dt{color:var(--ink-3)}
+.report dd{margin:0;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:500}
+.bench-main{background:var(--surface);min-width:0}
+.tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;
+  background:none;border:0;border-bottom:2px solid transparent;color:var(--ink-3);
+  padding:16px 19px;cursor:pointer;white-space:nowrap;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+.tabpanel{padding:clamp(22px,3vw,30px)}
+.tabpanel h3{margin-bottom:12px}
+.scale{display:flex;gap:3px;margin:20px 0 7px;overflow-x:auto;padding-bottom:6px}
+.step{
+  flex:1;min-width:52px;border:1px solid var(--line-2);border-radius:4px;padding:9px 4px;
+  cursor:pointer;background:var(--surface-2);text-align:center;font:inherit;color:var(--ink);
+  transition:border-color .13s;
+}
+.step:hover{border-color:var(--accent)}
+.step[aria-pressed="true"]{border-color:var(--accent);border-width:2px;padding:8px 3px;background:var(--accent-soft)}
+.step .glabel{font-family:var(--mono);font-size:.8rem;font-weight:500;display:block}
+.step .gsw{height:24px;border-radius:3px;margin-bottom:7px;border:1px solid var(--line-2)}
+.scale-legend{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.72rem;color:var(--ink-3);letter-spacing:.05em;text-transform:uppercase}
+.detail{margin-top:20px;border:1px solid var(--line);border-radius:5px;background:var(--surface-2);padding:20px 22px}
+.detail .eyebrow{display:block;margin-bottom:7px}
+.detail h4{font-family:var(--display);font-weight:500;font-size:1.32rem;margin-bottom:9px}
+.detail p{font-size:.99rem;color:var(--ink-2);line-height:1.62}
+.verdict{
+  display:inline-flex;align-items:center;font-family:var(--mono);font-size:.74rem;
+  text-transform:uppercase;letter-spacing:.07em;border-radius:99px;padding:5px 12px;margin-top:14px;font-weight:500;
+}
+.verdict.buy{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.verdict.care{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.verdict.skip{background:color-mix(in srgb,var(--crit) 15%,transparent);color:var(--crit)}
+.slider{width:100%;accent-color:var(--accent);margin-top:8px}
+.sliderrow{display:flex;align-items:baseline;gap:14px;margin-top:20px;flex-wrap:wrap}
+.sliderrow .big{font-family:var(--mono);font-size:1.7rem;letter-spacing:-.02em;color:var(--ink)}
+
+.facts{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-top:20px}
+.fact{background:var(--surface);padding:16px 18px;display:grid;grid-template-columns:140px 1fr;gap:16px;font-size:.97rem}
+.fact dt{font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);padding-top:3px}
+.fact dd{margin:0;color:var(--ink-2);line-height:1.6}
+
+.shapes{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.shape{background:var(--surface);padding:17px 12px;text-align:center;cursor:pointer;border:0;font:inherit;color:var(--ink);transition:background .13s}
+.shape:hover{background:var(--accent-soft)}
+.shape[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 0 -3px 0 var(--accent)}
+.shape svg{width:54px;height:54px;display:block;margin:0 auto 9px}
+.shape b{font-weight:600;font-size:.92rem;display:block}
+.shape span{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.03em}
+
+/* ============ HOW ============ */
+.how-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.how{background:var(--surface);padding:22px 24px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
+.how .idx{font-family:var(--mono);font-size:.82rem;color:var(--gold);padding-top:5px;font-weight:500}
+.how h4{font-family:var(--display);font-weight:500;font-size:1.26rem;margin-bottom:8px}
+.how p{font-size:.97rem;color:var(--ink-2);line-height:1.62}
+.how .meta{margin-top:12px}
+
+/* ============ TIMELINE ============ */
+.tl{list-style:none;padding:0;margin:24px 0 0;position:relative}
+.tl::before{content:"";position:absolute;left:8px;top:10px;bottom:10px;width:1px;background:var(--line-2)}
+.tl li{position:relative;padding-left:36px;padding-bottom:22px}
+.tl li:last-child{padding-bottom:0}
+.tl .dot{position:absolute;left:0;top:6px;width:17px;height:17px;border-radius:50%;background:var(--surface);border:2px solid var(--line-2)}
+.tl li.due .dot{border-color:var(--accent);background:var(--accent)}
+.tl li.past .dot{border-color:var(--crit);background:var(--surface)}
+.tl .when{font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;color:var(--ink-3);text-transform:uppercase}
+.tl li.past .when{color:var(--crit)}
+.tl h4{margin:4px 0 5px;font-size:1.04rem}
+.tl p{font-size:.95rem;color:var(--ink-2);line-height:1.58}
+
+/* ============ BUDGET ============ */
+.budget-out{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:20px}
+.bcol{background:var(--surface);padding:20px}
+.bcol .eyebrow{display:block;margin-bottom:11px}
+.bcol .big{font-family:var(--mono);font-size:1.5rem;letter-spacing:-.02em;display:block;color:var(--ink)}
+.bcol p{font-size:.93rem;color:var(--ink-2);margin-top:9px;line-height:1.55}
+.alloc{display:flex;height:10px;border-radius:99px;overflow:hidden;margin-top:20px;border:1px solid var(--line)}
+.alloc i{display:block;height:100%}
+.alloc-key{display:flex;flex-wrap:wrap;gap:18px;margin-top:11px;font-size:.88rem;color:var(--ink-2)}
+.alloc-key span{display:inline-flex;align-items:center;gap:8px}
+.alloc-key b{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(--surface-2)}
+.foot-grid{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;justify-content:space-between}
+
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .bench{grid-template-columns:1fr}
+  .rec-row{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  body{font-size:16.5px}
+  .g2,.g3{grid-template-columns:1fr}
+  .budget-out{grid-template-columns:1fr}
+  .fact{grid-template-columns:1fr;gap:5px}
+  .how{grid-template-columns:1fr;gap:7px}
+  .lens{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+
+<header id="topbar">
+  <div class="bar-inner">
+    <button class="mark" data-go="home">Just <em>Not</em> The Ring</button>
+    <nav class="bar-nav" aria-label="Sections">
+      <button data-go="quiz">Quiz</button>
+      <button data-go="locations">Locations</button>
+      <button data-go="trip">Trip</button>
+      <button data-go="diamonds">Diamonds</button>
+      <button data-go="rings">Rings</button>
+      <button data-go="how">How</button>
+      <button data-go="when">When</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ======================= HOME ======================= -->
+<section class="view" id="view-home">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-kicker">
+          <span class="eyebrow">A planning guide for the proposal</span>
+          <span class="rule"></span>
+        </div>
+        <h1>You have one shot,<br>and about <span class="it">nine decisions</span><br>to make first.</h1>
+        <p class="lede hero-sub">Where, when, how, and what they'll wear for the next fifty years. Answer nine questions about your partner and we'll hand you a specific starting point — a place, a method, and a ring spec you can walk into a jeweler with.</p>
+        <div class="hero-cta">
+          <button class="btn" data-go="quiz">Take the nine questions</button>
+          <button class="btn ghost" data-go="diamonds">Just explain the 4Cs</button>
+        </div>
+      </div>
+      <aside>
+        <div class="spectrum" role="img" aria-label="The diamond color scale, running from icy colorless at D to warm yellow at Z"></div>
+        <div class="stat-stack">
+          <div class="stat"><b>61%</b><span>of 2025 engagement rings used a lab-grown center stone</span></div>
+          <div class="stat"><b>$4,600</b><span>average total spend — $4,300 lab-grown, $7,000 natural</span></div>
+          <div class="stat"><b>1.9 ct</b><span>average center stone, and rising</span></div>
+        </div>
+        <p class="tiny" style="margin-top:11px">The Knot 2026 Real Weddings Study · 10,000+ couples</p>
+      </aside>
+    </div>
+
+    <h2 style="margin:clamp(44px,7vw,72px) 0 20px">Seven things to decide</h2>
+    <div class="index-grid">
+      <button class="idx-card" data-go="quiz">
+        <span class="eyebrow"><span class="n">01</span> — The quiz</span>
+        <h3>Start with them</h3>
+        <p>Nine questions about your partner and your relationship. The answer combines a location, a method, and a ring specification — with the reasoning shown, so you can argue with it.</p>
+        <span class="go">Take the quiz →</span>
+      </button>
+      <button class="idx-card" data-go="locations">
+        <span class="eyebrow"><span class="n">02</span> — Locations</span>
+        <h3>Where to ask</h3>
+        <p>Eight archetypes that cover nearly every proposal spot, the permit rules nobody mentions, and a city lens that turns the archetypes into real searches near you.</p>
+        <span class="go">See the archetypes →</span>
+      </button>
+      <button class="idx-card" data-go="trip">
+        <span class="eyebrow"><span class="n">03</span> — The trip</span>
+        <h3>Go somewhere to do it</h3>
+        <p>Describe what you picture and get destinations that actually deliver it, whether your dates are right for the season, flight and hotel searches already filled in, and the email that gets a yes from the venue.</p>
+        <span class="go">Build the trip →</span>
+      </button>
+      <button class="idx-card" data-go="diamonds">
+        <span class="eyebrow"><span class="n">04</span> — Diamonds</span>
+        <h3>Understand the 4Cs</h3>
+        <p>An interactive grading bench. Click through every cut, color and clarity grade and watch a real stone change — with a verdict on each about where money is worth spending.</p>
+        <span class="go">Open the bench →</span>
+      </button>
+      <button class="idx-card" data-go="rings">
+        <span class="eyebrow"><span class="n">05</span> — The ring</span>
+        <h3>Setting, metal, size, budget</h3>
+        <p>The stone gets the attention and the setting does the work. Match the ring to their actual hands, get the size without asking, and see what a number really buys.</p>
+        <span class="go">Compare settings →</span>
+      </button>
+      <button class="idx-card" data-go="how">
+        <span class="eyebrow"><span class="n">06</span> — How</span>
+        <h3>Eight ways to do it</h3>
+        <p>Ordered from most private to most public. Find where your partner sits on that line, then the logistics for the hour before — and the two questions worth settling early.</p>
+        <span class="go">Read the methods →</span>
+      </button>
+      <button class="idx-card" data-go="when">
+        <span class="eyebrow"><span class="n">07</span> — When</span>
+        <h3>Pick a date, work backwards</h3>
+        <p>Most of what goes wrong is a lead time somebody didn't know about. Enter a target date and get the twelve milestones that have to happen, each with a real deadline.</p>
+        <span class="go">Build the timeline →</span>
+      </button>
+    </div>
+
+    <div class="starter">
+      <span class="eyebrow">Question one, right here</span>
+      <p class="q-prompt" style="margin-top:12px">When your partner has news, who hears about it first?</p>
+      <div class="opts" id="starterOpts"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= QUIZ ======================= -->
+<section class="view" id="view-quiz" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow"><span class="n">01</span> — The quiz</span>
+      <h2>Nine questions about them, not you</h2>
+      <p class="lede">Answer as your partner would, not as you'd like them to. The recommendation at the end combines a location archetype, a proposal method, and a ring specification.</p>
+    </div>
+
+    <div id="quizpanel">
+      <div class="quiz-top" id="quizTop">
+        <span class="eyebrow" id="qcount">Question 1 of 9</span>
+        <div class="progress"><i id="qbar"></i></div>
+      </div>
+      <div class="quiz-body" id="quizStage"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= LOCATIONS ======================= -->
+<section class="view" id="view-locations" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow"><span class="n">02</span> — Locations</span>
+      <h2>Eight archetypes, then your own map</h2>
+      <p class="lede">Almost every proposal location is a version of one of these. Find the one that sounds like your partner, then use the city lens to find the real version of it near you.</p>
+    </div>
+
+    <div class="loc-grid">
+      <article class="loc">
+        <h4>The overlook you have to earn</h4>
+        <p>A summit, a bluff, a fire tower. The walk up does the work — by the time you're at the top you've been alone together for an hour and nobody is watching.</p>
+        <div class="meta"><span class="chip">Private</span><span class="chip">Golden hour</span><span class="chip">Weather risk</span></div>
+      </article>
+      <article class="loc">
+        <h4>The conservatory</h4>
+        <p>Botanical gardens and glasshouses are the reliable choice: beautiful in any month, warm in February, and staff who have seen a hundred proposals and will help.</p>
+        <div class="meta"><span class="chip">All-weather</span><span class="chip gold">Permit likely</span><span class="chip">Photo-friendly</span></div>
+      </article>
+      <article class="loc">
+        <h4>Water's edge</h4>
+        <p>Lake, coast, river walk, a harbor at dusk. Open sightlines make a hidden photographer easy and give you somewhere to walk afterwards while it sinks in.</p>
+        <div class="meta"><span class="chip">Sunset-dependent</span><span class="chip">Wind</span></div>
+      </article>
+      <article class="loc">
+        <h4>Rooftop or observation deck</h4>
+        <p>City skyline, elevation, a drink in hand. Book a table or a private corner rather than trusting availability — most decks are loud and full at sunset.</p>
+        <div class="meta"><span class="chip">Urban</span><span class="chip">Reservation</span><span class="chip">Loud</span></div>
+      </article>
+      <article class="loc">
+        <h4>Where it started</h4>
+        <p>The bar, the bench, the block you lived on. The place carries the meaning, so it doesn't have to be beautiful. This is the archetype people cry at.</p>
+        <div class="meta"><span class="chip on">High meaning</span><span class="chip">Low cost</span></div>
+      </article>
+      <article class="loc">
+        <h4>Home</h4>
+        <p>Your kitchen, your living room, the dog underfoot. Deeply underrated for a private person: no audience, no travel, no outfit anxiety, and they can cry in peace.</p>
+        <div class="meta"><span class="chip on">Most private</span><span class="chip">Hard to photograph</span></div>
+      </article>
+      <article class="loc">
+        <h4>A trip they think is just a trip</h4>
+        <p>Propose on day one or two, not the last night. Spend the rest of the trip engaged instead of spending the whole trip waiting, and let them tell people in their own time.</p>
+        <div class="meta"><span class="chip">Destination</span><span class="chip gold">Carry-on only</span></div>
+      </article>
+      <article class="loc">
+        <h4>The gathering</h4>
+        <p>A holiday table, a birthday, a reunion where their people are already in one room. Only do this if being watched is genuinely fun for them. It cannot be undone.</p>
+        <div class="meta"><span class="chip">Public</span><span class="chip">Family</span><span class="chip">Irreversible</span></div>
+      </article>
+    </div>
+
+    <div class="callout">
+      <span class="eyebrow">The practical layer nobody mentions</span>
+      <p>Most botanical gardens, state parks, national parks and private estates require a photography permit if you bring a photographer, and several charge a proposal or event fee. Call two to four weeks ahead and ask specifically about "a proposal with a photographer" — staff usually have a standard answer and sometimes a preferred spot.</p>
+      <p>Also check: sunset time for your exact date, whether the spot is in shadow an hour before sunset, parking, and whether the location closes seasonally. Have a rain plan you'd be equally happy with — not a worse version of the same plan.</p>
+    </div>
+
+    <h3 style="margin:44px 0 10px">When none of those are right</h3>
+    <p class="small" style="max-width:64ch;margin-bottom:20px">The eight above cover most proposals, which is exactly why some people want none of them. The test for an unconventional location is not whether it's unusual — it's whether it's <em>specific to you two</em>. A laundromat is a great proposal spot if that's where you talked for three hours the night you met, and a bad one if you picked it to be different.</p>
+
+    <div class="loc-grid">
+      <article class="loc">
+        <h4>The place with the in-joke</h4>
+        <p>The gas station you broke down at. The bench where the seagull took their sandwich. The parking lot of a restaurant that's since closed. Nobody else would photograph it, which is the point — the story does all the work.</p>
+        <div class="meta"><span class="chip on">Only means something to you</span></div>
+      </article>
+      <article class="loc">
+        <h4>Where the hobby lives</h4>
+        <p>The climbing gym, the pottery studio, the record shop, the chess club, the dog park at 7am with the same six regulars. You propose inside the thing they've built a life around, and the regulars become witnesses.</p>
+        <div class="meta"><span class="chip">Built-in audience</span><span class="chip">Ask the owner first</span></div>
+      </article>
+      <article class="loc">
+        <h4>Inside the story</h4>
+        <p>The town a book is set in, the diner from the film you've watched eleven times, the stadium of the team they inherited from their father. Borrowed meaning, but borrowed from something they already love.</p>
+        <div class="meta"><span class="chip">High effort</span><span class="chip">Travel likely</span></div>
+      </article>
+      <article class="loc">
+        <h4>A game or a world you share</h4>
+        <p>Inside the game you've played together for years, on the server you built, in the campaign you've run since 2019. Increasingly common and frequently mocked by people who weren't there. Do it in private, then do it again in person with the ring.</p>
+        <div class="meta"><span class="chip">Two-stage</span><span class="chip on">Very personal</span></div>
+      </article>
+      <article class="loc">
+        <h4>Mid-transit</h4>
+        <p>On a train, on a ferry, in the car on a drive you've done a hundred times, on a plane at cruising altitude. Nowhere to escape to and nothing to do but talk. Ask flight or ferry crew first if you want any help at all.</p>
+        <div class="meta"><span class="chip">Captive and calm</span><span class="chip gold">Crew permission</span></div>
+      </article>
+      <article class="loc">
+        <h4>The aggressively unromantic</h4>
+        <p>The hardware store aisle. The DMV queue. A Costco food court. Works only for the couple whose entire register is deadpan — and for them, it lands harder than any overlook. Know which kind you are before you commit.</p>
+        <div class="meta"><span class="chip">Deadpan only</span><span class="chip">Zero cost</span></div>
+      </article>
+      <article class="loc">
+        <h4>Around the animal</h4>
+        <p>The shelter where you got the dog, the barn where they ride, the vet's parking lot after good news. Attaching the moment to the creature they'd do anything for is a shortcut straight past their composure.</p>
+        <div class="meta"><span class="chip on">Emotionally unfair</span><span class="chip">In the best way</span></div>
+      </article>
+      <article class="loc">
+        <h4>No location at all</h4>
+        <p>Propose in bed on a Sunday morning before anyone has brushed their teeth. It is the least photogenic option available and the one a surprising number of people say they'd have chosen — because it's the version with no performance in it anywhere.</p>
+        <div class="meta"><span class="chip on">Most private</span><span class="chip">No planning</span></div>
+      </article>
+    </div>
+
+    <div style="margin-top:44px">
+      <span class="eyebrow">The city lens</span>
+      <h3 style="margin:12px 0 12px">Find the real version near you</h3>
+      <p class="small" style="max-width:62ch;margin-bottom:20px">Type where you are. We'll turn the archetypes into actual searches for your area — the place types that consistently work, rather than a list of somebody else's favorite spots.</p>
+      <div class="lens">
+        <input class="field" id="cityInput" type="text" placeholder="City, neighborhood, or region" autocomplete="address-level2">
+        <button class="btn" id="lensBtn" type="button">Show me</button>
+      </div>
+      <div class="lensmodes" id="lensModes" role="group" aria-label="What kind of place">
+        <button class="modechip" type="button" data-mode="auto" aria-pressed="true">Match my quiz</button>
+        <button class="modechip" type="button" data-mode="nature">Outdoors</button>
+        <button class="modechip" type="button" data-mode="urban">City</button>
+        <button class="modechip" type="button" data-mode="home">At home</button>
+        <button class="modechip" type="button" data-mode="destination">Travel</button>
+        <button class="modechip" type="button" data-mode="unconv">Unconventional</button>
+      </div>
+      <div id="lensOut"></div>
+    </div>
+
+    <div class="view-foot">
+      <button class="btn ghost" data-go="home">← Home</button>
+      <div class="spacer"></div>
+      <button class="btn" data-go="diamonds">Next: Diamonds →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TRIP ======================= -->
+<section class="view" id="view-trip" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow"><span class="n">03</span> — The trip</span>
+      <h2>Say what you want to do. Get somewhere to do it.</h2>
+      <p class="lede">Describe the thing you picture — a place, an activity, a feeling — and this builds the trip around it: where it actually happens, whether your dates are right for it, and the flight and hotel searches already filled in. Then it writes the email to the venue.</p>
+    </div>
+
+    <div class="card" style="padding:clamp(22px,3.5vw,30px)">
+      <span class="eyebrow">The brief</span>
+      <div class="brief-grid">
+        <div class="bf bf-wide">
+          <label for="tripWant">What do you want to do?</label>
+          <input class="field" id="tripWant" type="text" placeholder="Hot air balloon at sunrise · see the northern lights · somewhere warm with good food">
+        </div>
+        <div class="bf bf-wide">
+          <label for="tripWhere">Anywhere in mind? <span class="opt-note">optional</span></label>
+          <input class="field" id="tripWhere" type="text" placeholder="Leave blank and we'll suggest somewhere">
+        </div>
+        <div class="bf">
+          <label for="tripFrom">Leaving from</label>
+          <input class="field" id="tripFrom" type="text" placeholder="City or airport" value="">
+        </div>
+        <div class="bf">
+          <label for="tripOut">Out</label>
+          <input class="field" id="tripOut" type="date">
+        </div>
+        <div class="bf">
+          <label for="tripBack">Back</label>
+          <input class="field" id="tripBack" type="date">
+        </div>
+        <div class="bf">
+          <label for="tripBudget">Budget</label>
+          <select class="field" id="tripBudget">
+            <option value="lean">Keeping it lean</option>
+            <option value="comfortable" selected>Comfortable</option>
+            <option value="open">Not the constraint</option>
+          </select>
+        </div>
+      </div>
+      <div class="quiz-foot" style="margin-top:22px">
+        <button class="btn" id="tripGo" type="button">Build the trip</button>
+        <button class="linkbtn" id="tripStop" type="button" hidden>Stop</button>
+        <div class="spacer"></div>
+        <span class="tiny" id="tripStatus"></span>
+      </div>
+    </div>
+
+    <div id="tripLinks"></div>
+    <div id="tripIdeas"></div>
+
+    <div style="margin-top:clamp(40px,6vw,60px)">
+      <span class="eyebrow">The outreach kit</span>
+      <h3 style="margin:12px 0 12px">The email that gets you a yes from the venue</h3>
+      <p class="small" style="max-width:66ch;margin-bottom:20px">Venues get these requests constantly and most will help — but only if you ask the right things. Pick who you're writing to and this fills in a message with the questions that actually matter, including the ones people forget until it's too late. Nothing here leaves your browser.</p>
+
+      <div class="lensmodes" id="noteKinds" role="group" aria-label="Who you're writing to">
+        <button class="modechip" type="button" data-kind="hotel" aria-pressed="true">Hotel or concierge</button>
+        <button class="modechip" type="button" data-kind="restaurant">Restaurant</button>
+        <button class="modechip" type="button" data-kind="venue">Garden, park or museum</button>
+        <button class="modechip" type="button" data-kind="photo">Photographer</button>
+        <button class="modechip" type="button" data-kind="charter">Boat, guide or private hire</button>
+      </div>
+
+      <div class="brief-grid" style="margin-top:18px">
+        <div class="bf bf-wide">
+          <label for="notePlace">Who or where you're writing to</label>
+          <input class="field" id="notePlace" type="text" placeholder="The name of the hotel, restaurant or venue">
+        </div>
+        <div class="bf">
+          <label for="noteDate">Date</label>
+          <input class="field" id="noteDate" type="date">
+        </div>
+        <div class="bf">
+          <label for="noteTime">Time</label>
+          <input class="field" id="noteTime" type="time" value="17:30">
+        </div>
+        <div class="bf">
+          <label for="noteName">Signed</label>
+          <input class="field" id="noteName" type="text" placeholder="Your name">
+        </div>
+      </div>
+
+      <div class="note-out">
+        <div class="note-head">
+          <span class="tiny" id="noteSubject">Subject line</span>
+          <button class="btn ghost" id="noteCopy" type="button">Copy</button>
+        </div>
+        <textarea class="field note-body" id="noteBody" rows="18" spellcheck="false" aria-label="Draft message"></textarea>
+        <p class="tiny" id="noteHint" style="margin-top:10px">Edit anything before you send it. The bracketed parts are yours to fill in.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="eyebrow">Carrying a ring on a plane</span>
+      <p>The ring goes in your carry-on, never in checked luggage — a checked bag is not covered for jewelry by any airline, and most travel insurance excludes it too. Keep it in a flat case in a bag that stays with you.</p>
+      <p>You do not have to take it out at security in most airports, and you do not have to open the box. If screening asks, a folded jacket over the bag is not the move — just hand it over quietly and ask for a private screening if your partner is standing right there. Crossing a border with a ring above your destination country's duty-free allowance can technically require a customs declaration; for a typical engagement ring worn or carried as a personal effect this rarely comes up, but it is worth a search on your specific route if the ring is expensive.</p>
+      <p>Insure it before you fly, with a policy that covers travel and loss rather than theft alone.</p>
+    </div>
+
+    <div class="view-foot">
+      <button class="btn ghost" data-go="locations">← Locations</button>
+      <div class="spacer"></div>
+      <button class="btn" data-go="diamonds">Next: Diamonds →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= DIAMONDS ======================= -->
+<section class="view" id="view-diamonds" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow"><span class="n">04</span> — Diamonds</span>
+      <h2>The four Cs, ranked by how much they matter</h2>
+      <p class="lede">Cut, Color, Clarity, Carat. They are not equally important and they don't cost the same. Move through each one — the stone on the left updates, and the panel tells you where the money is worth spending and where it is quietly wasted.</p>
+    </div>
+
+    <div class="bench">
+      <div class="stage">
+        <div class="stage-art" id="stageArt"></div>
+        <dl class="report">
+          <div><dt>Shape</dt><dd id="rShape">Round brilliant</dd></div>
+          <div><dt>Carat</dt><dd id="rCarat">1.00 ct</dd></div>
+          <div><dt>Diameter</dt><dd id="rMm">6.4 mm</dd></div>
+          <div><dt>Color</dt><dd id="rColor">G</dd></div>
+          <div><dt>Clarity</dt><dd id="rClarity">VS2</dd></div>
+          <div><dt>Cut</dt><dd id="rCut">Excellent</dd></div>
+        </dl>
+        <p class="tiny" style="text-align:center">A live spec sheet — change anything and it updates</p>
+      </div>
+
+      <div class="bench-main">
+        <div class="tabs" role="tablist" aria-label="The four Cs">
+          <button class="tab" role="tab" id="tab-cut" aria-selected="true" aria-controls="panel-cut">Cut</button>
+          <button class="tab" role="tab" id="tab-color" aria-selected="false" aria-controls="panel-color">Color</button>
+          <button class="tab" role="tab" id="tab-clarity" aria-selected="false" aria-controls="panel-clarity">Clarity</button>
+          <button class="tab" role="tab" id="tab-carat" aria-selected="false" aria-controls="panel-carat">Carat</button>
+          <button class="tab" role="tab" id="tab-shape" aria-selected="false" aria-controls="panel-shape">Shape</button>
+        </div>
+
+        <div class="tabpanel" role="tabpanel" id="panel-cut" aria-labelledby="tab-cut">
+          <h3>Cut — the only C you can see across a room</h3>
+          <p class="small">Cut is not the shape. It's how precisely the facets were placed: the angles, the proportions, the polish and the symmetry. A well-cut stone bounces light back up through the top. A poorly cut one leaks it out of the bottom and looks dull no matter how flawless the grading report says it is. If you cut one corner, do not cut this one.</p>
+          <div class="scale" id="cutScale" role="group" aria-label="Cut grades"></div>
+          <div class="scale-legend"><span>Best</span><span>Worst</span></div>
+          <div class="detail" id="cutDetail"></div>
+          <dl class="facts">
+            <div class="fact"><dt>What to ask</dt><dd>For a round brilliant, ask for GIA "Excellent" or AGS "Ideal" cut, with Excellent polish and symmetry. Fancy shapes get no official cut grade at all — judge those by proportions and by looking at them.</dd></div>
+            <div class="fact"><dt>The numbers</dt><dd>A well-proportioned round sits near a 54–57% table, 59–62.5% total depth, a 34–35° crown angle and a 40.6–41° pavilion angle. Depth much over 63% usually means weight hidden underneath where you can't see it.</dd></div>
+            <div class="fact"><dt>Three effects</dt><dd><b>Brilliance</b> is white light return. <b>Fire</b> is the rainbow flash. <b>Scintillation</b> is the sparkle as it moves. Cut controls all three; nothing else does.</dd></div>
+          </dl>
+        </div>
+
+        <div class="tabpanel" role="tabpanel" id="panel-color" aria-labelledby="tab-color" hidden>
+          <h3>Color — graded on absence, not presence</h3>
+          <p class="small">The scale runs D to Z, measuring how little yellow or brown tint the stone has. Nobody starts at A — the scale deliberately began at D in 1953 to break from the vague "A, AA, AAA" grading that came before it. Stones are graded face-down against master stones under controlled light, which is nothing like how you'll ever see the ring.</p>
+          <div class="scale" id="colorScale" role="group" aria-label="Color grades"></div>
+          <div class="scale-legend"><span>D — Colorless</span><span>Z — Light yellow</span></div>
+          <div class="detail" id="colorDetail"></div>
+          <dl class="facts">
+            <div class="fact"><dt>Metal changes it</dt><dd>Yellow and rose gold hide warmth — an I, J or even K looks white set in gold and saves a great deal. Platinum and white gold are unforgiving: G or H is the sweet spot there.</dd></div>
+            <div class="fact"><dt>Size changes it</dt><dd>Color is far more visible in larger stones. Under about 0.70 ct you can go two grades lower than you'd dare at 2 ct.</dd></div>
+            <div class="fact"><dt>Shape changes it</dt><dd>Step cuts and elongated shapes concentrate color in the corners and tips. Go one grade higher for those than you would for a round.</dd></div>
+            <div class="fact"><dt>Fluorescence</dt><dd>Strong blue fluorescence can make a warmer stone look whiter, and those stones often cost less. In a small minority it causes a milky haze — look at it in daylight rather than ruling it out on paper.</dd></div>
+          </dl>
+        </div>
+
+        <div class="tabpanel" role="tabpanel" id="panel-clarity" aria-labelledby="tab-clarity" hidden>
+          <h3>Clarity — where most people overspend</h3>
+          <p class="small">Clarity grades the internal inclusions and surface blemishes, viewed at 10× magnification by a trained grader. That last part is the whole point: a VS2 and a VVS1 look identical to the naked eye, and your partner is not going to carry a loupe. The word you want is not a grade at all — it's <b>eye-clean</b>.</p>
+          <div class="scale" id="clarityScale" role="group" aria-label="Clarity grades"></div>
+          <div class="scale-legend"><span>Flawless</span><span>Included</span></div>
+          <div class="detail" id="clarityDetail"></div>
+          <dl class="facts">
+            <div class="fact"><dt>The rule</dt><dd>VS2 is almost always eye-clean. SI1 often is, and is where the value lives — but you must look at that specific stone, or its plotted diagram, because it depends entirely on where the inclusion sits.</dd></div>
+            <div class="fact"><dt>Position beats grade</dt><dd>An inclusion under the table in the middle is the worst place. One near the girdle edge can be hidden by a prong. Ask the jeweler to point to the plot on the report and show you.</dd></div>
+            <div class="fact"><dt>Step cuts are strict</dt><dd>Emerald and asscher cuts have big open facets — a hall of mirrors with nowhere to hide. For those, VS2 or better, no exceptions.</dd></div>
+            <div class="fact"><dt>Not all flaws</dt><dd>Inclusions are a stone's fingerprint and how a gemologist proves it's yours. A visible feather near the surface is a durability question worth asking about; a tiny crystal in the middle is not.</dd></div>
+          </dl>
+        </div>
+
+        <div class="tabpanel" role="tabpanel" id="panel-carat" aria-labelledby="tab-carat" hidden>
+          <h3>Carat — weight, not size</h3>
+          <p class="small">One carat is 0.2 grams, divided into 100 points. It measures mass, so two 1-carat stones can look noticeably different sizes depending on how they're cut and how much weight is hidden in the depth. Drag the slider — the stone is drawn to true millimeter scale.</p>
+          <div class="sliderrow">
+            <span class="big" id="caratVal">1.00 ct</span>
+            <span class="small" id="caratMm">6.4 mm across</span>
+          </div>
+          <input class="slider" id="caratSlider" type="range" min="30" max="300" step="5" value="100" aria-label="Carat weight">
+          <div class="detail" id="caratDetail"></div>
+          <dl class="facts">
+            <div class="fact"><dt>Magic sizes</dt><dd>Prices jump at the round numbers — 0.50, 0.75, 1.00, 1.50, 2.00. A 0.92 ct is visually indistinguishable from a 1.00 ct and can cost noticeably less. Ask for stones just under a threshold.</dd></div>
+            <div class="fact"><dt>Spread</dt><dd>Elongated shapes cover more finger per carat than a round. An oval typically reads about a quarter to a half carat larger than it weighs.</dd></div>
+            <div class="fact"><dt>Finger size matters</dt><dd>The same stone looks materially bigger on a size 4 hand than a size 8. Judge proportion on their hand, not in a photograph of someone else's.</dd></div>
+            <div class="fact"><dt>Halos</dt><dd>A halo of small stones adds 0.3–0.5 ct of apparent size for a fraction of the cost. It also dates faster than a plain solitaire — a real trade-off, not a trick.</dd></div>
+          </dl>
+        </div>
+
+        <div class="tabpanel" role="tabpanel" id="panel-shape" aria-labelledby="tab-shape" hidden>
+          <h3>Shape — the decision they'll actually notice</h3>
+          <p class="small">Cut quality is invisible until you compare. Shape is the thing your partner already has an opinion about. Tap one to set it on the spec sheet.</p>
+          <div class="lensmodes" id="shapeModes" role="group" aria-label="Which shapes to show">
+            <button class="modechip" type="button" data-group="classic" aria-pressed="true">The usual ten</button>
+            <button class="modechip" type="button" data-group="alt">Less traditional</button>
+          </div>
+          <div class="shapes" id="shapeGrid" role="group" aria-label="Diamond shapes" style="margin-top:14px"></div>
+          <div class="detail" id="shapeDetail"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:28px">
+      <div class="card" style="padding:24px">
+        <span class="eyebrow">Lab-grown vs natural</span>
+        <h3 style="margin:12px 0 11px">Chemically identical, commercially not</h3>
+        <p class="small">A lab-grown diamond is a diamond — same carbon lattice, same hardness, same sparkle, and only distinguishable by specialist equipment. It's grown by CVD or HPHT in weeks instead of billions of years. It now accounts for 61% of engagement ring purchases, and at the same budget it buys roughly twice the stone.</p>
+        <p class="small" style="margin-top:11px">The honest trade-off: lab-grown prices have fallen steeply and continue to, so resale value is close to nothing. Natural stones hold value better and carry a rarity story some people care about and others actively don't. Neither answer is wrong — but decide which of those two things you're buying before you walk in.</p>
+        <p class="small" style="margin-top:11px"><b>Either way, insist on a report</b> from GIA or AGS (strictest) or IGI (the norm for lab-grown), and check that the report number is laser-inscribed on the girdle. Be wary of EGL grades, which run soft by a grade or two.</p>
+      </div>
+      <div class="card" style="padding:24px">
+        <span class="eyebrow">If not a diamond</span>
+        <h3 style="margin:12px 0 11px">What survives daily wear</h3>
+        <p class="small">An engagement ring gets worn in the shower, at the gym and while doing dishes for decades. Hardness, measured on the Mohs scale, is the first filter — anything under 8 will scuff and chip in a way that becomes visible within a few years.</p>
+        <div class="tablewrap" style="margin-top:15px">
+          <table>
+            <thead><tr><th>Stone</th><th>Mohs</th><th>Verdict for daily wear</th></tr></thead>
+            <tbody>
+              <tr><td>Diamond</td><td class="mohs">10</td><td>The benchmark. Nothing scratches it but another diamond.</td></tr>
+              <tr><td>Moissanite</td><td class="mohs">9.25</td><td>Excellent. More fire than diamond — a rainbow flash some love and some find obviously not-diamond.</td></tr>
+              <tr><td>Sapphire &amp; ruby</td><td class="mohs">9</td><td>Excellent, and available in every color including colorless. The strongest non-diamond choice.</td></tr>
+              <tr><td>Spinel</td><td class="mohs">8</td><td>Good. Underrated, naturally vivid, rarely treated.</td></tr>
+              <tr><td>Morganite</td><td class="mohs">7.5–8</td><td>Acceptable with a protective setting, but abrades over time and dulls.</td></tr>
+              <tr><td>Emerald</td><td class="mohs">7.5–8</td><td>Risky. Heavily included and brittle — it chips. Beautiful, but plan on repairs.</td></tr>
+              <tr><td>Opal &amp; pearl</td><td class="mohs">2.5–6.5</td><td>Not for daily wear. Reserve for pieces taken off at night.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-foot">
+      <button class="btn ghost" data-go="locations">← Locations</button>
+      <div class="spacer"></div>
+      <button class="btn" data-go="rings">Next: The ring →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= RINGS ======================= -->
+<section class="view" id="view-rings" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow"><span class="n">05</span> — The ring</span>
+      <h2>Setting, metal, size, budget</h2>
+      <p class="lede">The stone gets all the attention and the setting does all the work. This is where you match the ring to their actual hands and actual week.</p>
+    </div>
+
+    <div class="grid g3">
+      <div class="card" style="padding:22px">
+        <h4>Solitaire</h4>
+        <p class="small" style="margin-top:9px">One stone, four or six prongs. The default for a reason: it never looks dated and it puts every dollar into the center. Six prongs are more secure; four show more stone.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip">Classic</span><span class="chip">Resizes easily</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>Bezel</h4>
+        <p class="small" style="margin-top:9px">A metal rim around the whole stone. The most secure setting there is, and the one that doesn't snag on gloves, hair, climbing holds or patients. Slightly modern, slightly less sparkle.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip on">Best for active hands</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>Halo</h4>
+        <p class="small" style="margin-top:9px">A ring of small stones around the center, making it read half a carat larger. Maximum apparent size per dollar. A hidden halo — visible only from the side — gets the sparkle without the era stamp.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip">Maximizes size</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>Three-stone</h4>
+        <p class="small" style="margin-top:9px">A center with two side stones — often given the past/present/future reading. Adds width and presence, and lets a smaller center carry a bigger ring.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip">Wide profile</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>Pavé &amp; micropavé</h4>
+        <p class="small" style="margin-top:9px">Tiny stones set along the band. Enormous sparkle, and the small stones do occasionally come loose over the years. Full-coverage and eternity bands are very hard to resize later.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip gold">Resizing limited</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>Vintage &amp; milgrain</h4>
+        <p class="small" style="margin-top:9px">Beaded edges, engraving, filigree. Genuine antique rings often hold old mine or old European cuts, which sparkle differently — broader, warmer flashes made for candlelight rather than LEDs.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip">Character</span></div>
+      </div>
+    </div>
+
+    <h3 style="margin:44px 0 10px">If none of those are the ring</h3>
+    <p class="small" style="max-width:64ch;margin-bottom:18px">Plenty of people don't want a solitaire, and a few don't want a diamond or a ring at all. These are the real alternatives, with the real trade-offs — the biggest of which is almost always resizing.</p>
+
+    <div class="grid g3">
+      <div class="card" style="padding:22px">
+        <h4>Toi et moi</h4>
+        <p class="small" style="margin-top:9px">Two stones side by side — "you and me" — often two different shapes or two different stones entirely. Georgian in origin, thoroughly back. Reads as a story rather than a status object.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip gold">Very hard to resize</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>East-west</h4>
+        <p class="small" style="margin-top:9px">An elongated stone turned sideways across the finger instead of along it. One rotation, and a familiar shape stops looking familiar. Costs nothing extra and suits an oval, emerald, marquise or kite.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip on">Free way to be different</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>Cluster or constellation</h4>
+        <p class="small" style="margin-top:9px">Many small stones arranged as a shape — a flower, a scatter, a deliberate asymmetry. Antique in lineage, and it buys visual size for far less than one large stone.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip">More presence per dollar</span><span class="chip">More to catch</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>No center stone</h4>
+        <p class="small" style="margin-top:9px">A carved, engraved, hammered or wide band with nothing raised on it at all. For someone who genuinely doesn't want a stone, this is the answer — and it's the single most durable thing you can put on a hand.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip on">Indestructible</span><span class="chip">Lowest cost</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>An heirloom reset</h4>
+        <p class="small" style="margin-top:9px">Their grandmother's stone in a setting built for them. Costs a fraction of a new ring, carries meaning nothing else can buy, and the old cut will look different from anything modern — which is the point.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip gold">Have it checked first</span></div>
+      </div>
+      <div class="card" style="padding:22px">
+        <h4>Not a ring</h4>
+        <p class="small" style="margin-top:9px">A necklace, a watch, a tattoo appointment booked for the following week, a tree planted in the yard. Right for someone whose work or hands make a ring impractical, or who simply doesn't wear rings.</p>
+        <div class="meta" style="margin-top:14px"><span class="chip">Nothing to resize</span></div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card" style="padding:24px">
+        <span class="eyebrow">Stones that aren't diamonds</span>
+        <h3 style="margin:12px 0 11px">What people actually choose</h3>
+        <p class="small"><b>Sapphire</b> is the serious answer — Mohs 9, and it comes in teal, peach, parti (two colors in one stone), grey, green and colorless, not only blue. Montana sapphires have traceable US origin, which solves the sourcing question at the same time.</p>
+        <p class="small" style="margin-top:11px"><b>Salt-and-pepper diamonds</b> are real diamonds full of visible black inclusions — the flaws are the design. Cheap, unrepeatable, and every one is different. <b>Spinel</b> (Mohs 8) is vivid, natural and almost never treated. <b>Moissanite</b> throws more rainbow fire than diamond, which people either love or immediately clock.</p>
+        <p class="small" style="margin-top:11px"><b>Be careful with</b> opal, moonstone, moss agate and raw or rough stones. They photograph beautifully and they are soft — expect visible wear within a couple of years on a ring worn daily. That can be an acceptable trade if you both know it going in.</p>
+      </div>
+      <div class="card" style="padding:24px">
+        <span class="eyebrow">The three traps</span>
+        <h3 style="margin:12px 0 14px">What goes wrong with unusual rings</h3>
+        <ul class="moves">
+          <li data-n="1"><b>Resizing.</b> Toi et moi, east-west, clusters, eternity bands and anything with stones all the way around can often be moved half a size at most, sometimes not at all. Get the measurement right the first time or expect to remake the band.</li>
+          <li data-n="2"><b>No grading language.</b> Colored stones aren't graded on the D–Z or VS scales, so there is no report to hide behind and no standard to compare against. You are buying with your eyes and on the seller's reputation. Ask who cut it and where it came from.</li>
+          <li data-n="3"><b>Replacement.</b> A one-of-a-kind stone can't be replaced with an identical one if it's lost. Insure it with an appraisal that describes it specifically, and photograph it from several angles before it goes on a hand.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin:44px 0 16px">Metal, honestly compared</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Metal</th><th>Upkeep</th><th>Wears like</th><th>Pick it if</th></tr></thead>
+        <tbody>
+          <tr><td>Platinum</td><td>None required; develops a soft grey patina that can be polished back</td><td>Doesn't lose metal when scratched — it displaces. Heavy and dense.</td><td>They have a nickel allergy, or you want prongs that hold for decades without re-tipping.</td></tr>
+          <tr><td>14k white gold</td><td>Rhodium replating every 1–3 years to stay bright white</td><td>Harder than 18k, more scratch-resistant</td><td>You want the platinum look for less, and don't mind the replating appointment.</td></tr>
+          <tr><td>18k yellow gold</td><td>Low; polish occasionally</td><td>Softer than 14k — scratches and softens over time</td><td>They wear warm tones, or the stone is I–K and you want the warmth hidden.</td></tr>
+          <tr><td>14k yellow gold</td><td>Low</td><td>The most durable everyday gold — 58.3% gold, alloyed harder</td><td>Practicality matters and the color difference from 18k doesn't.</td></tr>
+          <tr><td>Rose gold</td><td>Low; never needs plating</td><td>Very durable thanks to the copper alloy</td><td>They like it — but note copper can irritate sensitive skin.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid g2" style="margin-top:28px">
+      <div class="card" style="padding:24px">
+        <span class="eyebrow">Getting the size without asking</span>
+        <h3 style="margin:12px 0 14px">Four methods that work</h3>
+        <ul class="moves">
+          <li data-n="1">Borrow a ring they already wear on that finger — the ring finger or the one next to it — and take it to a jeweler. Don't guess from a different finger.</li>
+          <li data-n="2">Press that ring into a bar of soap or plasticine for a clean impression if you can't leave the house with it.</li>
+          <li data-n="3">Recruit their most discreet friend or sibling to go "ring shopping for themselves" and try things on together.</li>
+          <li data-n="4">Accept a near miss. The average US size is around 6 to 6.5, and resizing a plain band is routine.</li>
+        </ul>
+        <p class="small" style="margin-top:16px"><b>Fingers change size.</b> They swell in heat, after salt, at the end of the day and on flights. Measure at normal room temperature, and remember a wide band fits tighter than a thin one — go up about a quarter size for anything over 4mm.</p>
+      </div>
+
+      <div class="card" style="padding:24px">
+        <span class="eyebrow">Budget</span>
+        <h3 style="margin:12px 0 8px">What a number actually buys</h3>
+        <p class="small">Three months' salary was a De Beers advertising line from the 1930s, revived in the 1980s. It is not a rule and never was. Set a number you can pay without financing, then spend it well.</p>
+        <div class="sliderrow">
+          <span class="big" id="budgetVal">$5,200</span>
+          <span class="small">total, ring complete</span>
+        </div>
+        <input class="slider" id="budgetSlider" type="range" min="1000" max="25000" step="200" value="5200" aria-label="Total ring budget">
+        <div class="budget-out">
+          <div class="bcol">
+            <span class="eyebrow">Lab-grown</span>
+            <span class="big" id="labOut">~1.8–2.2 ct</span>
+            <p id="labNote">G color, VS2, excellent cut, in a simple solitaire.</p>
+          </div>
+          <div class="bcol">
+            <span class="eyebrow">Natural</span>
+            <span class="big" id="natOut">~0.9–1.1 ct</span>
+            <p id="natNote">G color, SI1 eye-clean, excellent cut, in a simple solitaire.</p>
+          </div>
+        </div>
+        <div class="alloc" aria-hidden="true">
+          <i style="width:65%;background:var(--accent)"></i>
+          <i style="width:23%;background:var(--gold)"></i>
+          <i style="width:12%;background:var(--ink-3)"></i>
+        </div>
+        <div class="alloc-key">
+          <span><b style="background:var(--accent)"></b>Center stone 65%</span>
+          <span><b style="background:var(--gold)"></b>Setting 23%</span>
+          <span><b style="background:var(--ink-3)"></b>Sizing &amp; insurance 12%</span>
+        </div>
+        <p class="tiny" style="margin-top:13px">Ballpark ranges for orientation, not quotes. Stone prices move constantly — price-check three vendors before committing.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="eyebrow">Insure it before you propose</span>
+      <p>The window where a ring is most likely to be lost is the week you're carrying it around in a coat pocket waiting for the right moment. Get a valuation from the jeweler and add a scheduled personal property rider to your renter's or homeowner's policy, or a standalone jewelry policy — typically 1–2% of the ring's value per year. Photograph the report number on the girdle while you have it.</p>
+    </div>
+
+    <div class="view-foot">
+      <button class="btn ghost" data-go="diamonds">← Diamonds</button>
+      <div class="spacer"></div>
+      <button class="btn" data-go="how">Next: How →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= HOW ======================= -->
+<section class="view" id="view-how" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow"><span class="n">06</span> — How</span>
+      <h2>Eight ways to actually do it</h2>
+      <p class="lede">The method matters more than the venue. These run from most private to most public — find where your partner sits on that line and don't drift past it to impress anyone else.</p>
+    </div>
+
+    <div class="how-list">
+      <article class="how"><span class="idx">01</span><div>
+        <h4>The ordinary Tuesday</h4>
+        <p>No occasion, no reservation, no warning. Making dinner, walking the dog, on the sofa. The whole meaning is that it wasn't a production — that this is what the rest of it looks like. Impossible to see coming, and the version most private people describe afterwards as perfect.</p>
+        <div class="meta"><span class="chip on">Most private</span><span class="chip">No cost</span></div>
+      </div></article>
+      <article class="how"><span class="idx">02</span><div>
+        <h4>The walk that ends somewhere</h4>
+        <p>A hike, a beach, a route you've done a hundred times, with one spot chosen in advance. The walking gives you both something to do with the nerves, and arriving somewhere makes a natural moment to stop. Scout it in person at the same hour, on a similar day.</p>
+        <div class="meta"><span class="chip">Private</span><span class="chip">Weather plan needed</span></div>
+      </div></article>
+      <article class="how"><span class="idx">03</span><div>
+        <h4>The hidden photographer</h4>
+        <p>A photographer waiting at a distance with a long lens, looking like a tourist. You get their real face in the real second — which is the one photo people actually keep. Proposal shoots typically run 30–60 minutes and a few hundred dollars. Agree a signal, a direction to face, and a plan for if they're late.</p>
+        <div class="meta"><span class="chip">Private moment, kept</span><span class="chip gold">Book 6+ weeks out</span></div>
+      </div></article>
+      <article class="how"><span class="idx">04</span><div>
+        <h4>Dinner, then the real reason</h4>
+        <p>Propose before or after the meal, never during. Before, and you both get to enjoy dinner engaged; after, and they don't spend two courses suspicious. Doing it at the table in a full restaurant turns strangers into an audience — only choose that deliberately.</p>
+        <div class="meta"><span class="chip">Semi-public</span><span class="chip">Call the venue ahead</span></div>
+      </div></article>
+      <article class="how"><span class="idx">05</span><div>
+        <h4>The staged errand</h4>
+        <p>A believable reason to be somewhere and dressed well — a friend's fake party, a work thing, a portrait session "for your parents". The cover story does the heavy lifting: it explains the outfit, the location, and why you're nervous.</p>
+        <div class="meta"><span class="chip">Needs accomplices</span><span class="chip">High surprise</span></div>
+      </div></article>
+      <article class="how"><span class="idx">06</span><div>
+        <h4>The long game</h4>
+        <p>A letter a week, a photo album finished on the last page, a scavenger hunt through the places that got you here. Takes weeks of preparation and lands hardest with sentimental people who keep things. Make sure the final step is somewhere you can be alone.</p>
+        <div class="meta"><span class="chip">High effort</span><span class="chip on">High meaning</span></div>
+      </div></article>
+      <article class="how"><span class="idx">07</span><div>
+        <h4>The reveal, then the room</h4>
+        <p>Propose just the two of you, then walk into a bar or a living room where everyone they love is already waiting. The best of both — a private yes, followed immediately by the celebration. Give them a moment in the car first.</p>
+        <div class="meta"><span class="chip">Private then public</span><span class="chip">Two-part logistics</span></div>
+      </div></article>
+      <article class="how"><span class="idx">08</span><div>
+        <h4>Designed together</h4>
+        <p>No surprise at all about the ring — you choose it together, then the timing is the only secret. Increasingly common, and the right answer whenever the ring is something they'll wear every day and have strong opinions about. You can still ambush them with <em>when</em>.</p>
+        <div class="meta"><span class="chip on">Zero ring risk</span><span class="chip">Surprise preserved</span></div>
+      </div></article>
+    </div>
+
+    <div class="grid g2" style="margin-top:28px">
+      <div class="card" style="padding:24px">
+        <span class="eyebrow">The hour before</span>
+        <ul class="moves" style="margin-top:16px">
+          <li data-n="1">Don't put the box in your trouser pocket — it prints through. Use a flat travel case in a coat, or give the box to an accomplice.</li>
+          <li data-n="2">Take the ring out of the box beforehand if you're nervous about fumbling. Several people have dropped it opening the lid.</li>
+          <li data-n="3">Charge your phone. Someone will need to take the first photo and you'll want to call people afterwards.</li>
+          <li data-n="4">Know the first two sentences you want to say. Not a speech — you will not remember a speech.</li>
+          <li data-n="5">Decide in advance who they get to call first, and leave time for it. That call matters more than the dinner reservation.</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:24px">
+        <span class="eyebrow">Two questions worth settling early</span>
+        <h4 style="margin-top:12px">Do they want family asked?</h4>
+        <p class="small" style="margin-top:7px">The modern framing is asking whether your partner would want you to, rather than asking anyone for permission. For some families it means a great deal; for others it lands badly. This is knowable in advance — it's come up in conversation before, you just have to remember what they said.</p>
+        <h4 style="margin-top:18px">Who knows in advance?</h4>
+        <p class="small" style="margin-top:7px">Every person you tell is a person who can accidentally tell. Keep the circle to the people who are genuinely needed — the photographer, the sibling who got the ring size, the friend hosting the room afterwards — and tell them the date, not the details.</p>
+      </div>
+    </div>
+
+    <div class="view-foot">
+      <button class="btn ghost" data-go="rings">← The ring</button>
+      <div class="spacer"></div>
+      <button class="btn" data-go="when">Next: When →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= WHEN ======================= -->
+<section class="view" id="view-when" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow"><span class="n">07</span> — When</span>
+      <h2>Pick a date, work backwards</h2>
+      <p class="lede">Most of what goes wrong is a lead time somebody didn't know about. Enter your target date and we'll lay out what has to happen and by when.</p>
+    </div>
+
+    <div class="grid g2">
+      <div>
+        <label class="eyebrow" for="dateInput" style="display:block;margin-bottom:9px">Target date</label>
+        <input class="field" id="dateInput" type="date" style="max-width:280px">
+        <div id="tlWarn" style="margin-top:18px"></div>
+        <ol class="tl" id="timeline"></ol>
+      </div>
+      <div>
+        <div class="card" style="padding:24px">
+          <span class="eyebrow">Choosing the date itself</span>
+          <h3 style="margin:12px 0 12px">What the calendar does to you</h3>
+          <p class="small"><b>Engagement season</b> runs from Thanksgiving through Valentine's Day and takes a large share of the year's proposals. Everyone is together, everyone is off work, and the photos look like the holidays. The cost: photographers book out, restaurants are full, and their family may half-expect it.</p>
+          <p class="small" style="margin-top:12px"><b>The off-season</b> — March through October — buys you availability, surprise, better light, and venues that aren't crowded. If nothing is forcing December, this is the easier path.</p>
+          <p class="small" style="margin-top:12px"><b>Golden hour</b> is the hour after sunrise and before sunset. Look up sunset for your exact date, then arrive 90 minutes before — many spots fall into shadow well before the sun is technically down.</p>
+          <p class="small" style="margin-top:12px"><b>Avoid borrowing a date.</b> Proposing on their birthday or a family anniversary means that day now belongs to two things forever. Some people love that. Ask yourself which kind they are.</p>
+          <p class="small" style="margin-top:12px"><b>Weekdays are underrated.</b> Quieter venues, empty overlooks, and a Tuesday that becomes memorable on its own.</p>
+        </div>
+        <div class="callout">
+          <span class="eyebrow">If the date is close</span>
+          <p>Ready-to-ship settings with a stone already on hand can be done in one to two weeks. If you're tighter than that, propose with a temporary band, an heirloom, or the empty box and design the real ring together afterwards — which many people prefer anyway. Rushing a custom CAD order is how rings arrive wrong.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="view-foot">
+      <button class="btn ghost" data-go="how">← How</button>
+      <div class="spacer"></div>
+      <button class="btn" data-go="quiz">Take the quiz →</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div style="max-width:54ch">
+        <span class="mark" style="font-size:1.2rem">Just <em>Not</em> The Ring</span>
+        <p class="small" style="margin-top:11px">A planning guide, not a jeweler and not an appraiser. Grading standards referenced are GIA's. Price figures are orientation ranges that move with the market — verify with vendors before committing.</p>
+      </div>
+      <div>
+        <span class="eyebrow">Sources</span>
+        <p class="small" style="margin-top:9px;line-height:2">
+          <a href="https://www.theknot.com/content/how-much-to-spend-on-engagement-ring">The Knot — engagement ring cost</a><br>
+          <a href="https://rapaport.com/news/lab-grown-taking-over-engagement-ring-spending-the-knot/">Rapaport — The Knot 2026 study</a><br>
+          <a href="https://www.gia.edu/diamond-quality-factor">GIA — the 4Cs</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+function el(h){ var t=document.createElement("template"); t.innerHTML=h.trim(); return t.content.firstElementChild; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+function $(id){ return document.getElementById(id); }
+
+/* ============================================================
+   ROUTING — one view at a time
+   ============================================================ */
+var VIEWS=["home","quiz","locations","trip","diamonds","rings","how","when"];
+function showView(name, push){
+  if(VIEWS.indexOf(name)<0) name="home";
+  VIEWS.forEach(function(v){ $("view-"+v).hidden = (v!==name); });
+  [].slice.call(document.querySelectorAll(".bar-nav button")).forEach(function(b){
+    if(b.getAttribute("data-go")===name) b.setAttribute("aria-current","page");
+    else b.removeAttribute("aria-current");
+  });
+  if(push!==false && location.hash!=="#"+name){ history.pushState({v:name},"","#"+name); }
+  window.scrollTo({top:0,behavior:"instant"});
+}
+document.addEventListener("click",function(e){
+  var t=e.target.closest("[data-go]");
+  if(!t) return;
+  e.preventDefault();
+  showView(t.getAttribute("data-go"));
+});
+window.addEventListener("popstate",function(){ showView((location.hash||"#home").slice(1), false); });
+showView((location.hash||"#home").slice(1), false);
+
+/* ============================================================
+   DIAMOND DATA
+   ============================================================ */
+var SHAPES = {
+  round:{name:"Round brilliant", ratio:1.00, spread:1.00, note:"The most brilliant shape and the most researched — it's the only one GIA issues a cut grade for. It's also the most expensive per carat, because cutting a round wastes the most rough.", tip:"Insist on Excellent cut. It's the one shape where the grade tells you everything."},
+  oval:{name:"Oval", ratio:1.40, spread:1.10, note:"Elongated and finger-flattering, and it covers more surface per carat than a round — an oval typically reads a quarter carat larger than it weighs.", tip:"Look for a bowtie — a dark shadow across the middle. Every oval has some; you want one where it's faint."},
+  cushion:{name:"Cushion", ratio:1.10, spread:0.98, note:"A softened square with rounded corners and large facets. Warm, slightly antique, and it throws more fire than a round — broad colored flashes rather than fine white sparkle.", tip:"Cushions hold color. Go a grade higher on color than you would for a round."},
+  emerald:{name:"Emerald", ratio:1.45, spread:1.05, note:"A step cut: long parallel facets instead of brilliant triangles, producing a hall-of-mirrors flash rather than sparkle. Architectural and quietly expensive-looking.", tip:"Clarity is exposed here. VS2 or better, and check the corners for color."},
+  princess:{name:"Princess", ratio:1.00, spread:1.02, note:"A square brilliant. Sharp modern lines, excellent light return, and less rough wasted in cutting — so more stone per dollar than a round.", tip:"The corners are the weak point. A setting with corner prongs or a V-cap is not optional."},
+  radiant:{name:"Radiant", ratio:1.30, spread:1.04, note:"A cut-cornered rectangle with brilliant faceting — emerald's outline with a round's sparkle. Hides inclusions and color better than almost any other shape.", tip:"The most forgiving shape for stretching a budget on clarity and color."},
+  pear:{name:"Pear", ratio:1.55, spread:1.12, note:"A round on one end, a point on the other. Elongating, distinctive, and one of the best shapes for apparent size per carat.", tip:"Check the point is protected by a V-prong, and that the shoulders are symmetrical — a lopsided pear is obvious forever."},
+  marquise:{name:"Marquise", ratio:1.95, spread:1.20, note:"The largest apparent size of any shape per carat — two points and a wide middle. Strongly vintage, and back in fashion after decades away.", tip:"Both points need protecting, and a bowtie is common. Judge it face-up in person."},
+  asscher:{name:"Asscher", ratio:1.00, spread:0.97, note:"A square step cut with cropped corners and deep concentric facets. Distinctly Art Deco, and it draws the eye into the stone rather than off the surface.", tip:"Like the emerald: clarity shows. VS2 minimum, and a high-clarity stone genuinely looks different here."},
+  elongated:{name:"Elongated cushion", ratio:1.35, spread:1.06, note:"A cushion stretched long. Softer than an oval, more contemporary than a classic cushion, and currently one of the fastest-rising choices.", tip:"Ask for the length-to-width ratio in writing — 1.25 to 1.45 is where it looks deliberate rather than accidental."},
+
+  hexagon:{name:"Hexagon", alt:true, ratio:1.15, spread:1.08, note:"Six straight sides, usually step-cut. Geometric and deliberate, and it reads as a choice rather than a default the second anyone looks at it. Common in salt-and-pepper and colored stones.", tip:"The six corners are all points of weakness. Bezel it, or insist on prongs that cap the corners."},
+  kite:{name:"Kite", alt:true, ratio:1.50, spread:1.14, note:"A four-sided stone with a long axis and two points. Sharp, modern, and it sits beautifully at an angle across the finger — often set east-west or in a cluster.", tip:"Set at a diagonal, it catches on everything. A bezel is close to mandatory for daily wear."},
+  shield:{name:"Shield", alt:true, ratio:1.10, spread:1.06, note:"Flat top, tapering to a point. Historically a side stone, increasingly used as a center. Unmistakably not a round, and it costs less per carat than the shapes everyone asks for.", tip:"The bottom point needs a V-prong. Check the shoulders are even — asymmetry is glaring on a shield."},
+  trillion:{name:"Trillion", alt:true, ratio:1.00, spread:1.16, note:"A triangle. Enormous spread for the weight — a trillion covers more finger per carat than almost anything — and it throws light in broad flat flashes rather than pinpoint sparkle.", tip:"Three corners, three vulnerabilities. Shallow by nature, so inclusions show: go VS2 or better."},
+  rosecut:{name:"Rose cut", alt:true, ratio:1.05, spread:1.22, note:"A flat back with a domed, triangular-faceted top and no pavilion at all. It doesn't sparkle — it glows, softly, the way stones did before electric light. The oldest style here and the most divisive.", tip:"Because it's flat-backed, it looks far larger than its weight. It also shows inclusions clearly, and it will never sparkle like a brilliant. Look at one in person before committing."},
+  oldmine:{name:"Old mine cut", alt:true, ratio:1.05, spread:0.94, note:"The hand-cut ancestor of the modern cushion — a small table, a high crown, and an open culet you can see straight down into. Cut by candlelight, for candlelight: broad, slow, warm flashes instead of fine white fire.", tip:"Genuine antiques are rarely graded to modern standards and often face up a grade or two warmer. That warmth is the appeal; don't buy one expecting an F."}
+};
+
+var CUTS = [
+  {g:"Excellent", v:"buy", d:"Light entering the crown reflects off both pavilion facets and returns straight back through the table. Maximum brilliance, fire and scintillation. This is where the money belongs — a 0.9 ct Excellent outshines a 1.1 ct Good every time.", eff:1.0},
+  {g:"Very Good", v:"buy", d:"Very close to Excellent and noticeably cheaper. Most people cannot tell the two apart without comparing them side by side under the same light. A legitimate way to save.", eff:0.92},
+  {g:"Good", v:"care", d:"Still returns a reasonable amount of light, but the stone starts to look flatter in dim rooms — restaurant lighting, evening, indoors. You'll see the difference where you actually live.", eff:0.78},
+  {g:"Fair", v:"skip", d:"Proportions are off enough that light leaks out of the pavilion. The stone reads glassy rather than lively. No amount of color or clarity rescues this.", eff:0.58},
+  {g:"Poor", v:"skip", d:"Most light entering escapes through the bottom or sides. Often the result of cutting for weight — keeping the stone heavy enough to hit a carat threshold at the cost of everything you can see.", eff:0.40}
+];
+
+var COLORS = [
+  {g:"D", hex:"#FBFDFF", band:"Colorless", v:"care", d:"The top of the scale. Icy and technically perfect — and in a mounted ring, essentially indistinguishable from an F to anyone without master stones. You pay a significant premium for the letter on the paper."},
+  {g:"E", hex:"#FAFDFE", band:"Colorless", v:"care", d:"Colorless. Only a trained grader separates D, E and F face-down against masters. Beautiful, and you're still paying for rarity rather than for something visible."},
+  {g:"F", hex:"#FAFCFB", band:"Colorless", v:"buy", d:"The last colorless grade and the smartest of the three. Visually identical to D in the setting, meaningfully less expensive."},
+  {g:"G", hex:"#FBFCF6", band:"Near colorless", v:"buy", d:"The sweet spot. Faces up white in every metal, including platinum, with no visible tint unless compared directly against a D. If you want one answer for color, this is it."},
+  {g:"H", hex:"#FCFBF0", band:"Near colorless", v:"buy", d:"Still faces up white on its own. A trace of warmth appears only alongside a higher grade. Excellent value, especially under 1.5 ct."},
+  {g:"I", hex:"#FCF9E8", band:"Near colorless", v:"buy", d:"Slight warmth visible from the side in larger stones, and invisible face-up in yellow or rose gold. The best-value grade in a gold setting."},
+  {g:"J", hex:"#FBF6DE", band:"Near colorless", v:"care", d:"Faint warmth that most people won't notice in gold and some will notice in platinum. Below 1 ct it's a genuine bargain; above 2 ct look at it in person first."},
+  {g:"K", hex:"#F9F2CF", band:"Faint", v:"care", d:"Now officially tinted. In yellow gold it reads as warm and vintage rather than off-white, and many people prefer it there. In white metal it looks yellow."},
+  {g:"L", hex:"#F7EEC2", band:"Faint", v:"skip", d:"Warmth is visible face-up in most lighting. Only worth it in a warm-metal antique setting where the color is the point."},
+  {g:"M", hex:"#F5E9B3", band:"Faint", v:"skip", d:"Clearly tinted. Priced accordingly, and hard to make look intentional in a modern ring."},
+  {g:"N–R", hex:"#F2E2A0", band:"Very light", v:"skip", d:"Obvious yellow to brown. Sold cheaply, and almost always a disappointment against expectations set by everything else on this page."},
+  {g:"S–Z", hex:"#EDD98A", band:"Light", v:"skip", d:"Distinctly yellow. Past Z the stone is graded as a fancy colored diamond instead — a completely different and much more expensive market."}
+];
+
+var CLARITY = [
+  {g:"FL", n:0, name:"Flawless", v:"care", d:"No inclusions or blemishes at 10×. Under 0.5% of gem diamonds. You are buying a certificate — it is visually identical to a VS2 on a hand."},
+  {g:"IF", n:0, name:"Internally flawless", v:"care", d:"No internal inclusions; minor surface blemishes only. Still a rarity premium for something nobody will ever see."},
+  {g:"VVS1", n:1, name:"Very very slightly included", v:"care", d:"Inclusions extremely difficult to see even at 10×, usually only from the pavilion side. Lovely, and a lot of money spent invisibly."},
+  {g:"VVS2", n:2, name:"Very very slightly included", v:"care", d:"Very difficult to spot at 10×. Still comfortably above what any eye can resolve."},
+  {g:"VS1", n:3, name:"Very slightly included", v:"buy", d:"Minor inclusions, difficult to see at 10×. Guaranteed eye-clean and a sensible ceiling for most budgets."},
+  {g:"VS2", n:5, name:"Very slightly included", v:"buy", d:"Minor inclusions, somewhat easy to find at 10× — and invisible without magnification. The best balance of price and certainty on the whole scale."},
+  {g:"SI1", n:9, name:"Slightly included", v:"buy", d:"Noticeable at 10×, frequently still eye-clean face-up. This is where the value lives, but you must see the stone or its plot first. Position is everything."},
+  {g:"SI2", n:15, name:"Slightly included", v:"care", d:"Easy to see at 10×, and sometimes visible to the eye. Roughly a coin-flip. Never buy one unseen, and never in a step cut."},
+  {g:"I1", n:26, name:"Included", v:"skip", d:"Inclusions visible to the naked eye and affecting transparency. The stone looks slightly cloudy or spotted in daylight."},
+  {g:"I2–I3", n:44, name:"Included", v:"skip", d:"Obvious to the eye, dulling brilliance, and occasionally a durability risk if a feather reaches the surface. Not an engagement stone."}
+];
+
+var state = { shape:"round", carat:1.00, color:3, clarity:5, cut:0 };
+
+function caratToMm(ct, shape){
+  var d = 6.4 * Math.pow(ct, 1/3);
+  return d * (SHAPES[shape] ? SHAPES[shape].spread : 1);
+}
+function shapePath(shape){
+  switch(shape){
+    case "oval":      return '<ellipse cx="100" cy="100" rx="58" ry="80"/>';
+    case "cushion":   return '<path d="M42 30 Q30 30 30 42 L30 158 Q30 170 42 170 L158 170 Q170 170 170 158 L170 42 Q170 30 158 30 Z"/>';
+    case "emerald":   return '<path d="M62 24 L138 24 L170 56 L170 144 L138 176 L62 176 L30 144 L30 56 Z"/>';
+    case "princess":  return '<rect x="28" y="28" width="144" height="144"/>';
+    case "radiant":   return '<path d="M60 26 L140 26 L172 58 L172 142 L140 174 L60 174 L28 142 L28 58 Z"/>';
+    case "pear":      return '<path d="M100 18 C132 60 158 92 158 122 C158 154 132 180 100 180 C68 180 42 154 42 122 C42 92 68 60 100 18 Z"/>';
+    case "marquise":  return '<path d="M100 16 C132 54 148 82 148 100 C148 118 132 146 100 184 C68 146 52 118 52 100 C52 82 68 54 100 16 Z"/>';
+    case "asscher":   return '<path d="M58 24 L142 24 L176 58 L176 142 L142 176 L58 176 L24 142 L24 58 Z"/>';
+    case "elongated": return '<path d="M50 34 Q34 34 34 50 L34 150 Q34 166 50 166 L150 166 Q166 166 166 150 L166 50 Q166 34 150 34 Z"/>';
+    case "hexagon":   return '<path d="M100 18 L168 59 L168 141 L100 182 L32 141 L32 59 Z"/>';
+    case "kite":      return '<path d="M100 14 L164 86 L100 186 L36 86 Z"/>';
+    case "shield":    return '<path d="M38 28 L162 28 L162 108 Q162 150 100 180 Q38 150 38 108 Z"/>';
+    case "trillion":  return '<path d="M100 24 L172 160 Q176 170 166 170 L34 170 Q24 170 28 160 Z"/>';
+    case "rosecut":   return '<circle cx="100" cy="100" r="76"/>';
+    case "oldmine":   return '<path d="M46 32 Q32 32 32 46 L32 154 Q32 168 46 168 L154 168 Q168 168 168 154 L168 46 Q168 32 154 32 Z"/>';
+    default:          return '<circle cx="100" cy="100" r="76"/>';
+  }
+}
+var ALT_SPOKE={hexagon:6, kite:4, shield:5, trillion:3, oldmine:8};
+function facetLines(shape){
+  if(shape==="emerald"||shape==="asscher"){
+    return '<path d="M74 40 L126 40 L154 68 L154 132 L126 160 L74 160 L46 132 L46 68 Z"/>'+
+           '<path d="M86 56 L114 56 L138 78 L138 122 L114 144 L86 144 L62 122 L62 78 Z"/>'+
+           '<path d="M98 72 L102 72 L122 90 L122 110 L102 128 L98 128 L78 110 L78 90 Z"/>';
+  }
+  if(shape==="princess"||shape==="radiant"){
+    return '<path d="M28 28 L172 172 M172 28 L28 172"/><rect x="66" y="66" width="68" height="68"/>';
+  }
+  if(shape==="rosecut"){
+    /* flat back, domed top: six triangular facets meeting at an apex */
+    var tri='', k;
+    for(k=0;k<6;k++){
+      var a1=(k/6)*Math.PI*2-Math.PI/2, a2=((k+1)/6)*Math.PI*2-Math.PI/2;
+      tri+='<path d="M100 100 L'+(100+Math.cos(a1)*74).toFixed(1)+' '+(100+Math.sin(a1)*74).toFixed(1)+
+           ' L'+(100+Math.cos(a2)*74).toFixed(1)+' '+(100+Math.sin(a2)*74).toFixed(1)+' Z"/>';
+    }
+    for(k=0;k<6;k++){
+      var b1=(k/6)*Math.PI*2-Math.PI/2, b2=((k+0.5)/6)*Math.PI*2-Math.PI/2;
+      tri+='<path d="M'+(100+Math.cos(b1)*74).toFixed(1)+' '+(100+Math.sin(b1)*74).toFixed(1)+
+           ' L'+(100+Math.cos(b2)*38).toFixed(1)+' '+(100+Math.sin(b2)*38).toFixed(1)+'"/>';
+    }
+    return tri;
+  }
+  if(ALT_SPOKE[shape]){
+    var n=ALT_SPOKE[shape], sp='';
+    for(var j=0;j<n;j++){
+      var ang=(j/n)*Math.PI*2-Math.PI/2;
+      sp+='<path d="M'+(100+Math.cos(ang)*26).toFixed(1)+' '+(100+Math.sin(ang)*26).toFixed(1)+
+          ' L'+(100+Math.cos(ang)*82).toFixed(1)+' '+(100+Math.sin(ang)*82).toFixed(1)+'"/>';
+    }
+    var inner='<g transform="translate(100 100) scale(0.6) translate(-100 -100)">'+shapePath(shape)+'</g>';
+    var culet = shape==="oldmine" ? '<circle cx="100" cy="100" r="11"/>' : '';
+    return inner+sp+culet;
+  }
+  var star='';
+  for(var i=0;i<8;i++){
+    var a=(i/8)*Math.PI*2 - Math.PI/2;
+    star += '<path d="M'+(100+Math.cos(a)*34).toFixed(1)+' '+(100+Math.sin(a)*34).toFixed(1)+
+            ' L'+(100+Math.cos(a)*76).toFixed(1)+' '+(100+Math.sin(a)*76).toFixed(1)+'"/>';
+  }
+  return star + '<circle cx="100" cy="100" r="34"/><circle cx="100" cy="100" r="52"/>';
+}
+var INC_PTS=[[104,96],[78,118],[126,74],[92,138],[136,126],[66,84],[112,122],[88,70],[142,98],[60,120],
+  [118,148],[74,146],[148,62],[52,66],[100,58],[128,44],[70,48],[152,136],[46,102],[106,166],
+  [160,84],[40,140],[92,40],[136,160],[56,158],[166,116],[84,104],[120,100],[96,112],[110,82],
+  [72,100],[130,116],[86,88],[114,134],[64,136],[142,80],[98,148],[54,88],[150,150],[80,60],
+  [124,60],[44,120],[158,102],[102,130]];
+function inclusionMarks(n){
+  var out='';
+  for(var i=0;i<Math.min(n,INC_PTS.length);i++){
+    out += '<circle cx="'+INC_PTS[i][0]+'" cy="'+INC_PTS[i][1]+'" r="'+(1.6+(i%3)*0.9).toFixed(1)+'" fill="currentColor" opacity="0.55"/>';
+  }
+  return out;
+}
+function drawStone(){
+  var c=COLORS[state.color], cl=CLARITY[state.clarity], cut=CUTS[state.cut];
+  var mm=caratToMm(state.carat,state.shape);
+  var sizePct=Math.max(34,Math.min(100,(mm/11)*100));
+  var glow=cut.eff;
+  var svg =
+   '<svg viewBox="0 0 200 200" width="100%" height="100%" role="img" aria-label="'+
+     esc(SHAPES[state.shape].name+", "+state.carat.toFixed(2)+" carat, color "+c.g+", clarity "+cl.g+", "+cut.g+" cut")+'">'+
+   '<defs><radialGradient id="stoneFill" cx="38%" cy="30%" r="82%">'+
+     '<stop offset="0%" stop-color="#ffffff" stop-opacity="'+(0.30+0.62*glow).toFixed(2)+'"/>'+
+     '<stop offset="46%" stop-color="'+c.hex+'" stop-opacity="0.96"/>'+
+     '<stop offset="100%" stop-color="'+c.hex+'" stop-opacity="'+(0.55+0.35*glow).toFixed(2)+'"/>'+
+   '</radialGradient><clipPath id="stoneClip">'+shapePath(state.shape)+'</clipPath></defs>'+
+   '<circle cx="100" cy="100" r="96" fill="var(--surface-3)"/>'+
+   '<circle cx="100" cy="100" r="96" fill="none" stroke="var(--line-2)" stroke-width="1"/>'+
+   '<g transform="translate(100 100) scale('+(sizePct/100).toFixed(3)+') translate(-100 -100)">'+
+     '<g fill="url(#stoneFill)" stroke="#44576D" stroke-width="2.4" stroke-opacity="0.92">'+shapePath(state.shape)+'</g>'+
+     '<g clip-path="url(#stoneClip)">'+
+       '<g fill="none" stroke="#3B5168" stroke-width="1.3" stroke-opacity="'+(0.24+0.44*glow).toFixed(2)+'">'+facetLines(state.shape)+'</g>'+
+       '<g color="#27343F">'+inclusionMarks(cl.n)+'</g>'+
+     '</g></g></svg>';
+  $("stageArt").innerHTML=svg;
+  $("rShape").textContent=SHAPES[state.shape].name;
+  $("rCarat").textContent=state.carat.toFixed(2)+" ct";
+  $("rMm").textContent=mm.toFixed(1)+" mm";
+  $("rColor").textContent=c.g;
+  $("rClarity").textContent=cl.g;
+  $("rCut").textContent=cut.g;
+}
+function verdictTag(v){
+  var m={buy:["Where value lives","buy"],care:["Judge in person","care"],skip:["Skip this","skip"]}[v]||["Judge in person","care"];
+  return '<span class="verdict '+m[1]+'">'+m[0]+'</span>';
+}
+
+function buildCut(){
+  var wrap=$("cutScale"); wrap.innerHTML="";
+  CUTS.forEach(function(c,i){
+    var gem='<svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">'+
+      '<path d="M12 2 L22 9.5 L12 22 L2 9.5 Z" fill="#C3D2E2" fill-opacity="'+(0.25+0.75*c.eff).toFixed(2)+
+      '" stroke="#44576D" stroke-width="1.1" stroke-opacity="0.85"/>'+
+      '<path d="M2 9.5 H22 M12 2 L7 9.5 L12 22 M12 2 L17 9.5 L12 22" fill="none" stroke="#44576D" stroke-width="0.8" stroke-opacity="'+
+      (0.15+0.6*c.eff).toFixed(2)+'"/></svg>';
+    var b=el('<button class="step" type="button" aria-pressed="'+(i===state.cut)+'">'+
+      '<span class="gsw" style="display:grid;place-items:center;background:var(--surface)">'+gem+'</span>'+
+      '<span class="glabel" style="font-size:.7rem">'+esc(c.g)+'</span></button>');
+    b.addEventListener("click",function(){ state.cut=i; syncCut(); drawStone(); });
+    wrap.appendChild(b);
+  });
+  syncCut();
+}
+function syncCut(){
+  var b=$("cutScale").children;
+  for(var i=0;i<b.length;i++) b[i].setAttribute("aria-pressed", i===state.cut);
+  var c=CUTS[state.cut];
+  $("cutDetail").innerHTML='<span class="eyebrow">Cut grade</span><h4>'+esc(c.g)+'</h4><p>'+esc(c.d)+'</p>'+verdictTag(c.v);
+}
+function buildColor(){
+  var wrap=$("colorScale"); wrap.innerHTML="";
+  COLORS.forEach(function(c,i){
+    var b=el('<button class="step" type="button" aria-pressed="'+(i===state.color)+'">'+
+      '<span class="gsw" style="background:'+c.hex+'"></span><span class="glabel">'+esc(c.g)+'</span></button>');
+    b.addEventListener("click",function(){ state.color=i; syncColor(); drawStone(); });
+    wrap.appendChild(b);
+  });
+  syncColor();
+}
+function syncColor(){
+  var b=$("colorScale").children;
+  for(var i=0;i<b.length;i++) b[i].setAttribute("aria-pressed", i===state.color);
+  var c=COLORS[state.color];
+  $("colorDetail").innerHTML='<span class="eyebrow">'+esc(c.band)+'</span><h4>Grade '+esc(c.g)+'</h4><p>'+esc(c.d)+'</p>'+verdictTag(c.v);
+}
+function buildClarity(){
+  var wrap=$("clarityScale"); wrap.innerHTML="";
+  CLARITY.forEach(function(c,i){
+    var dots=Math.min(c.n,6), dh='';
+    for(var k=0;k<dots;k++) dh+='<i style="display:inline-block;width:3.5px;height:3.5px;border-radius:50%;background:var(--ink-3);margin:0 1px"></i>';
+    if(!dots) dh='<i style="display:inline-block;width:15px;height:1.5px;background:var(--line-2)"></i>';
+    var b=el('<button class="step" type="button" aria-pressed="'+(i===state.clarity)+'">'+
+      '<span class="gsw" style="display:grid;place-items:center;background:var(--surface)">'+dh+'</span>'+
+      '<span class="glabel">'+esc(c.g)+'</span></button>');
+    b.addEventListener("click",function(){ state.clarity=i; syncClarity(); drawStone(); });
+    wrap.appendChild(b);
+  });
+  syncClarity();
+}
+function syncClarity(){
+  var b=$("clarityScale").children;
+  for(var i=0;i<b.length;i++) b[i].setAttribute("aria-pressed", i===state.clarity);
+  var c=CLARITY[state.clarity];
+  $("clarityDetail").innerHTML='<span class="eyebrow">'+esc(c.name)+'</span><h4>'+esc(c.g)+'</h4><p>'+esc(c.d)+'</p>'+verdictTag(c.v);
+}
+var MAGIC=[0.50,0.75,1.00,1.50,2.00,3.00];
+function syncCarat(){
+  var ct=state.carat, mm=caratToMm(ct,state.shape);
+  $("caratVal").textContent=ct.toFixed(2)+" ct";
+  $("caratMm").textContent=mm.toFixed(1)+" mm across, "+SHAPES[state.shape].name.toLowerCase();
+  var nearMagic=null;
+  MAGIC.forEach(function(m){ if(ct>m && ct<=m+0.09) nearMagic=m; });
+  var head,body,tag;
+  if(nearMagic){
+    head="Just over a threshold"; tag="care";
+    body="At "+ct.toFixed(2)+" ct you're paying the premium for crossing "+nearMagic.toFixed(2)+" without the size to show for it. Drop to about "+(nearMagic-0.05).toFixed(2)+" ct — roughly "+caratToMm(nearMagic-0.05,state.shape).toFixed(1)+" mm against "+mm.toFixed(1)+" mm — and nobody will ever see the difference.";
+  } else if(ct<0.55){
+    head="Small and sharp"; tag="buy";
+    body="Under about 0.55 ct you can drop two color grades and a clarity grade with no visible cost — tint and inclusions simply don't show at this size. Put every spare dollar into cut instead.";
+  } else if(ct<1.0){
+    head="The value band"; tag="buy";
+    body="Between 0.6 and 0.95 ct, stones sit below the one-carat price wall while looking almost identical to it. A 0.92 ct reads as a carat to everyone who isn't holding a scale.";
+  } else if(ct<1.8){
+    head="Where color starts to show"; tag="buy";
+    body="Above a carat, warmth becomes visible from the side and inclusions get easier to spot. Hold the line at G color and VS2 clarity here rather than trading them for weight.";
+  } else {
+    head="Large enough to be scrutinized"; tag="care";
+    body="At "+ct.toFixed(2)+" ct every grade is visible — color face-up, inclusions to the naked eye, and any cut compromise. This is the size where paying for F/VS1 and an Excellent cut stops being vanity. Also check the setting: a stone this size needs six prongs or a bezel.";
+  }
+  $("caratDetail").innerHTML='<span class="eyebrow">At this weight</span><h4>'+esc(head)+'</h4><p>'+esc(body)+'</p>'+verdictTag(tag);
+  drawStone();
+}
+function shapeThumb(k){
+  return '<svg viewBox="0 0 200 200" aria-hidden="true">'+
+    '<g fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round">'+shapePath(k)+'</g>'+
+    '<g fill="none" stroke="currentColor" stroke-width="3" opacity="0.34">'+facetLines(k)+'</g></svg>';
+}
+var shapeGroup="classic";
+function shapeKeys(){
+  return Object.keys(SHAPES).filter(function(k){
+    return shapeGroup==="alt" ? !!SHAPES[k].alt : !SHAPES[k].alt;
+  });
+}
+function buildShapes(){
+  var grid=$("shapeGrid"); grid.innerHTML="";
+  shapeKeys().forEach(function(k){
+    var s=SHAPES[k];
+    var b=el('<button class="shape" type="button" aria-pressed="'+(k===state.shape)+'">'+shapeThumb(k)+
+      '<b>'+esc(s.name)+'</b><span>'+(s.ratio===1?"1.00":s.ratio.toFixed(2))+' L:W</span></button>');
+    b.addEventListener("click",function(){ state.shape=k; syncShapes(); syncCarat(); });
+    grid.appendChild(b);
+  });
+  syncShapes();
+}
+[].slice.call(document.querySelectorAll("#shapeModes .modechip")).forEach(function(b){
+  b.addEventListener("click",function(){
+    shapeGroup=b.getAttribute("data-group");
+    [].slice.call(document.querySelectorAll("#shapeModes .modechip")).forEach(function(o){
+      o.setAttribute("aria-pressed", o===b);
+    });
+    buildShapes();
+  });
+});
+function syncShapes(){
+  var b=$("shapeGrid").children, keys=shapeKeys();
+  for(var i=0;i<b.length;i++) b[i].setAttribute("aria-pressed", keys[i]===state.shape);
+  var s=SHAPES[state.shape];
+  $("shapeDetail").innerHTML='<span class="eyebrow">Length-to-width '+(s.ratio===1?"1.00":s.ratio.toFixed(2))+
+    ' · about '+Math.round((s.spread-1)*100)+'% spread vs a round</span>'+
+    '<h4>'+esc(s.name)+'</h4><p>'+esc(s.note)+'</p>'+
+    '<p style="margin-top:11px"><b>Watch for:</b> '+esc(s.tip)+'</p>';
+  drawStone();
+}
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll(".tab"));
+  tabs.forEach(function(t){
+    t.addEventListener("click",function(){
+      tabs.forEach(function(o){
+        var on=o===t;
+        o.setAttribute("aria-selected",on);
+        $(o.getAttribute("aria-controls")).hidden=!on;
+      });
+    });
+    t.addEventListener("keydown",function(e){
+      var i=tabs.indexOf(t), n=null;
+      if(e.key==="ArrowRight") n=tabs[(i+1)%tabs.length];
+      if(e.key==="ArrowLeft")  n=tabs[(i-1+tabs.length)%tabs.length];
+      if(n){ e.preventDefault(); n.focus(); n.click(); }
+    });
+  });
+})();
+$("caratSlider").addEventListener("input",function(){ state.carat=parseInt(this.value,10)/100; syncCarat(); });
+buildCut(); buildColor(); buildClarity(); buildShapes(); syncCarat();
+
+/* ============================================================
+   BUDGET
+   ============================================================ */
+function fmt(n){ return "$"+n.toLocaleString("en-US"); }
+function caratForBudget(total, lab){
+  var stone=total*0.65;
+  var steps = lab
+    ? [[0.5,600],[0.75,750],[1,900],[1.5,1100],[2,1250],[2.5,1400],[3,1500],[4,1700],[5,1900]]
+    : [[0.5,2600],[0.75,3100],[1,4800],[1.25,5600],[1.5,6600],[2,9500],[2.5,12000],[3,15000]];
+  var best=steps[0][0];
+  for(var i=0;i<steps.length;i++){ if(steps[i][0]*steps[i][1]<=stone) best=steps[i][0]; }
+  if(stone<steps[0][0]*steps[0][1]) best=Math.max(0.2, stone/steps[0][1]);
+  return best;
+}
+function syncBudget(){
+  var total=parseInt($("budgetSlider").value,10);
+  $("budgetVal").textContent=fmt(total);
+  function band(c){ return "~"+(c*0.9).toFixed(1)+"–"+(c*1.12).toFixed(1)+" ct"; }
+  $("labOut").textContent=band(caratForBudget(total,true));
+  $("natOut").textContent=band(caratForBudget(total,false));
+  $("labNote").textContent = total<2500 ? "G color, VS2, excellent cut. At this budget lab-grown is the only route to a full carat."
+    : total<8000 ? "G color, VS2, excellent cut, in a 14k solitaire. Comfortable headroom for a better setting."
+    : "F–G color, VS1, excellent cut, in platinum. At this budget stop buying weight and buy the grades you can see.";
+  $("natNote").textContent = total<2500 ? "H–I color, SI1 eye-clean, in 14k gold — gold hides the warmth and stretches the stone."
+    : total<8000 ? "G color, SI1 eye-clean, excellent cut, in a simple solitaire. Buy just under a magic weight."
+    : "G color, VS2, excellent cut. Consider an elongated shape for more finger coverage per carat.";
+}
+$("budgetSlider").addEventListener("input",syncBudget);
+syncBudget();
+
+/* ============================================================
+   CITY LENS
+   ============================================================ */
+var LENS={
+  nature:["botanical garden","scenic overlook","state park trail","arboretum","waterfront park","conservatory"],
+  urban:["rooftop bar","observation deck","historic library","sculpture garden","riverwalk","hotel bar with a view"],
+  home:["private dining room","chef's table","florist","cake shop","string quartet for hire"],
+  destination:["proposal photographer","private boat charter","sunrise viewpoint","hotel with a terrace suite"],
+  unconv:["record store","climbing gym","pottery studio","arcade","bowling alley","planetarium","drive-in theater","animal shelter","dive bar","late night diner","independent bookstore"]
+};
+var lensMode="auto";
+function renderLens(city, archetype){
+  if(!city){ $("lensOut").innerHTML=""; return; }
+  var key = lensMode==="auto" ? (archetype||"nature") : lensMode;
+  if(!LENS[key]) key="nature";
+  var terms=LENS[key].concat(["proposal photographer"]).filter(function(v,i,a){return a.indexOf(v)===i;});
+  var pin='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>';
+  var links=terms.map(function(t){
+    return '<a class="lenslink" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+
+      encodeURIComponent(t+" near "+city)+'">'+pin+esc(t)+'</a>';
+  }).join("");
+  var labels={nature:"outdoor and garden",urban:"city and skyline",home:"at-home and private-dining",destination:"travel",unconv:"unconventional"};
+  $("lensOut").innerHTML=
+    '<div class="card" style="padding:22px;margin-top:20px">'+
+      '<span class="eyebrow">Searching '+esc(city)+' — '+esc(labels[key])+' options</span>'+
+      '<p class="small" style="margin-top:11px">These are the place types that reliably work. Open a few, then call the two best and ask what they allow — most have a standard answer for proposals, and a surprising number will help you set it up.</p>'+
+      '<div class="lenslinks">'+links+'</div>'+
+      '<p class="tiny" style="margin-top:15px">Opens Google Maps in a new tab. Check permit rules and closing times before you commit.</p>'+
+    '</div>';
+}
+$("lensBtn").addEventListener("click",function(){ renderLens($("cityInput").value.trim(), window.__topEnv); });
+[].slice.call(document.querySelectorAll("#lensModes .modechip")).forEach(function(b){
+  b.addEventListener("click",function(){
+    lensMode=b.getAttribute("data-mode");
+    [].slice.call(document.querySelectorAll("#lensModes .modechip")).forEach(function(o){
+      o.setAttribute("aria-pressed", o===b);
+    });
+    renderLens($("cityInput").value.trim(), window.__topEnv);
+  });
+});
+$("cityInput").addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); $("lensBtn").click(); } });
+
+/* ============================================================
+   TRIP — booking hand-offs, Claude-powered ideas, outreach kit
+   ============================================================ */
+var PIN='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>';
+var EXT='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+function ln(href,label,icon){
+  return '<a class="lenslink" target="_blank" rel="noopener" href="'+href+'">'+(icon||EXT)+esc(label)+'</a>';
+}
+function enc(s){ return encodeURIComponent(String(s||"").trim()); }
+function prettyDay(iso){
+  if(!iso) return "";
+  var d=new Date(iso+"T12:00:00");
+  return isNaN(d)?"":d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+}
+function monthOf(iso){
+  if(!iso) return "";
+  var d=new Date(iso+"T12:00:00");
+  return isNaN(d)?"":d.toLocaleDateString("en-US",{month:"long",year:"numeric"});
+}
+function tripBrief(){
+  return {
+    want:  $("tripWant").value.trim(),
+    where: $("tripWhere").value.trim(),
+    from:  $("tripFrom").value.trim(),
+    out:   $("tripOut").value,
+    back:  $("tripBack").value,
+    budget:$("tripBudget").value
+  };
+}
+/* Every link below opens a real search on the site named. Nothing is fetched or
+   priced here — the page has no network access and will never show a made-up fare. */
+function bookingLinks(dest, b){
+  var out=[], d=dest||b.where||b.want;
+  if(!d) return out;
+  var fl = b.from
+    ? "https://www.google.com/travel/flights?q="+enc("Flights from "+b.from+" to "+d+(b.out?" on "+b.out:"")+(b.back?" through "+b.back:""))
+    : "https://www.google.com/travel/flights?q="+enc("Flights to "+d+(b.out?" on "+b.out:""));
+  out.push({group:"Flights", links:[ln(fl,"Google Flights")]});
+  var stay=[];
+  stay.push(ln("https://www.booking.com/searchresults.html?ss="+enc(d)+
+    (b.out?"&checkin="+b.out:"")+(b.back?"&checkout="+b.back:"")+"&group_adults=2&no_rooms=1&group_children=0","Booking.com"));
+  stay.push(ln("https://www.airbnb.com/s/"+enc(d)+"/homes?adults=2"+
+    (b.out?"&checkin="+b.out:"")+(b.back?"&checkout="+b.back:""),"Airbnb"));
+  stay.push(ln("https://www.google.com/travel/search?q="+enc("hotels in "+d),"Google Hotels"));
+  out.push({group:"Stays", links:stay});
+  return out;
+}
+function placeLinks(dest, terms){
+  return (terms||[]).map(function(t){
+    return ln("https://www.google.com/maps/search/?api=1&query="+enc(t+" "+dest), t, PIN);
+  });
+}
+function timingLinks(dest, b){
+  var l=[];
+  if(b.out) l.push(ln("https://www.google.com/search?q="+enc("sunset time in "+dest+" on "+prettyDay(b.out)),"Sunset time"));
+  l.push(ln("https://www.google.com/search?q="+enc("weather in "+dest+" in "+(monthOf(b.out)||"each month")),"Typical weather"));
+  l.push(ln("https://www.google.com/maps/search/?api=1&query="+enc("proposal photographer "+dest),"Photographers",PIN));
+  return l;
+}
+function renderTripLinks(){
+  var b=tripBrief();
+  var dest=b.where||b.want;
+  if(!dest){ $("tripLinks").innerHTML=""; return; }
+  var groups=bookingLinks(dest,b);
+  groups.push({group:"Timing", links:timingLinks(dest,b)});
+  $("tripLinks").innerHTML=
+    '<div class="linkset">'+groups.map(function(g){
+      return '<div class="linkrow"><span class="lr-label">'+esc(g.group)+'</span>'+
+        '<div class="lr-links">'+g.links.join("")+'</div></div>';
+    }).join("")+'</div>'+
+    '<p class="tiny" style="margin-top:11px">Each opens a live search with your dates already in it. This page has no connection to those sites and never shows a price of its own — anything you see on cost comes from them, not from here.</p>';
+}
+
+/* --- Claude-powered destination ideas (optional; page works fully without it) --- */
+var sampleFn=null, tripCtl=null;
+/* window.claude exists only inside a Claude viewer. Opened as a saved file or
+   hosted anywhere else, it is absent — the page must work exactly the same. */
+(function(){
+  var c = (typeof window!=="undefined" && window.claude && typeof window.claude.use==="function") ? window.claude : null;
+  if(!c) return;
+  try{
+    c.use("sample").then(function(s){ sampleFn=s||null; }, function(){ sampleFn=null; });
+  }catch(err){ sampleFn=null; }
+})();
+
+function tripPrompt(b){
+  var quizLine="";
+  var t=tally();
+  if(answers.some(function(a){return a!==null;})){
+    var env=top(t,["nature","urban","home","dest"],"nature");
+    var privacy=((t.priv||0)-(t.pub||0))>=0?"strongly prefers privacy and would hate an audience":"is comfortable being celebrated in front of people";
+    quizLine="\nFrom a quiz they took about their partner: happiest in "+env+" settings, and "+privacy+".";
+  }
+  return "Help someone plan a trip on which they intend to propose marriage. Be concrete and specific. Never invent prices, fares or availability — you cannot know them.\n\n"+
+    "THE BRIEF\n"+
+    "- What they want to do: "+(b.want||"(not said)")+"\n"+
+    "- Destination they have in mind: "+(b.where||"(open — suggest)")+"\n"+
+    "- Departing from: "+(b.from||"(not said)")+"\n"+
+    "- Dates: "+(b.out?prettyDay(b.out):"(flexible)")+(b.back?" to "+prettyDay(b.back):"")+"\n"+
+    "- Budget: "+b.budget+quizLine+"\n\n"+
+    "Suggest exactly 3 destinations that genuinely deliver what they described. If their dates are wrong for it — wrong season, wrong hemisphere, the thing does not happen then — say so plainly in seasonNote and give the nearest workable alternative instead of pretending it works. If they named a destination, keep it as the first suggestion but still say honestly whether the dates suit it.\n\n"+
+    "For each, name the specific place within the destination where they should actually propose — a named viewpoint, garden, beach or room, not 'the old town'.\n\n"+
+    'Reply with only JSON of exactly this shape:\n'+
+    '{"reading":"one sentence: what you understood them to want",'+
+    '"destinations":[{"name":"City, Country","airport":"main airport IATA code","why":"two sentences on why this fits what they asked for",'+
+    '"season":"the months this actually works","seasonNote":"one honest sentence about whether THEIR dates suit it",'+
+    '"spot":"the specific named place to propose","spotWhy":"one sentence",'+
+    '"watchOut":"one practical warning: permits, crowds, weather, closures or cost",'+
+    '"searches":["3-5 short map search terms for this destination"]}],'+
+    '"note":"one sentence of overall advice or a caveat about this trip"}';
+}
+function tripError(code){
+  switch(code){
+    case "not_granted": case "sampling_disabled": case "not_declared":
+    case "capability_disabled": case "capability_removed":
+      return "Suggestions are turned off for this page. The searches and the outreach email below still work.";
+    case "rate_limited": return "Too many requests just now. Give it a minute and try again.";
+    case "session_expired": return "Your Claude session expired — sign in again and retry.";
+    case "cancelled": return "";
+    case "invalid_json": case "empty_completion": return "That answer came back malformed. Try again, or add a little more detail to the brief.";
+    case "refused": return "Claude declined that brief. Try describing it differently.";
+    case "prompt_too_large": return "That brief is too long — shorten it.";
+    default: return "Something went wrong reaching Claude. The searches below still work.";
+  }
+}
+function renderDestinations(data,b){
+  if(!data || !data.destinations || !data.destinations.length){
+    $("tripIdeas").innerHTML='<p class="watch" style="margin-top:20px">No destinations came back. Try describing what you want a little differently.</p>';
+    return;
+  }
+  var head = data.reading
+    ? '<div class="own-echo" style="margin-top:24px"><span class="eyebrow">What we took you to mean</span>'+
+      '<blockquote style="font-size:1.14rem">'+esc(data.reading)+'</blockquote></div>' : '';
+  var cards=data.destinations.slice(0,4).map(function(d){
+    var name=String(d.name||"").trim(); if(!name) return "";
+    var bb={from:b.from,out:b.out,back:b.back,where:name,want:b.want};
+    var links=bookingLinks(name,bb).reduce(function(a,g){ return a.concat(g.links); },[]);
+    links=links.concat(timingLinks(name,bb));
+    return '<article class="dest">'+
+      '<div class="dest-top"><h4>'+esc(name)+'</h4>'+
+        (d.airport?'<span class="code">'+esc(String(d.airport).toUpperCase())+'</span>':'')+'</div>'+
+      (d.why?'<p>'+esc(d.why)+'</p>':'')+
+      (d.season||d.seasonNote
+        ? '<div class="season"><b>Season</b>'+esc(d.season||"")+(d.seasonNote?' — '+esc(d.seasonNote):'')+'</div>' : '')+
+      (d.spot?'<div class="spot"><span class="lbl">Where to actually ask</span><b>'+esc(d.spot)+'</b>'+
+        (d.spotWhy?'<p style="margin-top:5px">'+esc(d.spotWhy)+'</p>':'')+'</div>':'')+
+      (d.watchOut?'<p class="watch" style="margin-top:14px"><b>Watch out:</b> '+esc(d.watchOut)+'</p>':'')+
+      '<div class="lr-links">'+links.join("")+'</div>'+
+      (d.searches&&d.searches.length
+        ? '<div class="lr-links">'+placeLinks(name,d.searches.slice(0,5).map(String)).join("")+'</div>' : '')+
+      '</article>';
+  }).join("");
+  var note=data.note?'<p class="small" style="margin-top:16px;border-left:3px solid var(--gold);padding-left:15px">'+esc(data.note)+'</p>':'';
+  $("tripIdeas").innerHTML=head+
+    '<h3 style="margin:26px 0 4px">Three that fit</h3>'+
+    '<p class="tiny" style="margin-bottom:6px">Written by Claude from your brief. Check seasons and opening times yourself before you book anything.</p>'+
+    cards+note+
+    '<div class="quiz-foot"><button class="btn ghost" id="tripAgain" type="button">Ask for different ideas</button></div>';
+  var again=$("tripAgain");
+  if(again) again.addEventListener("click",function(){ runTrip(true); });
+}
+function runTrip(fresh){
+  var b=tripBrief();
+  renderTripLinks();
+  if(!b.want && !b.where){
+    $("tripStatus").textContent="Tell us what you want to do, or where.";
+    return;
+  }
+  if(!sampleFn){
+    $("tripIdeas").innerHTML='<p class="small" style="margin-top:20px;border-left:3px solid var(--line-2);padding-left:15px">'+
+      'Destination suggestions need a connection to Claude, which this view does not have. Everything else on this page — the searches above and the outreach email below — works as normal.</p>';
+    $("tripStatus").textContent="";
+    return;
+  }
+  if(tripCtl) tripCtl.abort();
+  tripCtl=new AbortController();
+  var ctl=tripCtl;
+  $("tripGo").disabled=true;
+  $("tripStop").hidden=false;
+  $("tripStatus").innerHTML='<span class="thinking"><i></i>Thinking — this takes up to a minute</span>';
+  $("tripIdeas").innerHTML="";
+  var opts={ signal:ctl.signal, modelTier:"default",
+    onText:function(){ $("tripStatus").innerHTML='<span class="thinking"><i></i>Writing…</span>'; } };
+  if(fresh) opts.cache=false;
+  sampleFn.json(tripPrompt(b),opts).then(function(data){
+    if(ctl.signal.aborted) return;
+    $("tripStatus").textContent="";
+    renderDestinations(data,b);
+  }).catch(function(e){
+    if(!e || e.code==="cancelled"){ $("tripStatus").textContent=""; return; }
+    $("tripStatus").textContent="";
+    var msg=tripError(e.code);
+    if(msg) $("tripIdeas").innerHTML='<p class="watch" style="margin-top:20px">'+esc(msg)+'</p>';
+  }).then(function(){
+    $("tripGo").disabled=false;
+    $("tripStop").hidden=true;
+  });
+}
+$("tripGo").addEventListener("click",function(){ runTrip(false); });
+$("tripStop").addEventListener("click",function(){ if(tripCtl) tripCtl.abort(); });
+["tripWhere","tripWant","tripFrom","tripOut","tripBack"].forEach(function(id){
+  $(id).addEventListener("change",renderTripLinks);
+});
+
+/* --- The outreach kit: entirely local, no network, no model --- */
+var NOTE_KIND="hotel";
+function noteTime(){
+  var v=$("noteTime").value;
+  if(!v) return "early evening";
+  var p=v.split(":"), h=parseInt(p[0],10), m=p[1];
+  var ap=h>=12?"pm":"am", hh=h%12; if(hh===0) hh=12;
+  return hh+":"+m+ap;
+}
+function buildNote(){
+  var place=$("notePlace").value.trim() || "[venue name]";
+  var when=prettyDay($("noteDate").value) || "[date]";
+  var time=noteTime();
+  var me=$("noteName").value.trim() || "[your name]";
+  var hi="Hello,\n\n";
+  var sign="\n\nThank you — I know this is a lot of questions, and I'd rather ask them now than get it wrong on the day.\n\nBest,\n"+me;
+  var t={};
+
+  t.hotel={
+    subject:"Proposal at "+place+" on "+when,
+    body:hi+
+"I'm planning to propose to my partner during our stay at "+place+" on "+when+", and I'd be grateful for your help with a few details.\n\n"+
+"What I'm hoping for is a quiet spot on the property at around "+time+" where we can be alone for a few minutes. A few questions:\n\n"+
+"1. Is there somewhere on the grounds you'd recommend at that hour — somewhere that isn't busy and gets decent light?\n"+
+"2. Do you allow an outside photographer on the property? If so, is there a fee or a form?\n"+
+"3. Could you hold the ring in the hotel safe until that afternoon, under my name only?\n"+
+"4. Is a room with a terrace or a view available for those nights, and could you note the occasion on the booking?\n"+
+"5. If I wanted flowers or champagne in the room afterwards, what's the lead time and cost?\n\n"+
+"One request: my partner is travelling with me and doesn't know. Please don't mention any of this at check-in or in any confirmation sent to both of us — I'm reachable at this address only.\n\n"+
+"Happy to confirm anything by phone if that's easier."+sign};
+
+  t.restaurant={
+    subject:"Table for 2 on "+when+" — proposal, one small request",
+    body:hi+
+"I'd like to book a table for two at "+place+" on "+when+" at around "+time+". I'm planning to propose to my partner that evening, and I wanted to give you a heads-up rather than spring it on your staff.\n\n"+
+"A few questions:\n\n"+
+"1. Could we have a quieter corner or a table that isn't in the middle of the room?\n"+
+"2. Is there somewhere just outside or nearby — a terrace, a garden, a landing — where I could ask privately before or after the meal? I'd rather not do it at the table with the room watching.\n"+
+"3. If I give a signal to our server, could champagne come out afterwards?\n"+
+"4. Is a photographer allowed inside, or would you prefer they stay outside?\n\n"+
+"Please don't announce anything to the room or bring the whole staff over unless I ask — my partner would find that mortifying. Quiet is very much the goal.\n\n"+
+"If the booking confirmation goes to both of us, please leave any mention of the occasion off it."+sign};
+
+  t.venue={
+    subject:"Proposal and photography at "+place+" — "+when,
+    body:hi+
+"I'd like to propose to my partner at "+place+" on "+when+", at around "+time+", and I want to make sure I do it in a way that works for you.\n\n"+
+"Could you tell me:\n\n"+
+"1. Do you have a policy on proposals, and is there a spot you usually recommend?\n"+
+"2. Do I need a photography permit to bring a photographer for 30–45 minutes, and what does it cost?\n"+
+"3. What time do you close, and what time does that area fall into shade?\n"+
+"4. Is anything else booked in that area that day — a wedding, a private event, maintenance?\n"+
+"5. Is there a rain alternative on the grounds I could fall back on?\n"+
+"6. Is there an admission or booking fee for two people, and do I need to reserve in advance?\n\n"+
+"I'll be as unobtrusive as possible and I'm happy to work around anything else you have on that day."+sign};
+
+  t.photo={
+    subject:"Proposal shoot — "+when+", "+time,
+    body:hi+
+"I'm proposing to my partner on "+when+" at around "+time+", at "+place+", and I'm looking for someone to photograph it without being seen.\n\n"+
+"What I'm after is roughly 30–60 minutes: the moment itself from a distance, then a short set of portraits once they know what's happening.\n\n"+
+"Could you let me know:\n\n"+
+"1. Are you free that day, and what's your rate for a proposal session?\n"+
+"2. Have you shot at this location before? Do you know whether it needs a permit?\n"+
+"3. How do you want to handle the signal — where will you position yourself, and which way should I face?\n"+
+"4. What will you wear so you read as a tourist rather than a photographer?\n"+
+"5. What's your turnaround on the images, and do we get a couple of previews the same day? We'll want something to send to family that night.\n"+
+"6. What happens if the weather turns or we're running late — how flexible is the window?\n\n"+
+"Please send any correspondence to this address only. My partner has no idea."+sign};
+
+  t.charter={
+    subject:"Private booking on "+when+" — proposal",
+    body:hi+
+"I'd like to book with "+place+" on "+when+", starting around "+time+", for two people. I'm planning to propose during the trip.\n\n"+
+"A few things I'd want to confirm first:\n\n"+
+"1. Would it be just the two of us, or shared with other guests? Privacy matters more than anything else here.\n"+
+"2. Can you time the route so we're somewhere worth looking at as the light goes?\n"+
+"3. Is there a moment where the two of us could be alone for a few minutes — and could you give me a discreet signal when it's coming up?\n"+
+"4. Would you be able to take a few photos on my phone straight afterwards?\n"+
+"5. What's your weather cancellation policy, and how late can we decide?\n"+
+"6. Is there anything I should bring or avoid bringing?\n\n"+
+"Please keep it off any confirmation my partner might see — I'm the only one who should get the details."+sign};
+
+  return t[NOTE_KIND]||t.hotel;
+}
+function renderNote(){
+  var n=buildNote();
+  $("noteSubject").textContent="Subject: "+n.subject;
+  $("noteBody").value=n.body;
+}
+[].slice.call(document.querySelectorAll("#noteKinds .modechip")).forEach(function(b){
+  b.addEventListener("click",function(){
+    NOTE_KIND=b.getAttribute("data-kind");
+    [].slice.call(document.querySelectorAll("#noteKinds .modechip")).forEach(function(o){
+      o.setAttribute("aria-pressed", o===b);
+    });
+    renderNote();
+  });
+});
+["notePlace","noteDate","noteTime","noteName"].forEach(function(id){
+  $(id).addEventListener("input",renderNote);
+});
+$("noteCopy").addEventListener("click",function(){
+  var ta=$("noteBody"), btn=$("noteCopy");
+  var done=function(ok){
+    btn.textContent = ok ? "Copied" : "Press Ctrl/Cmd-C";
+    setTimeout(function(){ btn.textContent="Copy"; }, 2200);
+  };
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value).then(function(){done(true);},function(){ ta.select(); done(false); });
+      return;
+    }
+  }catch(err){}
+  ta.select(); done(false);
+});
+(function(){
+  var out=new Date(Date.now()+100*864e5), back=new Date(Date.now()+104*864e5);
+  $("tripOut").value=out.toISOString().slice(0,10);
+  $("tripBack").value=back.toISOString().slice(0,10);
+  $("noteDate").value=out.toISOString().slice(0,10);
+  renderNote();
+})();
+
+/* ============================================================
+   TIMELINE
+   ============================================================ */
+var MILESTONES=[
+  {w:14,t:"Start the ring conversation with yourself",d:"Decide lab-grown or natural, and set the number you can pay without financing. Everything downstream depends on these two."},
+  {w:12,t:"Get their ring size",d:"Borrow a ring, take a soap impression, or recruit the discreet sibling. Do it early — this is the step that quietly delays everything."},
+  {w:10,t:"Custom or CAD order placed",d:"Full custom design runs 6–10 weeks from first sketch to finished ring. Skip this if you're buying ready-made."},
+  {w:8, t:"Book the photographer",d:"Good proposal photographers book out, and from Thanksgiving to Valentine's Day they book out further. Send the date before you're certain of the spot."},
+  {w:6, t:"Buy the stone and setting",d:"If you're buying ready-to-ship rather than custom, this is the real deadline. See the stone in person or on video before paying."},
+  {w:4, t:"Scout the location in person",d:"Same time of day, same day of the week. Check light, crowds, parking, and where a photographer could stand unseen."},
+  {w:4, t:"Call the venue or check permits",d:"Gardens, parks and estates usually need a photo permit. Restaurants need to know. Two weeks is the minimum they'll want."},
+  {w:2, t:"Resizing and engraving",d:"Allow one to two weeks. Engraving is a few days on top. Don't schedule either against the wire."},
+  {w:1, t:"Insure the ring",d:"Get the appraisal and add the rider before you start carrying it around. This is the highest-risk week of the ring's life."},
+  {w:1, t:"Clear their calendar quietly",d:"Check nothing is scheduled. Plant a reason to have their nails done and to dress for the occasion."},
+  {w:0.4,t:"Check sunset and weather",d:"Confirm the exact sunset time and set your arrival 90 minutes earlier. Commit to your rain plan or move the date now."},
+  {w:0, t:"The day",d:"Flat ring case, not the box, and not in a trouser pocket. Phone charged. Two sentences ready. Leave time afterwards for the calls that matter."}
+];
+function fmtDate(d){ return d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}); }
+function renderTimeline(){
+  var v=$("dateInput").value; if(!v) return;
+  var target=new Date(v+"T12:00:00");
+  var now=new Date(); now.setHours(0,0,0,0);
+  var weeksOut=(target-now)/(1000*60*60*24*7);
+  if(isNaN(weeksOut)) return;
+  var warn=$("tlWarn");
+  if(weeksOut<0){
+    warn.innerHTML='<p class="watch">That date has passed. Pick one in the future and the schedule will rebuild.</p>';
+  } else if(weeksOut<3){
+    warn.innerHTML='<p class="watch"><b>'+Math.max(0,Math.round(weeksOut*7))+' days out.</b> Custom is off the table. Buy a ready-to-ship setting with a stone in stock, or propose with an heirloom or a plain band and design the real ring together afterwards — which plenty of people prefer anyway.</p>';
+  } else if(weeksOut<7){
+    warn.innerHTML='<p class="watch"><b>'+Math.round(weeksOut)+' weeks out.</b> Enough time for a ready-made ring and a resize, but not for a custom CAD order. Book the photographer this week — that\'s the binding constraint.</p>';
+  } else if(weeksOut>26){
+    warn.innerHTML='<p class="note-good"><b>'+Math.round(weeksOut)+' weeks out.</b> Plenty of runway. Use it on the ring size and on scouting the location in the season you\'ll actually propose in.</p>';
+  } else {
+    warn.innerHTML='<p class="note-good"><b>'+Math.round(weeksOut)+' weeks out.</b> Comfortable. Everything below fits, including a custom ring if you start it now.</p>';
+  }
+  $("timeline").innerHTML=MILESTONES.map(function(m){
+    var d=new Date(target.getTime()-m.w*7*24*60*60*1000);
+    var behind = m.w>weeksOut || d<now;
+    var cls = behind ? "past" : (m.w===0 ? "due" : "");
+    var label = m.w===0 ? "The date" : (m.w<1 ? "3 days before" : m.w+" weeks before");
+    return '<li class="'+cls+'"><span class="dot"></span><span class="when">'+esc(label)+' · '+esc(fmtDate(d))+
+      (behind?" · already behind":"")+'</span><h4>'+esc(m.t)+'</h4><p>'+esc(m.d)+'</p></li>';
+  }).join("");
+}
+(function(){
+  var di=$("dateInput");
+  di.value=new Date(Date.now()+100*864e5).toISOString().slice(0,10);
+  di.addEventListener("input",renderTimeline);
+  di.addEventListener("change",renderTimeline);
+  renderTimeline();
+})();
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+var Q=[
+  {p:"When your partner has news, who hears about it first?",n:"Start with how much of their life is lived in public.",
+   own:"tell me how they share things",ph:"e.g. She tells her sister everything but would hate a crowd knowing before her friends did.",
+   o:[["It's on their story within the hour",{pub:2,doc:1}],["The group chat of four closest friends",{pub:1}],
+      ["Me, then their mother",{priv:1,fam:1}],["Just me. They like to sit with things",{priv:2}]]},
+  {p:"Your best days together usually look like…",n:"Where they're happiest is where they should be when you ask.",
+   own:"describe one of your best days",ph:"e.g. Driving out to the coast with the dog, stopping at the same diner, home by dark.",
+   o:[["A trailhead at six in the morning",{nature:2,active:1}],["A new neighborhood, a long walk, three coffee stops",{urban:2}],
+      ["The sofa, good food, nowhere to be",{home:2,priv:1}],["An airport gate with carry-ons",{dest:2}]]},
+  {p:"How do they feel about being the center of attention?",n:"Answer honestly. This is the question people get wrong about their partner.",
+   own:"describe how they handle it",ph:"e.g. Loves a party but freezes if a room turns to look at her.",
+   o:[["They live for it",{pub:2}],["Fine, if the people watching are theirs",{pub:1,fam:2}],
+      ["They'll tolerate about ninety seconds of it",{priv:1}],["They would genuinely hate it",{priv:2}]]},
+  {p:"Their jewelry, honestly:",n:"Look at what they already wear, not what you'd like to buy.",
+   own:"describe what they actually wear",ph:"e.g. Big silver rings from a market in Oaxaca, nothing matching, no diamonds ever.",
+   o:[["One or two pieces they never take off",{classic:2}],["Gold, layered, always something new",{modern:2}],
+      ["Estate shops and their grandmother's things",{vintage:2}],["Nothing conventional — they'd want something strange and theirs",{unconv:2}]]},
+  {p:"Their hands during an average week:",n:"This decides the setting more than any aesthetic preference does.",
+   own:"describe what their hands do",ph:"e.g. Pottery three nights a week, clay under the nails, rings always come off.",
+   o:[["Keyboard and coffee cup",{}],["Gym, garden, dog leash, dishwater",{active:2}],
+      ["Gloves at work — healthcare, kitchen, lab",{active:2,bezel:2}],["Rings come off constantly anyway",{active:1,bezel:1}]]},
+  {p:"If they could only have one, they'd pick:",n:"The trade-off everyone has to make and nobody enjoys making.",
+   own:"say what matters most to them",ph:"e.g. She'd want to know where the stone came from more than how big it is.",
+   o:[["The biggest stone the budget allows",{size:2}],["A smaller stone that's noticeably better",{quality:2}],
+      ["The ring that means something — who made it, what it's made of",{ethics:2,vintage:1}],["Spend less on the ring, more on the life after it",{thrift:2}]]},
+  {p:"Have the two of you talked about the ring?",n:"There is no wrong answer here, only a different plan.",
+   own:"describe where you've landed",ph:"e.g. We agreed on a sapphire together, but he has no idea I already had it made.",
+   o:[["They've sent me links. Several.",{collab:2}],["Hints, nothing explicit",{collab:1}],
+      ["Nothing, and I want it to stay that way",{surprise:2}],["We're shopping together and both know it",{collab:2}]]},
+  {p:"Five years from now, what do you want to be able to show someone?",n:"Whether a photographer belongs in this plan.",
+   own:"say what you want to keep",ph:"e.g. Just the ticket stub. We'd both hate a photographer in the bushes.",
+   o:[["Everything. Photos from their face onward.",{doc:2}],["One good picture",{doc:1}],
+      ["A shaky video off a phone",{}],["Nothing. It was ours.",{doc:-2,priv:1}]]},
+  {p:"How much runway do you have?",n:"Last one.",
+   own:"describe your timing",ph:"e.g. No rush at all, but her grandmother is ill and we'd want her there.",
+   o:[["Weeks — something's coming up",{rush:2}],["A couple of months",{normal:2}],
+      ["Six months or more",{ample:2}],["No deadline. I just want to get it right.",{ample:2,collab:1}]]}
+];
+var qi=0, answers=new Array(Q.length).fill(null), customs=new Array(Q.length).fill(""), cityAnswer="";
+
+/* Free-text answers are read by keyword against the same axes the multiple-choice
+   options score on. It is matching words, not understanding sentences — the result
+   says so, and quotes what you wrote back to you. */
+var LEXICON={
+  nature:["hike","hiking","trail","mountain","beach","ocean","lake","river","forest","park","camp","outdoor","garden","sunrise","sunset","stars","waterfall","climb","ski","snow","desert","canyon","woods","field","farm","botanic"],
+  urban:["city","downtown","bar","restaurant","museum","gallery","concert","rooftop","skyline","street","cafe","coffee","brewery","theater","theatre","bookstore","market","subway","gig","show"],
+  home:["home","house","apartment","couch","sofa","kitchen","cook","cooking","dog","cat","pet","bed","pajamas","movie night","backyard","porch","our place","stay in"],
+  dest:["travel","trip","flight","abroad","vacation","holiday","japan","italy","paris","europe","island","cruise","road trip","airbnb","hotel","passport","mexico","iceland"],
+  priv:["private","alone","just us","quiet","introvert","shy","hates attention","hate attention","intimate","small","no audience","embarrassed","low key","low-key"],
+  pub:["party","everyone","friends","family","crowd","celebration","extrovert","loud","social","big group","audience","announce"],
+  fam:["family","parents","mom","mother","dad","father","siblings","sister","brother","grandparents","kids","cousins"],
+  doc:["photo","photos","photographer","picture","pictures","camera","film","video","instagram","posted","memories"],
+  active:["gym","lifting","weights","climbing","garden","gardening","nurse","doctor","surgeon","chef","cook","baker","mechanic","potter","ceramics","horse","riding","swim","dishes","hands on","hands-on","lab","hospital","vet"],
+  bezel:["gloves","snag","catch","hospital","surgery","kitchen","climbing","rough on"],
+  vintage:["vintage","antique","estate","grandmother","grandma","heirloom","deco","art deco","victorian","edwardian","old","thrift","secondhand","second-hand","retro"],
+  modern:["modern","minimal","minimalist","clean","contemporary","sleek","simple lines","architectural"],
+  unconv:["unusual","weird","unique","different","alternative","nontraditional","non-traditional","not traditional","quirky","punk","goth","witchy","colorful","colourful","color stone","sapphire","emerald","opal","moss","agate","salt and pepper","salt-and-pepper","toi et moi","no diamond","not a diamond","hates diamonds","raw","rough","hexagon","kite","black","green","teal","purple","tattoo","weird taste"],
+  classic:["classic","timeless","traditional","elegant","understated","simple","never take it off","plain"],
+  ethics:["ethical","ethically","sustainable","recycled","conflict","conflict-free","lab grown","lab-grown","labgrown","moissanite","fair trade","fairmined","provenance","origin","where it came from","secondhand","reclaimed"],
+  size:["big","bigger","large","huge","statement","carat","sparkle big","as big as"],
+  quality:["quality","brilliant","brilliance","clarity","best stone","well cut","cut quality","fire"],
+  thrift:["cheap","budget","affordable","save","frugal","inexpensive","not much","spend less","practical","down payment","house"],
+  collab:["together","she picked","he picked","they picked","shopping","sent me","links","pinterest","we chose","wants to pick","her idea","their idea","board"],
+  surprise:["surprise","secret","no idea","clueless","doesn't suspect","does not suspect","blindside"],
+  rush:["soon","weeks","next month","asap","hurry","already booked","running out"],
+  ample:["no rush","next year","someday","eventually","whenever","plenty of time","a year"]
+};
+function scoreText(s){
+  var out={}, txt=" "+String(s||"").toLowerCase().replace(/[^a-z0-9\s'-]/g," ")+" ";
+  if(txt.trim().length<2) return out;
+  for(var axis in LEXICON){
+    var hits=0;
+    LEXICON[axis].forEach(function(w){ if(txt.indexOf(" "+w)>-1 || txt.indexOf(w+" ")>-1) hits++; });
+    if(hits) out[axis]=Math.min(2,hits);
+  }
+  return out;
+}
+function isOther(i,a){ return a===Q[i].o.length; }
+
+function tally(){
+  var t={};
+  answers.forEach(function(a,i){
+    if(a===null) return;
+    var w = isOther(i,a) ? scoreText(customs[i]) : Q[i].o[a][1];
+    for(var k in w) t[k]=(t[k]||0)+w[k];
+  });
+  return t;
+}
+function customAnswers(){
+  var out=[];
+  answers.forEach(function(a,i){ if(a!==null && isOther(i,a) && customs[i]) out.push({q:Q[i].p, a:customs[i]}); });
+  return out;
+}
+function top(t,keys,dflt){
+  var best=dflt,bv=-99;
+  keys.forEach(function(k){ var v=t[k]||0; if(v>bv){bv=v;best=k;} });
+  return bv<=0?dflt:best;
+}
+var LOCATION_REC={
+  nature_priv:{h:"An overlook at golden hour, just the two of you",d:"A summit, a bluff or a quiet stretch of trail you've walked before, timed for the hour before sunset. The climb burns off the nerves and gives you an hour alone before the moment — and there's no audience to manage when it lands.",w:"Scout it on the same day of the week at the same hour. Somewhere that's empty on a Wednesday can have twelve people on it on a Saturday."},
+  nature_pub:{h:"Somewhere outdoors with your people waiting at the end",d:"Ask on the trail, at the overlook, at the water — then bring them back to a garden, a park shelter or a backyard where everyone they love is already there. Nature for the moment, people for the hour after.",w:"Two locations means two sets of logistics and one way for it to leak. Give the waiting group a strict no-phones-until rule."},
+  urban_priv:{h:"A rooftop or a high view, early rather than at sunset",d:"The skyline at the hour before the crowd arrives, or a terrace you reserve outright. A city view gives you a reason to stand still and look at something together, which is all a proposal spot really has to do.",w:"Observation decks and rooftop bars are loud and packed at sunset. Go at opening, or book a private corner in writing."},
+  urban_pub:{h:"The bar or block where it started, full of your people",d:"Not the most beautiful place in your city — the most loaded one. The first date bar, the corner you lived on, the restaurant you go back to. Meaning beats scenery, and everyone in the room already knows the story.",w:"Tell the venue and put it in writing. A double-booked back room has ended better plans than yours."},
+  home_priv:{h:"Your own place, on a day with nothing else in it",d:"The kitchen, the sofa, the dog underfoot. For a private person this is the strongest option on the whole list: no audience, no outfit, no travel, and they can react however they actually feel instead of performing it.",w:"It's the hardest setting to photograph. If you want pictures, set a phone on a tripod running video and pull a frame from it later."},
+  home_pub:{h:"Dinner at home that turns into a room full of people",d:"Ask them in the kitchen, then have everyone arrive an hour later. You get the private yes and the celebration, in that order, which is the order almost everyone says they'd have chosen.",w:"Somebody will arrive early. Give one person the job of holding the group until you text."},
+  dest_priv:{h:"A trip they believe is just a trip",d:"Propose on the first or second day, not the last night. Spend the rest of the trip engaged rather than spending the whole trip waiting for it, and let them tell people in their own time from somewhere beautiful.",w:"The ring never goes in checked luggage. Carry it on you, in a flat case, and know your airport's screening rules before you're in the queue."},
+  dest_pub:{h:"A trip everyone else is secretly already on",d:"They think it's the two of you. It is, for the first day — and then the people they love turn up. Expensive and complicated, and the single most-watched version of this if that's genuinely their thing.",w:"Every extra person is another chance at a leak. Tell people the date and the city, and nothing else, until 24 hours before."}
+};
+var METHOD_REC={
+  quiet:{h:"The ordinary-day ambush",d:"No occasion and no warning. Making dinner, walking the dog, halfway through a Tuesday. The whole meaning is that it wasn't staged — that this is what the rest of your life looks like, and you wanted to ask in the middle of it."},
+  quiet_doc:{h:"A private moment, quietly photographed",d:"Just the two of you, with a photographer at a distance with a long lens looking like a tourist. You get the real face in the real second and nobody else in the frame. Agree a signal, a direction to face, and what happens if they're running late."},
+  reveal:{h:"The reveal, then the room",d:"Ask them alone, then walk into a bar or a living room where everyone they love is already waiting. The private yes first, the celebration second. Give them ten minutes in the car before you go in — they'll want to look at their own hand for a while."},
+  public:{h:"In front of the people who matter",d:"A gathering that already exists — a holiday table, a birthday, a reunion. The audience is the point, so make sure they're the kind of person for whom that's true. There is no quiet version of this once it starts."},
+  collab:{h:"Chosen together, timed by you",d:"No surprise about the ring at all — you pick it together, or they pick it outright. The only secret left is when, which is plenty. This is the right call whenever they have strong opinions about something they'll wear every day, and it removes the one risk you can't undo."}
+};
+var RING_REC={
+  classic:{shape:"Round brilliant",set:"Six-prong solitaire, or a hidden halo if you want more sparkle without the era stamp",metal:"Platinum or 14k white gold"},
+  modern:{shape:"Oval or elongated cushion",set:"Thin-band solitaire in a low basket, or east-west if they like being slightly ahead of things",metal:"14k yellow gold"},
+  vintage:{shape:"Old European cut, antique cushion, or an emerald cut",set:"Milgrain detailing or a three-stone, ideally a genuine estate piece",metal:"18k yellow gold"},
+  unconv:{shape:"Emerald, kite, hexagon, or a sapphire in a color they'd actually choose",set:"Full bezel — modern, protective, and it makes an unusual stone look deliberate",metal:"14k yellow or rose gold"}
+};
+var SPEC_REC={
+  size:{line:"Lab-grown · 1.8–2.2 ct · G · VS2 · Excellent cut · elongated shape",why:"Lab-grown is the only honest route to real size at a normal budget, and an elongated shape covers more finger per carat. Buy just under a magic weight — 1.9 ct looks identical to 2.0 and costs meaningfully less."},
+  quality:{line:"1.00–1.20 ct · F–G · VS1 · GIA Excellent cut, polish and symmetry",why:"Cut first, because it's the only C visible across a room. F to G faces up perfectly white in any metal, and VS1 is guaranteed eye-clean without paying for grades nobody can see."},
+  ethics:{line:"Recycled metal · documented-origin or reclaimed stone · report number in hand",why:"Ask for the specific claim in writing — origin country, recycled content, or the estate the stone came from. Adjectives like 'ethical' and 'conflict-free' are unregulated marketing. A reset heirloom beats all of it."},
+  thrift:{line:"0.70–1.00 ct lab-grown · G–H · SI1 eye-clean · 14k gold solitaire",why:"Gold hides warmth, so H does the work of an F. SI1 is where the value lives if you look at the stone or its plot first. And buy at 0.92 rather than 1.00 — the price wall is at the round number, not at the size."}
+};
+
+function composeResult(){
+  var t=tally();
+  var env=top(t,["nature","urban","home","dest"],"nature");
+  var priv=(t.priv||0)-(t.pub||0);
+  var pubKey=priv>=0?"priv":"pub";
+  window.__topEnv={nature:"nature",urban:"urban",home:"home",dest:"destination"}[env];
+  var loc=LOCATION_REC[env+"_"+pubKey]||LOCATION_REC.nature_priv;
+
+  var method;
+  if((t.collab||0)>=2 && !(t.surprise||0)) method=METHOD_REC.collab;
+  else if(priv>=2 && (t.doc||0)>=2) method=METHOD_REC.quiet_doc;
+  else if(priv>=2) method=METHOD_REC.quiet;
+  else if(priv<=-2 && (t.fam||0)>=2) method=METHOD_REC.public;
+  else if(priv<0) method=METHOD_REC.reveal;
+  else method=(t.doc||0)>=2?METHOD_REC.quiet_doc:METHOD_REC.reveal;
+
+  var aes=top(t,["classic","modern","vintage","unconv"],"classic");
+  var ring={shape:RING_REC[aes].shape,set:RING_REC[aes].set,metal:RING_REC[aes].metal};
+  if((t.bezel||0)>=2) ring.set="Full bezel or a low-profile basket — their hands are in things all week, and a raised prong setting will snag and loosen";
+  else if((t.active||0)>=2) ring.set=ring.set+". Skip full pavé and ask for platinum prongs — they hold up better under daily wear";
+
+  var spec=SPEC_REC[top(t,["size","quality","ethics","thrift"],"quality")];
+  var unconv=(t.unconv||0)>=2;
+  if(unconv) spec={
+    line:"Teal or parti sapphire, salt-and-pepper diamond, or a rose-cut · 1.2–2.0 ct · bezel or low basket",
+    why:"Skip the grading-report language entirely — colored stones aren't graded on D-to-Z or VS scales, so you're buying with your eyes. Check hardness first (sapphire 9, spinel 8, and nothing below 8 for daily wear), get it bezel-set, and buy from someone who will name the cutter."
+  };
+  var runway=(t.rush||0)>=2?"rush":((t.ample||0)>=2?"ample":"normal");
+  var timing={
+    rush:"You're weeks out, so custom is off the table. Buy a ready-to-ship setting with a stone already in stock, or propose with an heirloom or plain band and design the real ring together afterwards. Book the photographer today if you want one — that's the binding constraint, not the ring.",
+    normal:"A couple of months is comfortable for a ready-made ring plus a resize, and tight for a full custom order. Work backwards from the date in the planner: photographer at eight weeks, stone at six, permits at four.",
+    ample:"You have room to do this properly. Spend it on two things people skip: getting the ring size right without tipping them off, and scouting the location in the same season and at the same hour you'll actually propose."
+  }[runway];
+
+  var moves=["Get their ring size this week. It's the step that delays everything else, and it takes longer than you think."];
+  if((t.collab||0)>=2) moves.push("Bring them into the ring decision properly — they've already told you they want a say. Keep the timing to yourself.");
+  else moves.push("Recruit exactly one accomplice — the sibling or friend who can keep a secret and borrow a ring.");
+  if((t.doc||0)>=2) moves.push("Enquire with two proposal photographers now. They book out months ahead between Thanksgiving and Valentine's Day.");
+  if(env==="nature"||env==="urban") moves.push("Visit the location in person at the hour you plan to propose, on the same day of the week. Check light, crowds and where someone could stand unseen.");
+  if(env==="dest") moves.push("Check your airline and airport's rules for carrying the ring, and never put it in checked luggage.");
+  if(env==="home") moves.push("Set a phone recording video on a shelf. It's the only practical way to get a picture of an at-home proposal.");
+  moves.push("Insure the ring the day you collect it, before you start carrying it around waiting for the right moment.");
+
+  var cityBlock = cityAnswer
+    ? '<p class="small" style="margin-top:18px">The city lens in Locations is set to <b>'+esc(cityAnswer)+'</b> and tuned to '+esc(window.__topEnv)+' spots. <button class="linkbtn" style="color:var(--accent);font-size:inherit;padding:0" data-go="locations">Go see the map searches →</button></p>'
+    : '';
+
+  var owns=customAnswers();
+  var ownBlock = owns.length
+    ? '<div class="own-echo"><span class="eyebrow">In your words</span>'+
+      owns.map(function(o){
+        return '<blockquote><span class="oq">'+esc(o.q)+'</span>“'+esc(o.a)+'”</blockquote>';
+      }).join("")+
+      '<p class="tiny" style="margin-top:12px">Matched by keyword, which is a blunt instrument. If the recommendation above missed what you meant, trust yourself over it.</p></div>'
+    : '';
+
+  var unconvBlock = unconv
+    ? '<div class="callout" style="margin-top:26px"><span class="eyebrow">You said they\'d want something unconventional</span>'+
+      '<p>Two things that trip people up here. First, an unusual ring is harder to replace and harder to resize — a toi et moi, an east-west setting or an odd-shaped stone often can\'t be sized more than half a step, so the measurement has to be right the first time. Second, unconventional does not mean unprotected: the weirder the stone, the more it needs a bezel and the more the hardness number matters.</p>'+
+      '<p>And for the location — the rule is that it should be specific to the two of you, not just odd. A record shop means something if that\'s where you spent every Saturday. It means nothing if you picked it because it photographs interestingly. '+
+      '<button class="linkbtn" style="color:var(--accent);font-size:inherit;padding:0" data-go="locations">See the unconventional locations →</button></p></div>'
+    : '';
+
+  return '<div class="result-head">'+
+      '<span class="eyebrow">Your starting point</span>'+
+      '<h2 style="margin-top:12px">'+esc(loc.h)+'</h2>'+
+      '<p class="small" style="margin-top:14px;max-width:64ch">'+esc(loc.d)+'</p>'+
+      '<p class="watch" style="margin-top:16px;max-width:64ch"><b>Watch out:</b> '+esc(loc.w)+'</p>'+
+    '</div>'+
+    '<div class="rec-row">'+
+      '<div class="rec"><span class="eyebrow">How</span><h3>'+esc(method.h)+'</h3><p>'+esc(method.d)+'</p></div>'+
+      '<div class="rec"><span class="eyebrow">The ring</span><h3>'+esc(ring.shape)+'</h3>'+
+        '<p><b>Setting:</b> '+esc(ring.set)+'</p><p style="margin-top:7px"><b>Metal:</b> '+esc(ring.metal)+'</p></div>'+
+      '<div class="rec"><span class="eyebrow">Timing</span><h3>'+
+        (runway==="rush"?"Move now":(runway==="ample"?"Use the runway":"Comfortable, if you start"))+'</h3><p>'+esc(timing)+'</p></div>'+
+    '</div>'+
+    '<div class="quiz-body">'+
+      '<span class="eyebrow">Take this to a jeweler</span>'+
+      '<div class="spec-line"><span class="tag">SPEC</span> &nbsp;'+esc(spec.line)+'</div>'+
+      '<p class="small" style="margin-top:13px;max-width:68ch">'+esc(spec.why)+'</p>'+
+      cityBlock+
+      ownBlock+
+      unconvBlock+
+      '<h3 style="margin:30px 0 16px">What to do this week</h3>'+
+      '<ul class="moves">'+moves.map(function(m,i){return '<li data-n="'+(i+1)+'">'+esc(m)+'</li>';}).join("")+'</ul>'+
+      '<div class="quiz-foot">'+
+        '<button class="btn" data-go="diamonds">Now learn the 4Cs</button>'+
+        '<button class="linkbtn" id="restart" type="button">Start over</button>'+
+      '</div>'+
+      '<p class="tiny" style="margin-top:20px">A starting point, not an instruction. You know them; this is a structured second opinion.</p>'+
+    '</div>';
+}
+
+function renderQ(){
+  var stage=$("quizStage");
+  if(qi>=Q.length){
+    $("qcount").textContent="Result";
+    $("qbar").style.width="100%";
+    stage.className="";
+    stage.innerHTML=composeResult();
+    $("restart").addEventListener("click",function(){
+      qi=0; answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill("");
+      $("quizStage").className="quiz-body";
+      renderQ();
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+    return;
+  }
+  var q=Q[qi], keys=["A","B","C","D","E"], oIdx=q.o.length;
+  $("qcount").textContent="Question "+(qi+1)+" of "+Q.length;
+  $("qbar").style.width=((qi/Q.length)*100+11)+"%";
+  stage.className="quiz-body";
+  stage.innerHTML=
+    '<p class="q-prompt">'+esc(q.p)+'</p><p class="q-note">'+esc(q.n)+'</p>'+
+    '<div class="opts">'+
+      q.o.map(function(o,i){
+        return '<button class="opt" type="button" aria-pressed="'+(answers[qi]===i)+'">'+
+          '<span class="key">'+keys[i]+'</span><span>'+esc(o[0])+'</span></button>';
+      }).join("")+
+      '<button class="opt opt-other" type="button" aria-pressed="'+(answers[qi]===oIdx)+'">'+
+        '<span class="key">'+keys[4]+'</span><span>None of these — '+esc(q.own)+'</span></button>'+
+    '</div>'+
+    '<div class="own-wrap" id="ownWrap"'+(answers[qi]===oIdx?"":" hidden")+'>'+
+      '<label class="eyebrow" for="ownText" style="display:block;margin-bottom:9px">In your own words</label>'+
+      '<textarea class="field" id="ownText" rows="3" placeholder="'+esc(q.ph)+'">'+esc(customs[qi])+'</textarea>'+
+      '<p class="tiny" style="margin-top:8px">Read by keyword against the same things the options above measure. Whatever you write is quoted back in the result.</p>'+
+    '</div>'+
+    (qi===Q.length-1
+      ? '<div style="margin-top:24px"><label class="eyebrow" for="quizCity" style="display:block;margin-bottom:9px">Optional — where are you?</label>'+
+        '<input class="field" id="quizCity" type="text" placeholder="City or region" style="max-width:340px" value="'+esc(cityAnswer)+'"></div>' : '')+
+    '<div class="quiz-foot">'+
+      (qi>0?'<button class="linkbtn" id="backBtn" type="button">← Back</button>':'')+
+      '<div class="spacer"></div>'+
+      '<button class="btn" id="nextBtn" type="button">'+
+        (qi===Q.length-1?"See the recommendation":"Next")+'</button></div>';
+
+  function canAdvance(){
+    var a=answers[qi];
+    if(a===null) return false;
+    if(a===oIdx) return (($("ownText")||{}).value||"").trim().length>1;
+    return true;
+  }
+  function syncNext(){ $("nextBtn").disabled=!canAdvance(); }
+
+  var opts=[].slice.call(stage.querySelectorAll(".opt"));
+  opts.forEach(function(b,i){
+    b.addEventListener("click",function(){
+      answers[qi]=i;
+      opts.forEach(function(o,j){ o.setAttribute("aria-pressed",j===i); });
+      var wrap=$("ownWrap");
+      wrap.hidden = (i!==oIdx);
+      if(i===oIdx){ var ta=$("ownText"); ta.focus(); }
+      syncNext();
+    });
+  });
+  var ta=$("ownText");
+  if(ta) ta.addEventListener("input",function(){ customs[qi]=this.value; syncNext(); });
+  syncNext();
+
+  var back=$("backBtn");
+  if(back) back.addEventListener("click",function(){ qi--; renderQ(); });
+  $("nextBtn").addEventListener("click",function(){
+    if(!canAdvance()) return;
+    if(answers[qi]===oIdx) customs[qi]=($("ownText").value||"").trim();
+    var cf=$("quizCity");
+    if(cf){
+      cityAnswer=cf.value.trim();
+      if(cityAnswer) $("cityInput").value=cityAnswer;
+    }
+    qi++;
+    renderQ();
+    if(qi>=Q.length && cityAnswer) renderLens(cityAnswer, window.__topEnv);
+  });
+}
+renderQ();
+
+/* starter question on the home page */
+(function(){
+  var wrap=$("starterOpts"), keys=["A","B","C","D"];
+  Q[0].o.forEach(function(o,i){
+    var b=el('<button class="opt" type="button"><span class="key">'+keys[i]+'</span><span>'+esc(o[0])+'</span></button>');
+    b.addEventListener("click",function(){
+      answers[0]=i; qi=1; renderQ(); showView("quiz");
+    });
+    wrap.appendChild(b);
+  });
+  var other=el('<button class="opt opt-other" type="button"><span class="key">E</span>'+
+    '<span>None of these — '+esc(Q[0].own)+'</span></button>');
+  other.addEventListener("click",function(){ qi=0; renderQ(); showView("quiz"); });
+  wrap.appendChild(other);
+})();
+
+})();
+</script>
