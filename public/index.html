@@ -1340,8 +1340,10 @@ document.addEventListener("click",function(e){
   e.preventDefault();
   showView(t.getAttribute("data-go"));
 });
-window.addEventListener("popstate",function(){ showView((location.hash||"#home").slice(1), false); });
-showView((location.hash||"#home").slice(1), false);
+function hashView(){ return (location.hash||"#home").slice(1); }
+function isPlanHash(){ return hashView().indexOf("plan=")===0; }
+window.addEventListener("popstate",function(){ if(!isPlanHash()) showView(hashView(), false); });
+if(!isPlanHash()) showView(hashView(), false); else showView("home", false);
 
 /* ============================================================
    DIAMOND DATA
@@ -2484,18 +2486,20 @@ function renderQ(){
     if(qi>=Q.length && cityAnswer) renderLens(cityAnswer, window.__topEnv);
   });
 }
-(function(){
+function applyPlanHash(){
   var t=readPlanFromUrl();
-  if(t){
-    restoredTally=t;
-    qi=Q.length;
-    renderQ();
-    if(cityAnswer){ $("cityInput").value=cityAnswer; renderLens(cityAnswer, window.__topEnv); }
-    showView("quiz", false);
-  } else {
-    renderQ();
-  }
-})();
+  if(!t) return false;
+  restoredTally=t;
+  qi=Q.length;
+  renderQ();
+  if(cityAnswer){ $("cityInput").value=cityAnswer; renderLens(cityAnswer, window.__topEnv); }
+  showView("quiz", false);
+  return true;
+}
+/* A plan link pasted into an already-open tab, or reached with Back, must restore too --
+   not only on a cold load. */
+window.addEventListener("hashchange", function(){ applyPlanHash(); });
+if(!applyPlanHash()) renderQ();
 
 /* starter question on the home page */
 (function(){
