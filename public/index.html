@@ -2123,25 +2123,38 @@ function tripBrief(){
 /* Every link below opens a real search on the site named. Nothing is fetched or
    priced here — the page has no network access and will never show a made-up fare. */
 /* The date fields open on a sample window, so someone who changes the outbound
-   date and not the return can leave a return that falls BEFORE it. Booking and
-   Airbnb accept that silently and return nothing useful, so drop it instead of
-   sending a range that cannot exist. ISO dates compare correctly as strings. */
-function validBack(b){
-  return (b.back && b.out && b.back > b.out) ? b.back : "";
+   date and not the return can leave a return that falls BEFORE it. Sites accept
+   that silently and return nothing useful, so it is dropped rather than sent.
+   ISO dates compare correctly as strings.
+
+   Flights and stays need different tests. A same-day return is a real flight
+   search — a day trip — but no hotel can sell a stay of nought nights, so
+   Booking and Airbnb want it dropped. Hence >= for flying, > for staying. */
+function backFor(b, kind){
+  if(!b.back || !b.out) return "";
+  return (kind==="fly" ? b.back>=b.out : b.back>b.out) ? b.back : "";
+}
+/* "" | "reversed" | "sameday" — drives the note under the links. */
+function dateNote(b){
+  if(!b.back || !b.out) return "";
+  if(b.back < b.out) return "reversed";
+  if(b.back === b.out) return "sameday";
+  return "";
 }
 function bookingLinks(dest, b){
   /* No b.want fallback: a wish sentence is not a destination. See renderTripLinks. */
-  var out=[], d=dest||b.where, back=validBack(b);
+  var out=[], d=dest||b.where;
+  var flyBack=backFor(b,"fly"), stayBack=backFor(b,"stay");
   if(!d) return out;
   var fl = b.from
-    ? "https://www.google.com/travel/flights?q="+enc("Flights from "+b.from+" to "+d+(b.out?" on "+b.out:"")+(back?" through "+back:""))
+    ? "https://www.google.com/travel/flights?q="+enc("Flights from "+b.from+" to "+d+(b.out?" on "+b.out:"")+(flyBack?" through "+flyBack:""))
     : "https://www.google.com/travel/flights?q="+enc("Flights to "+d+(b.out?" on "+b.out:""));
   out.push({group:"Flights", links:[ln(fl,"Google Flights")]});
   var stay=[];
   stay.push(ln("https://www.booking.com/searchresults.html?ss="+enc(d)+
-    (b.out?"&checkin="+b.out:"")+(back?"&checkout="+back:"")+"&group_adults=2&no_rooms=1&group_children=0","Booking.com"));
+    (b.out?"&checkin="+b.out:"")+(stayBack?"&checkout="+stayBack:"")+"&group_adults=2&no_rooms=1&group_children=0","Booking.com"));
   stay.push(ln("https://www.airbnb.com/s/"+enc(d)+"/homes?adults=2"+
-    (b.out?"&checkin="+b.out:"")+(back?"&checkout="+back:""),"Airbnb"));
+    (b.out?"&checkin="+b.out:"")+(stayBack?"&checkout="+stayBack:""),"Airbnb"));
   stay.push(ln("https://www.google.com/travel/search?q="+enc("hotels in "+d),"Google Hotels"));
   out.push({group:"Stays", links:stay});
   return out;
@@ -2178,9 +2191,23 @@ function renderTripLinks(){
       return '<div class="linkrow"><span class="lr-label">'+esc(g.group)+'</span>'+
         '<div class="lr-links">'+g.links.join("")+'</div></div>';
     }).join("")+'</div>'+
-    (b.back && !validBack(b)
-      ? '<p class="tiny" style="margin-top:11px;color:var(--warn)">Your return date is before your outbound one, so it has been left out of these searches. Fix the dates above and it comes back.</p>'
-      : '')+
+    (function(){
+      var n=dateNote(b);
+      if(!n) return "";
+      /* With no origin the flights link is a one-way search that never carried a
+         return, so saying it was dropped -- or kept -- describes nothing. */
+      var flying=!!b.from, t;
+      if(n==="reversed"){
+        t = flying
+          ? "Your return date falls before your outbound one, so it has been left out of these searches. Fix the dates above and it comes back."
+          : "Your return date falls before your outbound one, so the stay searches leave it out. Fix the dates above and it comes back.";
+      } else {
+        t = flying
+          ? "Your return is the same day, so the stay searches leave it out — a hotel cannot sell you nought nights. The flight search keeps it."
+          : "Your return is the same day, so the stay searches leave it out — a hotel cannot sell you nought nights.";
+      }
+      return '<p class="tiny" style="margin-top:11px;color:var(--warn)">'+t+'</p>';
+    }())+
     '<p class="tiny" style="margin-top:11px">Each opens a live search with your dates already in it. This page has no connection to those sites and never shows a price of its own — anything you see on cost comes from them, not from here.</p>';
 }
 
