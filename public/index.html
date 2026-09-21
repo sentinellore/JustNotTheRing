@@ -7,7 +7,7 @@
 <title>Just Not The Ring</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Karla:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* ---- document reset (supplied by the host when embedded; explicit when self-hosted) ---- */
 :root{
@@ -18,47 +18,47 @@
 img{max-width:100%}
 /* ============ TOKENS ============ */
 :root{
-  --bg:#EEF0F3;
-  --surface:#FFFFFF;
-  --surface-2:#F7F8FA;
-  --surface-3:#E4E7EC;
-  --ink:#10151B;
-  --ink-2:#39424E;
-  --ink-3:#5C6672;
-  --line:#D6DAE0;
-  --line-2:#BBC2CC;
+  --bg:#F5F4EF;
+  --surface:#FCFCFA;
+  --surface-2:#F8F7F2;
+  --surface-3:#E7E9E4;
+  --ink:#1B2430;
+  --ink-2:#46525F;
+  --ink-3:#66717E;
+  --line:#DBDBD4;
+  --line-2:#C1C5BE;
   --accent:#2F5480;
-  --accent-ink:#1F3A57;
-  --accent-deep:#23415F;
-  --accent-soft:#E4EBF4;
-  --gold:#7E6116;
-  --gold-soft:#F4EEDC;
+  --accent-ink:#1E3A5F;
+  --accent-deep:#1E3A5F;
+  --accent-soft:#E5EBF3;
+  --gold:#8A6C2C;
+  --gold-soft:#F3EEE1;
   --good:#2F6B47;
   --warn:#7D5210;
   --crit:#8A2F2A;
-  --shadow:0 1px 2px rgba(16,21,27,.06), 0 10px 26px -14px rgba(16,21,27,.20);
-  --shadow-lift:0 2px 5px rgba(16,21,27,.07), 0 20px 44px -20px rgba(16,21,27,.30);
-  --display:"Newsreader", Georgia, "Times New Roman", serif;
-  --body:"IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --shadow:0 1px 2px rgba(30,58,95,.05), 0 14px 30px -18px rgba(30,58,95,.30);
+  --shadow-lift:0 2px 5px rgba(30,58,95,.07), 0 22px 46px -22px rgba(30,58,95,.38);
+  --display:"Fraunces", Georgia, "Times New Roman", serif;
+  --body:"Karla", "Helvetica Neue", Arial, sans-serif;
   --mono:"IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0E141B;
-    --surface:#161E27;
-    --surface-2:#1C2631;
-    --surface-3:#26323F;
-    --ink:#EEF3F8;
-    --ink-2:#BCC7D4;
-    --ink-3:#93A0AE;
-    --line:#2C3846;
-    --line-2:#3C4A5B;
+    --bg:#101823;
+    --surface:#18222F;
+    --surface-2:#1E2937;
+    --surface-3:#283545;
+    --ink:#EDF2F8;
+    --ink-2:#BAC7D6;
+    --ink-3:#93A1B1;
+    --line:#2C3949;
+    --line-2:#3C4C5F;
     --accent:#8FB3DF;
-    --accent-ink:#C3D6EE;
+    --accent-ink:#C6D8EF;
     --accent-deep:#A6C4E8;
-    --accent-soft:#1C2B3B;
-    --gold:#DCBE68;
-    --gold-soft:#2C2617;
+    --accent-soft:#1B2A3A;
+    --gold:#DCC07C;
+    --gold-soft:#2A2617;
     --good:#7CC69C;
     --warn:#DCAE5F;
     --crit:#E68880;
@@ -67,21 +67,21 @@ img{max-width:100%}
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0E141B;
-  --surface:#161E27;
-  --surface-2:#1C2631;
-  --surface-3:#26323F;
-  --ink:#EEF3F8;
-  --ink-2:#BCC7D4;
-  --ink-3:#93A0AE;
-  --line:#2C3846;
-  --line-2:#3C4A5B;
+  --bg:#101823;
+  --surface:#18222F;
+  --surface-2:#1E2937;
+  --surface-3:#283545;
+  --ink:#EDF2F8;
+  --ink-2:#BAC7D6;
+  --ink-3:#93A1B1;
+  --line:#2C3949;
+  --line-2:#3C4C5F;
   --accent:#8FB3DF;
-  --accent-ink:#C3D6EE;
+  --accent-ink:#C6D8EF;
   --accent-deep:#A6C4E8;
-  --accent-soft:#1C2B3B;
-  --gold:#DCBE68;
-  --gold-soft:#2C2617;
+  --accent-soft:#1B2A3A;
+  --gold:#DCC07C;
+  --gold-soft:#2A2617;
   --good:#7CC69C;
   --warn:#DCAE5F;
   --crit:#E68880;
@@ -157,7 +157,7 @@ b,strong{font-weight:600;color:var(--ink)}
 /* ============ BUTTONS ============ */
 .btn{
   font-family:var(--body);font-size:.95rem;font-weight:600;
-  padding:12px 22px;border-radius:4px;border:1px solid var(--accent);
+  padding:13px 26px;border-radius:999px;border:1px solid var(--accent);
   background:var(--accent);color:#fff;cursor:pointer;text-decoration:none;
   display:inline-flex;align-items:center;gap:9px;transition:background .15s,border-color .15s;
 }
@@ -176,24 +176,39 @@ b,strong{font-weight:600;color:var(--ink)}
 .field::placeholder{color:var(--ink-3)}
 
 /* ============ HOME ============ */
-.hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(30px,5vw,60px);align-items:end}
+.hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(30px,5vw,60px);align-items:center}
 .hero-kicker{display:flex;align-items:center;gap:12px;margin-bottom:20px}
 .hero-kicker .rule{height:1px;flex:1;background:var(--gold);opacity:.5;max-width:110px}
 h1 .it{font-style:italic;color:var(--accent)}
 .hero-sub{margin-top:22px;max-width:48ch}
 .hero-cta{display:flex;flex-wrap:wrap;gap:11px;margin-top:28px}
-.spectrum{
-  height:9px;border-radius:99px;margin-bottom:16px;border:1px solid var(--line-2);
-  background:linear-gradient(90deg,#F6FBFF 0%,#F9FCFD 18%,#FCFCF4 42%,#FBF5DC 62%,#F4E7B2 82%,#EDDA8C 100%);
+.skypanel{
+  position:relative;height:300px;border-radius:20px;overflow:hidden;margin-bottom:18px;
+  background:linear-gradient(170deg,#93AFD1 0%,#456A97 40%,#16304F 100%);
+  display:flex;align-items:center;justify-content:center;
 }
-.stat-stack{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.skypanel svg{position:relative;width:206px;height:206px;margin-bottom:24px}
+.skyglow{
+  position:absolute;top:28px;left:50%;margin-left:-118px;width:236px;height:236px;border-radius:50%;
+  background:radial-gradient(circle,rgba(238,245,255,.26) 0%,rgba(210,228,250,.09) 54%,rgba(210,228,250,0) 74%);
+}
+.skyveil{
+  position:absolute;left:0;right:0;bottom:0;height:88px;
+  background:linear-gradient(180deg,rgba(20,32,47,0) 0%,rgba(13,22,36,.58) 100%);
+}
+.skycap{
+  position:absolute;left:24px;bottom:18px;font-family:var(--display);font-style:italic;
+  font-size:1.16rem;color:#EEF3FA;
+}
+.stat-stack{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
 .stat{background:var(--surface);padding:14px 16px}
 .stat b{font-family:var(--mono);font-size:1.34rem;font-weight:500;display:block;letter-spacing:-.02em;color:var(--ink)}
 .stat span{font-size:.88rem;color:var(--ink-2);line-height:1.5;display:block;margin-top:3px}
 
-.index-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(266px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.index-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(266px,1fr));gap:18px}
 .idx-card{
-  background:var(--surface);padding:24px 24px 22px;text-align:left;border:0;font:inherit;
+  background:var(--surface);padding:26px 26px 24px;text-align:left;border:1px solid var(--line);
+  border-radius:18px;box-shadow:var(--shadow);font:inherit;
   color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:9px;
   transition:background .15s;min-height:100%;
 }
@@ -207,7 +222,7 @@ h1 .it{font-style:italic;color:var(--accent)}
 .starter{margin-top:clamp(40px,6vw,60px);background:var(--surface);border:1px solid var(--line-2);border-radius:6px;box-shadow:var(--shadow);padding:clamp(24px,4vw,34px)}
 
 /* ============ QUIZ ============ */
-#quizpanel{background:var(--surface);border:1px solid var(--line-2);border-radius:6px;box-shadow:var(--shadow-lift);overflow:hidden}
+#quizpanel{background:var(--surface);border:1px solid var(--line-2);border-radius:18px;box-shadow:var(--shadow-lift);overflow:hidden}
 .quiz-top{display:flex;align-items:center;gap:16px;padding:15px 24px;border-bottom:1px solid var(--line);background:var(--surface-2)}
 .progress{flex:1;height:4px;background:var(--surface-3);border-radius:99px;overflow:hidden}
 .progress i{display:block;height:100%;background:var(--accent);width:11%;transition:width .35s cubic-bezier(.2,.7,.3,1)}
@@ -262,7 +277,7 @@ h1 .it{font-style:italic;color:var(--accent)}
 .note-good{border-left:3px solid var(--good);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
 
 /* ============ SHARED BLOCKS ============ */
-.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;min-width:0}
 .grid{display:grid;gap:15px}
 .grid>*{min-width:0}
 .tablewrap{max-width:100%}
@@ -285,7 +300,7 @@ h1 .it{font-style:italic;color:var(--accent)}
 .callout p{font-size:.99rem;color:var(--ink-2);line-height:1.64}
 .callout p + p{margin-top:11px}
 
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
 table{border-collapse:collapse;width:100%;min-width:580px;font-size:.97rem}
 th,td{text-align:left;padding:14px 17px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55}
 thead th{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:500;background:var(--surface-2)}
@@ -295,7 +310,7 @@ td{color:var(--ink-2)}
 .mohs{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
 
 /* ============ LOCATIONS ============ */
-.loc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(262px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.loc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(262px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .loc{background:var(--surface);padding:24px;display:flex;flex-direction:column;gap:10px}
 .loc h4{font-family:var(--display);font-weight:500;font-size:1.26rem;line-height:1.24}
 .loc p{font-size:.95rem;color:var(--ink-2);line-height:1.6}
@@ -358,7 +373,7 @@ select.field{appearance:none;background-image:linear-gradient(45deg,transparent 
 }
 
 /* ============ DIAMOND BENCH ============ */
-.bench{display:grid;grid-template-columns:minmax(0,310px) minmax(0,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.bench{display:grid;grid-template-columns:minmax(0,310px) minmax(0,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .stage{background:var(--surface-2);padding:26px 22px;display:flex;flex-direction:column;align-items:center;gap:18px}
 .stage-art{width:100%;max-width:224px;aspect-ratio:1;display:grid;place-items:center}
 .stage-art svg{width:100%;height:100%}
@@ -409,7 +424,7 @@ select.field{appearance:none;background-image:linear-gradient(45deg,transparent 
 .fact dt{font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);padding-top:3px}
 .fact dd{margin:0;color:var(--ink-2);line-height:1.6}
 
-.shapes{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.shapes{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .shape{background:var(--surface);padding:17px 12px;text-align:center;cursor:pointer;border:0;font:inherit;color:var(--ink);transition:background .13s}
 .shape:hover{background:var(--accent-soft)}
 .shape[aria-pressed="true"]{background:var(--accent-soft);box-shadow:inset 0 -3px 0 var(--accent)}
@@ -418,7 +433,7 @@ select.field{appearance:none;background-image:linear-gradient(45deg,transparent 
 .shape span{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.03em}
 
 /* ============ HOW ============ */
-.how-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.how-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .how{background:var(--surface);padding:22px 24px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
 .how .idx{font-family:var(--mono);font-size:.82rem;color:var(--gold);padding-top:5px;font-weight:500}
 .how h4{font-family:var(--display);font-weight:500;font-size:1.26rem;margin-bottom:8px}
@@ -439,7 +454,7 @@ select.field{appearance:none;background-image:linear-gradient(45deg,transparent 
 .tl p{font-size:.95rem;color:var(--ink-2);line-height:1.58}
 
 /* ============ BUDGET ============ */
-.budget-out{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:20px}
+.budget-out{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:20px}
 .bcol{background:var(--surface);padding:20px}
 .bcol .eyebrow{display:block;margin-bottom:11px}
 .bcol .big{font-family:var(--mono);font-size:1.5rem;letter-spacing:-.02em;display:block;color:var(--ink)}
@@ -506,11 +521,21 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
         </div>
       </div>
       <aside>
-        <div class="spectrum" role="img" aria-label="The diamond color scale, running from icy colorless at D to warm yellow at Z"></div>
+        <div class="skypanel" role="img" aria-label="A diamond drawn in gold against a blue-hour sky">
+          <span class="skyglow"></span>
+          <svg viewBox="0 0 200 200" fill="none" aria-hidden="true">
+            <circle cx="100" cy="100" r="78" stroke="#F0DCA8" stroke-width="1.7"></circle>
+            <circle cx="100" cy="100" r="54" stroke="#F0DCA8" stroke-width="1.5" stroke-opacity="0.95"></circle>
+            <circle cx="100" cy="100" r="33" stroke="#EAF2FD" stroke-width="1.5" stroke-opacity="0.95"></circle>
+            <path d="M100 22v55M155 59l-39 27M178 100h-55M155 141l-39-27M100 178v-55M45 141l39-27M22 100h55M45 59l39 27" stroke="#F0DCA8" stroke-width="1.4" stroke-opacity="0.92" stroke-linecap="round"></path>
+            <path d="M64 50l36 25 36-25M64 150l36-25 36 25" stroke="#EAF2FD" stroke-width="1.3" stroke-opacity="0.78" stroke-linecap="round"></path>
+          </svg>
+          <span class="skyveil"></span>
+          <span class="skycap">the hour after sunset</span>
+        </div>
         <div class="stat-stack">
           <div class="stat"><b>61%</b><span>of 2025 engagement rings used a lab-grown center stone</span></div>
-          <div class="stat"><b>$4,600</b><span>average total spend — $4,300 lab-grown, $7,000 natural</span></div>
-          <div class="stat"><b>1.9 ct</b><span>average center stone, and rising</span></div>
+          <div class="stat"><b>$4,600</b><span>average total spend, lab-grown and natural combined</span></div>
         </div>
         <p class="tiny" style="margin-top:11px">The Knot 2026 Real Weddings Study · 10,000+ couples</p>
       </aside>
@@ -1471,10 +1496,10 @@ function drawStone(){
    '<circle cx="100" cy="100" r="96" fill="var(--surface-3)"/>'+
    '<circle cx="100" cy="100" r="96" fill="none" stroke="var(--line-2)" stroke-width="1"/>'+
    '<g transform="translate(100 100) scale('+(sizePct/100).toFixed(3)+') translate(-100 -100)">'+
-     '<g fill="url(#stoneFill)" stroke="#44576D" stroke-width="2.4" stroke-opacity="0.92">'+shapePath(state.shape)+'</g>'+
+     '<g fill="url(#stoneFill)" stroke="#33557E" stroke-width="2.4" stroke-opacity="0.92">'+shapePath(state.shape)+'</g>'+
      '<g clip-path="url(#stoneClip)">'+
-       '<g fill="none" stroke="#3B5168" stroke-width="1.3" stroke-opacity="'+(0.24+0.44*glow).toFixed(2)+'">'+facetLines(state.shape)+'</g>'+
-       '<g color="#27343F">'+inclusionMarks(cl.n)+'</g>'+
+       '<g fill="none" stroke="#3E6191" stroke-width="1.3" stroke-opacity="'+(0.24+0.44*glow).toFixed(2)+'">'+facetLines(state.shape)+'</g>'+
+       '<g color="#1E2E44">'+inclusionMarks(cl.n)+'</g>'+
      '</g></g></svg>';
   $("stageArt").innerHTML=svg;
   $("rShape").textContent=SHAPES[state.shape].name;
@@ -1493,9 +1518,9 @@ function buildCut(){
   var wrap=$("cutScale"); wrap.innerHTML="";
   CUTS.forEach(function(c,i){
     var gem='<svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">'+
-      '<path d="M12 2 L22 9.5 L12 22 L2 9.5 Z" fill="#C3D2E2" fill-opacity="'+(0.25+0.75*c.eff).toFixed(2)+
-      '" stroke="#44576D" stroke-width="1.1" stroke-opacity="0.85"/>'+
-      '<path d="M2 9.5 H22 M12 2 L7 9.5 L12 22 M12 2 L17 9.5 L12 22" fill="none" stroke="#44576D" stroke-width="0.8" stroke-opacity="'+
+      '<path d="M12 2 L22 9.5 L12 22 L2 9.5 Z" fill="#C6D7EA" fill-opacity="'+(0.25+0.75*c.eff).toFixed(2)+
+      '" stroke="#33557E" stroke-width="1.1" stroke-opacity="0.85"/>'+
+      '<path d="M2 9.5 H22 M12 2 L7 9.5 L12 22 M12 2 L17 9.5 L12 22" fill="none" stroke="#33557E" stroke-width="0.8" stroke-opacity="'+
       (0.15+0.6*c.eff).toFixed(2)+'"/></svg>';
     var b=el('<button class="step" type="button" aria-pressed="'+(i===state.cut)+'">'+
       '<span class="gsw" style="display:grid;place-items:center;background:var(--surface)">'+gem+'</span>'+
