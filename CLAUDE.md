@@ -46,10 +46,12 @@ automatically. Manual deploy: `npx wrangler deploy`.
 
 These are what make the site trustworthy. Preserve them.
 
-- **Never invent prices, fares, availability or inventory.** The site shows no numbers of its
-  own for these. The trip planner links out to Google Flights and Booking.com with dates
-  pre-filled and says plainly that it has no connection to those sites. Budget figures are
-  labelled orientation ranges, not quotes.
+- **Never invent prices, fares, availability or inventory.** The site shows no prices of its
+  own for flights, hotels or anything with live inventory — those always hand off to a
+  vendor's own search. Editorial price bands for rings and vendors are allowed where they are
+  clearly labelled as orientation ranges and say which are sourced. The trip planner links out
+  to Google Flights and Booking.com with dates pre-filled and says plainly that it has no
+  connection to those sites. Budget figures are labelled orientation ranges, not quotes.
 - **Keep stated limitations visible in the UI.** The free-text quiz answers tell the reader
   they are keyword-matched and to trust themselves over the result. AI suggestions say who
   wrote them and to verify seasons independently. Do not quietly remove these.

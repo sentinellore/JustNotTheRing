@@ -501,6 +501,27 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
   .hero-grid{grid-template-columns:1fr}
   .bench{grid-template-columns:1fr}
   .rec-row{grid-template-columns:1fr}
+
+  /* Stacked, the stone used to sit far above the controls: you tapped a colour grade and
+     the thing that changed was off-screen. The stage becomes a compact sticky header so
+     the stone stays in view while you work the scales. These rules must live here, after
+     the base .stage rule, or source order overrides them. */
+  .bench{overflow:visible}
+  .stage{
+    position:sticky;top:calc(58px + env(safe-area-inset-top,0px));z-index:20;
+    flex-direction:row;align-items:center;gap:14px;
+    padding:10px 14px;border-radius:16px 16px 0 0;
+    border-bottom:1px solid var(--line-2);box-shadow:0 12px 20px -18px rgba(30,58,95,.55);
+  }
+  .stage-art{width:92px;max-width:92px;flex:none;aspect-ratio:1}
+  .stage .tiny{display:none}
+  .report{
+    border-top:0;padding-top:0;margin:0;flex:1;min-width:0;
+    display:flex;flex-wrap:wrap;gap:0 12px;font-size:.72rem;line-height:1.5;
+  }
+  .report div{display:flex;gap:5px;justify-content:flex-start}
+  .bench-main{border-radius:0 0 16px 16px}
+  html{scroll-padding-top:200px}
 }
 @media (max-width:640px){
   body{font-size:16.5px}
@@ -926,7 +947,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     <div class="loc-grid">
       <article class="loc">
         <h4>Proposal photographer</h4>
-        <p>Roughly $300–800 for thirty to sixty minutes. The one worth paying for, because it's the only thing you cannot go back and get.</p>
+        <p>Most US sessions run $400–1,500 for thirty to sixty minutes, and specialists in expensive cities go higher. Nearly half of couples who hire one budget over $1,000. The one worth paying for, because it is the only thing you cannot go back and get.</p>
         <p class="small"><b>Ask:</b> Have you shot at this spot before? Does it need a permit, and will you handle it? Where will you stand and which way should I face? What will you wear so you read as a tourist? How soon do I get two or three images I can send my family that night? What happens if we're late, or it rains?</p>
         <div class="meta"><span class="chip on">Book this first</span><span class="chip gold">6+ weeks in season</span></div>
       </article>
@@ -967,7 +988,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       <p><b>Book the photographer first.</b> Everyone else can usually be found at two weeks' notice. Good proposal photographers cannot, and between Thanksgiving and Valentine's Day they are gone months ahead.</p>
       <p><b>Ask who is handling the permit, and get the answer in writing.</b> Vendors will often say it's fine. "Fine" is not a permit, and it is you who gets moved on.</p>
       <p><b>Pay deposits by credit card, not bank transfer.</b> A card gives you a route to a refund if someone vanishes. This is a category with a lot of one-person businesses and a few that are not businesses at all.</p>
-      <p><b>Prices here are US ballparks and move a great deal by city.</b> Treat them as orientation for whether a quote is sane, not as what you should pay.</p>
+      <p><b>Only the photography range is sourced.</b> It comes from 2026 market pricing. The other figures are rough orientation from operator quotes and move a great deal by city — use them to judge whether a quote is sane, not as what you should pay, and always get three.</p>
     </div>
 
     <div style="margin-top:44px">
@@ -1454,7 +1475,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     </div>
 
     <div class="callout">
-      <span class="eyebrow">Three that worked, in different registers</span>
+      <span class="eyebrow">Three examples, in different registers</span>
       <p><b>Plain.</b> "I think about you when nothing's happening. Just doing the dishes, driving to work — you're the thing my head goes to. I want that for the rest of my life. Will you marry me?"</p>
       <p><b>Specific.</b> "You drove four hours to sit in a hospital corridor with me and you never once made it about you. I knew then. I've known since. Will you marry me?"</p>
       <p><b>Light.</b> "I had a speech. It was very good. I've forgotten all of it except the important part — will you marry me?"</p>
@@ -1523,7 +1544,8 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
         <p class="small" style="margin-top:9px;line-height:2">
           <a href="https://www.theknot.com/content/how-much-to-spend-on-engagement-ring">The Knot — engagement ring cost</a><br>
           <a href="https://rapaport.com/news/lab-grown-taking-over-engagement-ring-spending-the-knot/">Rapaport — The Knot 2026 study</a><br>
-          <a href="https://www.gia.edu/diamond-quality-factor">GIA — the 4Cs</a>
+          <a href="https://www.gia.edu/diamond-quality-factor">GIA — the 4Cs</a><br>
+          <a href="https://caratyes.com/proposals/proposal-photographer-guide">Proposal photography pricing</a>
         </p>
       </div>
     </div>
@@ -1567,8 +1589,10 @@ function setMenu(open){
   if(!m.b||!m.p) return;
   m.p.hidden=!open;
   m.b.setAttribute("aria-expanded", open?"true":"false");
-  if(m.o) m.o.hidden=open;
-  if(m.c) m.c.hidden=!open;
+  /* SVG elements have no .hidden IDL property -- setting it makes a plain JS property
+     and never reaches the attribute. Toggle the attribute itself. */
+  if(m.o) m.o.toggleAttribute("hidden", open);
+  if(m.c) m.c.toggleAttribute("hidden", !open);
   m.b.querySelector("span").textContent = open?"Close":"Menu";
 }
 function closeMenu(){ var m=menuEls(); if(m.p && !m.p.hidden) setMenu(false); }
