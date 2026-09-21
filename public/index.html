@@ -1570,7 +1570,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
         <div class="card" style="padding:24px;margin-top:18px">
           <span class="eyebrow">Leaving this site</span>
           <h3 style="margin:12px 0 12px">Where the links take you</h3>
-          <p class="small">The flight, hotel and map links in the trip planner are built from the city and dates you typed, so clicking one hands those to Google or Booking.com. Nothing goes anywhere until you click, and you can always search for yourself instead.</p>
+          <p class="small">Several links here are built out of what you typed. The flight and hotel searches under Trip use your city and your dates; the map, weather and sunset-time searches under Locations, Who to hire and Trip use the place you named. Clicking one hands that much to Google or Booking.com. Nothing goes anywhere until you click, and you can always run the same search yourself instead.</p>
           <p class="small" style="margin-top:12px">Once you follow any link out — to those sites, to a jeweler, to a photographer — you are on their site and their terms apply, not ours. We have no relationship with any of them and are paid nothing for sending you.</p>
         </div>
       </div>
@@ -1590,7 +1590,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
           <p class="small"><b>No cookies, no analytics.</b> This site sets no cookies and runs no analytics or advertising scripts. We cannot tell how many people take the quiz or what they answer, which is a real cost to us and the right trade.</p>
           <p class="small" style="margin-top:12px"><b>Server logs.</b> The site is hosted on Cloudflare, which records ordinary request information — IP address, time, which page, which browser — to deliver pages and block attacks. That happens for every website you visit and we do not add anything to it.</p>
           <p class="small" style="margin-top:12px"><b>Typefaces.</b> The three fonts are served by Google Fonts, so loading any page here tells Google your IP address, as it does on a large share of the web. We would rather it didn't; serving the files ourselves is on the list.</p>
-          <p class="small" style="margin-top:12px"><b>Stopping abuse of the email button.</b> An open send button on a public site gets used to send mail nobody asked for, so we count how many plan emails each network address has requested in the past day. The count holds times, not addresses and not plans, and deletes itself after twenty-four hours.</p>
+          <p class="small" style="margin-top:12px"><b>Stopping abuse of the email button.</b> An open send button on a public site gets used to send mail nobody asked for, so we count how many plan emails each internet connection has asked for in the past day. The count holds times only — no email addresses, no plans — and nothing older than twenty-four hours is kept.</p>
         </div>
       </div>
     </div>
@@ -2844,19 +2844,28 @@ function renderQ(){
           box.value="";
           return;
         }
+        /* The cap is per internet connection, not per address — say so, or a
+           household on one router reads the fallback as an accusation. */
+        var capped="That is more of these than we send to one internet connection. Copy the link above instead.";
         if(r.status===429){
           /* The limiter writes a message meant to be shown as-is, because the
              wait can be hours and "try again in a moment" would be a lie. */
           return r.json().then(function(b){
-            say("bad", (b && b.message) ? String(b.message).slice(0,200)
-              : "That is more emails than we send to one address. Copy the link above instead.");
-          },function(){
-            say("bad","That is more emails than we send to one address. Copy the link above instead.");
-          });
+            say("bad", (b && b.message) ? String(b.message).slice(0,200) : capped);
+          },function(){ say("bad",capped); });
         }
         if(r.status===503){
-          say("bad","Email is not switched on yet. Copy the link above instead.");
-        } else if(r.status===404 || r.status===405){
+          /* 503 covers two different things: email was never configured, and
+             the limiter is momentarily unreachable. Only the first is permanent. */
+          return r.json().then(function(b){
+            say("bad", (b && b.error==="not_configured")
+              ? "Email is not switched on yet. Copy the link above instead."
+              : "Email is briefly unavailable. Copy the link above, or try again in a few minutes.");
+          },function(){
+            say("bad","Email is not available right now. Copy the link above instead.");
+          });
+        }
+        if(r.status===404 || r.status===405){
           say("bad","Email only works on justnotthering.com. Copy the link above instead.");
         } else {
           say("bad","That did not send. Try again in a moment, or copy the link above.");
