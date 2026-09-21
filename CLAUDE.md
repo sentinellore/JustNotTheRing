@@ -52,11 +52,12 @@ committed; the README lists the full environment.
 
 These are what make the site trustworthy. Preserve them.
 
-- **Never invent prices, fares, availability or inventory.** Every figure the site shows
-  traces to a cited, linked source, and where no figure can be sourced the page makes an
-  observation instead of a claim. The trip planner links out to Google Flights and Booking.com
-  with dates pre-filled and says plainly that it has no connection to those sites. Budget
-  figures are labelled orientation ranges, not quotes.
+- **Never invent prices, fares, availability or inventory.** Every figure the site shows is
+  one of two things, and the page always makes clear which: (a) sourced — traceable to a
+  cited, linked source, or (b) the site's own orientation estimate, labelled in the UI as an
+  estimate and never as a quote. A figure that is neither does not ship. Flights, hotels and
+  vendor availability are always (a) or a hand-off to the vendor; the site never states its
+  own number for those.
 - **Keep stated limitations visible in the UI.** The free-text quiz answers tell the reader
   they are keyword-matched and to trust themselves over the result. AI suggestions say who
   wrote them and to verify seasons independently. Do not quietly remove these.

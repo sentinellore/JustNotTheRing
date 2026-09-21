@@ -306,8 +306,13 @@ h1 .it{font-style:italic;color:var(--accent)}
 .mailrow input[type=email]{font-family:var(--body);font-size:.97rem}
 .optin{display:flex;gap:10px;align-items:flex-start;margin-top:13px;font-size:.92rem;line-height:1.5;color:var(--ink-2);cursor:pointer}
 .optin input{margin-top:3px;width:17px;height:17px;flex:none;accent-color:var(--accent)}
-#planMsg.ok{color:var(--good)}
-#planMsg.bad{color:var(--crit)}
+/* #planMsg is the standing disclosure and must never be overwritten — a visitor
+   who mistypes their address still needs to see what sending does. Transient
+   status goes in #planStatus, which collapses when empty. */
+#planStatus{margin-top:9px;font-weight:500}
+#planStatus:empty{display:none}
+#planStatus.ok{color:var(--good)}
+#planStatus.bad{color:var(--crit)}
 @media (max-width:640px){.share-row{grid-template-columns:1fr}}
 .watch{border-left:3px solid var(--warn);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
 .note-good{border-left:3px solid var(--good);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
@@ -1543,7 +1548,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     <div class="view-head">
       <span class="eyebrow">Privacy</span>
       <h2>What happens to what you type here</h2>
-      <p class="lede">You are describing someone you love, and planning a surprise. Both are reasons to know exactly where the words go. The short version: almost nothing leaves your browser, and the one thing that can is something you have to press a button to send.</p>
+      <p class="lede">You are describing someone you love, and planning a surprise. Both are reasons to know exactly where the words go. The short version: what you type stays in your browser unless you press a button that sends it, and there is exactly one such button.</p>
     </div>
 
     <div class="grid g2">
@@ -1561,6 +1566,13 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
           <p class="small">The link you can copy at the end of the quiz holds two things: the numeric scores your answers added up to, and the city you typed, if you typed one. It never holds what you wrote about your partner.</p>
           <p class="small" style="margin-top:12px">That data sits after the <code>#</code> in the address. Browsers do not send the part after a <code>#</code> to the server, so when you copy the link or paste it somewhere, we do not see it and neither does anyone hosting it. The link decodes in whichever browser opens it.</p>
         </div>
+
+        <div class="card" style="padding:24px;margin-top:18px">
+          <span class="eyebrow">Leaving this site</span>
+          <h3 style="margin:12px 0 12px">Where the links take you</h3>
+          <p class="small">The flight, hotel and map links in the trip planner are built from the city and dates you typed, so clicking one hands those to Google or Booking.com. Nothing goes anywhere until you click, and you can always search for yourself instead.</p>
+          <p class="small" style="margin-top:12px">Once you follow any link out — to those sites, to a jeweler, to a photographer — you are on their site and their terms apply, not ours. We have no relationship with any of them and are paid nothing for sending you.</p>
+        </div>
       </div>
 
       <div>
@@ -1575,9 +1587,10 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
         <div class="card" style="padding:24px;margin-top:18px">
           <span class="eyebrow">Everything else</span>
           <h3 style="margin:12px 0 12px">The unavoidable bits</h3>
-          <p class="small"><b>No cookies, no analytics, no trackers.</b> This site sets none. We cannot tell how many people take the quiz or what they answer, which is a real cost to us and the right trade.</p>
+          <p class="small"><b>No cookies, no analytics.</b> This site sets no cookies and runs no analytics or advertising scripts. We cannot tell how many people take the quiz or what they answer, which is a real cost to us and the right trade.</p>
           <p class="small" style="margin-top:12px"><b>Server logs.</b> The site is hosted on Cloudflare, which records ordinary request information — IP address, time, which page, which browser — to deliver pages and block attacks. That happens for every website you visit and we do not add anything to it.</p>
-          <p class="small" style="margin-top:12px"><b>Links out.</b> Where we point you at Google Flights, Booking.com, a jeweler or a photographer, you leave this site and their terms apply. We have no relationship with any of them and are paid nothing for sending you.</p>
+          <p class="small" style="margin-top:12px"><b>Typefaces.</b> The three fonts are served by Google Fonts, so loading any page here tells Google your IP address, as it does on a large share of the web. We would rather it didn't; serving the files ourselves is on the list.</p>
+          <p class="small" style="margin-top:12px"><b>Stopping abuse of the email button.</b> An open send button on a public site gets used to send mail nobody asked for, so we count how many plan emails each network address has requested in the past day. The count holds times, not addresses and not plans, and deletes itself after twenty-four hours.</p>
         </div>
       </div>
     </div>
@@ -2778,6 +2791,7 @@ function composeResult(forced){
           '</div>'+
           '<label class="optin"><input type="checkbox" id="planOptIn"><span>Also hear from us about proposal planning. Leave it unticked and we add you to nothing.</span></label>'+
           '<p class="tiny" id="planMsg">One email, carrying the same link. Unlike copying it, this does involve servers: your address and the link go to us and to our email provider so the message can be sent. <b>We keep no copy</b>, though they keep delivery records, as every email service does. <a href="#privacy" target="_blank" rel="noopener">The full note on this</a>.</p>'+
+          '<p class="tiny" id="planStatus" role="status" aria-live="polite"></p>'+
         '</div>'+
       '</div>'+
       '<div class="quiz-foot">'+
@@ -2809,33 +2823,46 @@ function renderQ(){
     });
     var sendBtn=$("planSend");
     if(sendBtn) sendBtn.addEventListener("click",function(){
-      var box=$("planEmail"), msg=$("planMsg"), note=$("planOptIn");
+      /* Status goes in its own element. #planMsg is the standing disclosure of
+         what sending does, and a validation error must not wipe it. */
+      var box=$("planEmail"), st=$("planStatus"), note=$("planOptIn");
       var addr=(box.value||"").trim();
-      msg.className="tiny";
+      function say(kind, text){ st.className="tiny"+(kind?" "+kind:""); st.textContent=text; }
       if(addr.indexOf("@")<1 || addr.length>254){
-        msg.className="tiny bad"; msg.textContent="That does not look like an email address.";
+        say("bad","That does not look like an email address.");
         box.focus(); return;
       }
       sendBtn.disabled=true; sendBtn.textContent="Sending…";
-      msg.className="tiny"; msg.textContent="Sending…";
+      say("","Sending…");
       fetch("/api/plan-email",{
         method:"POST",
         headers:{"content-type":"application/json"},
         body:JSON.stringify({ email:addr, plan:currentPlanCode(), optIn: !!(note && note.checked) })
       }).then(function(r){
         if(r.ok){
-          msg.className="tiny ok";
-          msg.textContent="Sent. If it is not there in a minute, check the spam folder — and delete it if that inbox is shared.";
+          say("ok","Sent. If it is not there in a minute, check the spam folder — and delete it if that inbox is shared.");
           box.value="";
-        } else if(r.status===503){
-          msg.className="tiny bad"; msg.textContent="Email is not switched on yet. Copy the link above instead.";
+          return;
+        }
+        if(r.status===429){
+          /* The limiter writes a message meant to be shown as-is, because the
+             wait can be hours and "try again in a moment" would be a lie. */
+          return r.json().then(function(b){
+            say("bad", (b && b.message) ? String(b.message).slice(0,200)
+              : "That is more emails than we send to one address. Copy the link above instead.");
+          },function(){
+            say("bad","That is more emails than we send to one address. Copy the link above instead.");
+          });
+        }
+        if(r.status===503){
+          say("bad","Email is not switched on yet. Copy the link above instead.");
         } else if(r.status===404 || r.status===405){
-          msg.className="tiny bad"; msg.textContent="Email only works on justnotthering.com. Copy the link above instead.";
+          say("bad","Email only works on justnotthering.com. Copy the link above instead.");
         } else {
-          msg.className="tiny bad"; msg.textContent="That did not send. Try again in a moment, or copy the link above.";
+          say("bad","That did not send. Try again in a moment, or copy the link above.");
         }
       }).catch(function(){
-        msg.className="tiny bad"; msg.textContent="Could not reach the server. Copy the link above instead.";
+        say("bad","Could not reach the server. Copy the link above instead.");
       }).then(function(){
         sendBtn.disabled=false; sendBtn.textContent="Send it";
       });

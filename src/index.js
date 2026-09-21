@@ -158,8 +158,12 @@ async function checkLimits(request, env) {
 
 /* One instance per network address, plus one named "site". Each holds a list of send
    times and nothing else: no email address, no plan, not even the address it is counting
-   for (the platform addresses the instance by a hash of its name). An alarm deletes the
-   list once the last entry ages out.
+   for (the platform addresses the instance by a hash of its name).
+
+   Every time is deleted once it is as old as the longest window — 24 hours — not merely
+   ignored: the alarm is always set for the moment the OLDEST stored time expires, prunes
+   it from storage, and re-arms for the next one. The privacy page promises this; keep
+   the two in step.
 
    All requests for one name reach the same single-threaded instance. The list lives in
    memory and the check-then-count below has no await inside it, so two requests cannot
@@ -195,14 +199,27 @@ export class SendLimiter {
     this.stamps.push(now);
     /* ---- counted ---- */
 
-    await this.state.storage.put("stamps", this.stamps);
-    await this.state.storage.setAlarm(now + horizon);
+    /* `this.stamps` is read at call time on purpose, here and in alarm(): whichever write
+       lands last carries the latest list. */
+    await this.state.storage.put({ stamps: this.stamps, horizon });
+    await this.state.storage.setAlarm(this.stamps[0] + horizon);
     return Response.json({ ok: true });
   }
 
   async alarm() {
-    this.stamps = [];
-    await this.state.storage.deleteAll();
+    const horizon = (await this.state.storage.get("horizon")) || DAY;
+    if (this.stamps === null) {
+      const saved = (await this.state.storage.get("stamps")) || [];
+      if (this.stamps === null) this.stamps = saved;
+    }
+    const now = Date.now();
+    this.stamps = this.stamps.filter((t) => now - t < horizon);
+    if (this.stamps.length === 0) {
+      await this.state.storage.deleteAll();
+      return;
+    }
+    await this.state.storage.put("stamps", this.stamps);
+    await this.state.storage.setAlarm(this.stamps[0] + horizon);
   }
 }
 
