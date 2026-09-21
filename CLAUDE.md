@@ -66,9 +66,12 @@ stay out of it regardless.
 ## Making changes
 
 - Colours are CSS custom properties on `:root`, redefined under both
-  `@media (prefers-color-scheme: dark)` and `:root[data-theme="dark"]`. Change tokens, not
-  individual rules. Every new colour needs a definition in all three places.
-- Fonts: Newsreader (display), IBM Plex Sans (body), IBM Plex Mono (data and labels).
+  `@media (prefers-color-scheme: dark)` and `:root[data-theme="dark"]`. The palette is
+  blue-hour: warm off-white ground, sapphire accent (`#2F5480`), deep navy (`#1E3A5F`) and
+  champagne gold for section numbers — those are the light-mode values; dark mode redefines
+  each token. Change tokens, not individual rules. Every new colour needs a definition in all
+  three places.
+- Fonts: Fraunces (display), Karla (body), IBM Plex Mono (data and labels).
 - Check any visual change at 390px width as well as desktop, and in both light and dark.
 - Key structures: `showView()` for routing; `SHAPES`/`CUTS`/`COLORS`/`CLARITY` drive the
   diamond bench; `Q` and `LEXICON` drive the quiz; `composeResult()` builds the

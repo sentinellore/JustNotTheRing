@@ -26,7 +26,7 @@ The site is a single static file, so it will also run on any other static host
 
 ## Two things to know
 
-**Fonts load from Google Fonts.** Newsreader, IBM Plex Sans and IBM Plex Mono are fetched at
+**Fonts load from Google Fonts.** Fraunces, Karla and IBM Plex Mono are fetched at
 runtime. On a live site this is fine. Offline, the page falls back to system serif and sans —
 still legible, slightly different. To remove the dependency, inline the fonts as base64
 `@font-face` rules (adds roughly 200KB).
