@@ -16,6 +16,7 @@
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 img{max-width:100%}
+
 /* ============ TOKENS ============ */
 :root{
   --bg:#F5F4EF;
@@ -543,6 +544,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
 </style>
 </head>
 <body>
+
 <header id="topbar">
   <div class="bar-inner">
     <button class="mark" data-go="home">Just <em>Not</em> The Ring</button>
@@ -1536,6 +1538,65 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
   </div>
 </section>
 
+<section class="view" id="view-privacy" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <span class="eyebrow">Privacy</span>
+      <h2>What happens to what you type here</h2>
+      <p class="lede">You are describing someone you love, and planning a surprise. Both are reasons to know exactly where the words go. The short version: almost nothing leaves your browser, and the one thing that can is something you have to press a button to send.</p>
+    </div>
+
+    <div class="grid g2">
+      <div>
+        <div class="card" style="padding:24px">
+          <span class="eyebrow">The quiz</span>
+          <h3 style="margin:12px 0 12px">Stays on your device</h3>
+          <p class="small">Every answer you give — the multiple choice and the free text where you describe your partner in your own words — is read by code running inside your own browser. It is matched against a keyword list that is part of this page. None of it is sent to us, and none of it is written to your device. Close the tab and it is gone.</p>
+          <p class="small" style="margin-top:12px">The same is true of the diamond bench, the date timeline, the budget figures and the outreach notes. This site has no database. There is no account to make, and nothing to log in to.</p>
+        </div>
+
+        <div class="card" style="padding:24px;margin-top:18px">
+          <span class="eyebrow">The plan link</span>
+          <h3 style="margin:12px 0 12px">Carries scores, not sentences</h3>
+          <p class="small">The link you can copy at the end of the quiz holds two things: the numeric scores your answers added up to, and the city you typed, if you typed one. It never holds what you wrote about your partner.</p>
+          <p class="small" style="margin-top:12px">That data sits after the <code>#</code> in the address. Browsers do not send the part after a <code>#</code> to the server, so when you copy the link or paste it somewhere, we do not see it and neither does anyone hosting it. The link decodes in whichever browser opens it.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="padding:24px">
+          <span class="eyebrow">The one thing that leaves</span>
+          <h3 style="margin:12px 0 12px">Emailing yourself the plan</h3>
+          <p class="small">If you use the email button, two things travel to our server and on to Resend, the service that delivers the message: <b>the address you typed</b> and <b>the plan link</b>. Nothing else. We do not keep a copy of either.</p>
+          <p class="small" style="margin-top:12px">Resend keeps delivery records — that a message to that address was sent, and whether it arrived — the way every email service does. Their privacy terms are at <a href="https://resend.com/legal/privacy-policy">resend.com/legal/privacy-policy</a>.</p>
+          <p class="small" style="margin-top:12px">If you tick the box asking to hear from us, your address is added to a mailing list and stays there until you unsubscribe, which every message we send will let you do in one click. Leave it unticked and your address is used once, to send you that one email, and then not again.</p>
+        </div>
+
+        <div class="card" style="padding:24px;margin-top:18px">
+          <span class="eyebrow">Everything else</span>
+          <h3 style="margin:12px 0 12px">The unavoidable bits</h3>
+          <p class="small"><b>No cookies, no analytics, no trackers.</b> This site sets none. We cannot tell how many people take the quiz or what they answer, which is a real cost to us and the right trade.</p>
+          <p class="small" style="margin-top:12px"><b>Server logs.</b> The site is hosted on Cloudflare, which records ordinary request information — IP address, time, which page, which browser — to deliver pages and block attacks. That happens for every website you visit and we do not add anything to it.</p>
+          <p class="small" style="margin-top:12px"><b>Links out.</b> Where we point you at Google Flights, Booking.com, a jeweler or a photographer, you leave this site and their terms apply. We have no relationship with any of them and are paid nothing for sending you.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:22px">
+      <span class="eyebrow">The practical warning</span>
+      <p>None of the above protects a surprise from a shared inbox. If you email yourself the plan, or leave the link in a browser you both use, the person it is about can find it. Use an address only you open, and delete the message once you have what you need. That is the likeliest way this goes wrong — not us.</p>
+    </div>
+
+    <p class="small" style="margin-top:22px">Questions, or you want a mailing-list address removed: <a href="mailto:hello@justnotthering.com">hello@justnotthering.com</a>. If this page ever changes in a way that matters, the change will be described here rather than quietly made.</p>
+
+    <div class="view-foot">
+      <button class="btn ghost" data-go="home">← Back to the start</button>
+      <div class="spacer"></div>
+      <button class="btn" data-go="quiz">Take the quiz →</button>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer>
@@ -1544,6 +1605,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       <div style="max-width:54ch">
         <span class="mark" style="font-size:1.2rem">Just <em>Not</em> The Ring</span>
         <p class="small" style="margin-top:11px">A planning guide, not a jeweler and not an appraiser. Grading standards referenced are GIA's. Price figures are orientation ranges that move with the market — verify with vendors before committing.</p>
+        <p class="small" style="margin-top:11px"><a href="#privacy" data-go="privacy">What happens to what you type here</a></p>
       </div>
       <div>
         <span class="eyebrow">Sources</span>
@@ -1569,7 +1631,9 @@ function $(id){ return document.getElementById(id); }
 /* ============================================================
    ROUTING — one view at a time
    ============================================================ */
-var VIEWS=["home","quiz","locations","trip","hire","diamonds","rings","how","words","when"];
+/* "privacy" is deliberately not in the nav — it is reachable from the footer
+   and from the email panel, but it is not one of the nine numbered sections. */
+var VIEWS=["home","quiz","locations","trip","hire","diamonds","rings","how","words","when","privacy"];
 function showView(name, push){
   if(VIEWS.indexOf(name)<0) name="home";
   VIEWS.forEach(function(v){ $("view-"+v).hidden = (v!==name); });
@@ -2700,20 +2764,20 @@ function composeResult(forced){
       '<ul class="moves">'+moves.map(function(m,i){return '<li data-n="'+(i+1)+'">'+esc(m)+'</li>';}).join("")+'</ul>'+
       '<div class="share">'+
         '<span class="eyebrow">Keep this</span>'+
-        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation — no account, nothing saved on any server.</p>'+
+        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation — no account, and nothing to sign up for.</p>'+
         '<div class="share-row">'+
           '<input class="field" id="shareUrl" readonly value="'+esc(planLink(t))+'" aria-label="Link to this plan">'+
           '<button class="btn ghost" id="shareCopy" type="button">Copy link</button>'+
         '</div>'+
-        '<p class="tiny" style="margin-top:10px"><b>The link carries your scores and the city you named — never anything you wrote about your partner.</b> It sits after the # in the address, which browsers never send to a server, so it reaches nobody but you. Before you email it anywhere, check that the inbox is yours alone.</p>'+
+        '<p class="tiny" style="margin-top:10px"><b>The link carries your scores and the city you named — never anything you wrote about your partner.</b> It sits after the # in the address, which browsers never send to a server, so copying it involves us not at all. Wherever it ends up, check that inbox is yours alone — a plan sitting in a shared inbox is how a surprise stops being one.</p>'+
         '<div class="mailrow">'+
           '<label class="eyebrow" for="planEmail">Or have it emailed to you</label>'+
           '<div class="share-row" style="margin-top:11px">'+
             '<input class="field" id="planEmail" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">'+
             '<button class="btn" id="planSend" type="button">Send it</button>'+
           '</div>'+
-          '<label class="optin"><input type="checkbox" id="planOptIn"><span>Also hear from us about proposal planning. Leave it unticked and we keep no record of your address at all.</span></label>'+
-          '<p class="tiny" id="planMsg">One email, carrying the same link. <b>Check the inbox is yours alone</b> — a plan sitting in a shared inbox is how a surprise stops being one.</p>'+
+          '<label class="optin"><input type="checkbox" id="planOptIn"><span>Also hear from us about proposal planning. Leave it unticked and we add you to nothing.</span></label>'+
+          '<p class="tiny" id="planMsg">One email, carrying the same link. Unlike copying it, this does involve servers: your address and the link go to us and to our email provider so the message can be sent. <b>We keep no copy</b>, though they keep delivery records, as every email service does. <a href="#privacy" target="_blank" rel="noopener">The full note on this</a>.</p>'+
         '</div>'+
       '</div>'+
       '<div class="quiz-foot">'+
