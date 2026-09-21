@@ -273,6 +273,10 @@ h1 .it{font-style:italic;color:var(--accent)}
   background:var(--accent-soft);border-radius:4px;width:23px;height:23px;flex:none;
   display:grid;place-items:center;margin-top:3px;font-weight:500;
 }
+.share{margin-top:26px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);padding:20px 22px}
+.share-row{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:13px}
+.share-row input{font-family:var(--mono);font-size:.84rem}
+@media (max-width:640px){.share-row{grid-template-columns:1fr}}
 .watch{border-left:3px solid var(--warn);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
 .note-good{border-left:3px solid var(--good);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
 
@@ -2245,8 +2249,43 @@ var SPEC_REC={
   thrift:{line:"0.70–1.00 ct lab-grown · G–H · SI1 eye-clean · 14k gold solitaire",why:"Gold hides warmth, so H does the work of an F. SI1 is where the value lives if you look at the stone or its plot first. And buy at 0.92 rather than 1.00 — the price wall is at the round number, not at the size."}
 };
 
-function composeResult(){
-  var t=tally();
+/* ---- Shareable plan links ----
+   We encode the computed axis scores, never the answers, and never the free text.
+   composeResult() is a pure function of the tally, so a link reproduces the exact same
+   recommendation while carrying nothing a person wrote about their partner. */
+var restoredTally=null;
+function b64e(s){
+  var bytes=new TextEncoder().encode(s), bin="";
+  for(var i=0;i<bytes.length;i++) bin+=String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function b64d(s){
+  s=s.replace(/-/g,"+").replace(/_/g,"/");
+  var bin=atob(s), bytes=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+function planLink(t){
+  try{
+    var code=b64e(JSON.stringify({t:t, c:cityAnswer||undefined}));
+    return location.origin+location.pathname+"?plan="+code;
+  }catch(err){ return ""; }
+}
+function readPlanFromUrl(){
+  try{
+    var code=new URLSearchParams(location.search).get("plan");
+    if(!code) return null;
+    var obj=JSON.parse(b64d(code));
+    if(!obj || typeof obj.t!=="object" || obj.t===null) return null;
+    var clean={};
+    for(var k in obj.t){ if(typeof obj.t[k]==="number" && isFinite(obj.t[k])) clean[k]=obj.t[k]; }
+    if(typeof obj.c==="string") cityAnswer=obj.c.slice(0,80);
+    return clean;
+  }catch(err){ return null; }
+}
+
+function composeResult(forced){
+  var t=forced||tally();
   var env=top(t,["nature","urban","home","dest"],"nature");
   var priv=(t.priv||0)-(t.pub||0);
   var pubKey=priv>=0?"priv":"pub";
@@ -2330,6 +2369,15 @@ function composeResult(){
       unconvBlock+
       '<h3 style="margin:30px 0 16px">What to do this week</h3>'+
       '<ul class="moves">'+moves.map(function(m,i){return '<li data-n="'+(i+1)+'">'+esc(m)+'</li>';}).join("")+'</ul>'+
+      '<div class="share">'+
+        '<span class="eyebrow">Keep this</span>'+
+        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation — no account, nothing saved on any server.</p>'+
+        '<div class="share-row">'+
+          '<input class="field" id="shareUrl" readonly value="'+esc(planLink(t))+'" aria-label="Link to this plan">'+
+          '<button class="btn ghost" id="shareCopy" type="button">Copy link</button>'+
+        '</div>'+
+        '<p class="tiny" style="margin-top:10px"><b>The link carries your scores, not your words.</b> Anything you typed in your own words stays on this device and never travels. Before you email it anywhere, check the inbox is yours alone.</p>'+
+      '</div>'+
       '<div class="quiz-foot">'+
         '<button class="btn" data-go="diamonds">Now learn the 4Cs</button>'+
         '<button class="linkbtn" id="restart" type="button">Start over</button>'+
@@ -2344,9 +2392,22 @@ function renderQ(){
     $("qcount").textContent="Result";
     $("qbar").style.width="100%";
     stage.className="";
-    stage.innerHTML=composeResult();
+    stage.innerHTML=composeResult(restoredTally);
+    var sc=$("shareCopy");
+    if(sc) sc.addEventListener("click",function(){
+      var box=$("shareUrl");
+      var done=function(ok){ sc.textContent = ok?"Copied":"Press Ctrl/Cmd-C"; setTimeout(function(){sc.textContent="Copy link";},2200); };
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(box.value).then(function(){done(true);},function(){box.select();done(false);});
+          return;
+        }
+      }catch(err){}
+      box.select(); done(false);
+    });
     $("restart").addEventListener("click",function(){
-      qi=0; answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill("");
+      qi=0; answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill(""); restoredTally=null;
+      if(location.search) history.replaceState({}, "", location.pathname+location.hash);
       $("quizStage").className="quiz-body";
       renderQ();
       window.scrollTo({top:0,behavior:"smooth"});
@@ -2419,7 +2480,18 @@ function renderQ(){
     if(qi>=Q.length && cityAnswer) renderLens(cityAnswer, window.__topEnv);
   });
 }
-renderQ();
+(function(){
+  var t=readPlanFromUrl();
+  if(t){
+    restoredTally=t;
+    qi=Q.length;
+    renderQ();
+    if(cityAnswer){ $("cityInput").value=cityAnswer; renderLens(cityAnswer, window.__topEnv); }
+    showView("quiz", false);
+  } else {
+    renderQ();
+  }
+})();
 
 /* starter question on the home page */
 (function(){
