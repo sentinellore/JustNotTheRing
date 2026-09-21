@@ -83,11 +83,13 @@ be retried for free.
 | `LIMITER` | binding | yes | The `SendLimiter` Durable Object. Declared in `wrangler.jsonc`; nothing to create by hand. |
 
 Set the secret with `npx wrangler secret put RESEND_API_KEY`. Never commit it. For local work
-it goes in `.dev.vars`, which is gitignored.
+it goes in `.dev.vars`, which is gitignored. In the Cloudflare dashboard it belongs under the
+Worker's runtime Variables and Secrets, not its build-time variables — a key saved in the
+build panel is invisible to `env` and the route keeps answering 503.
 
-`MAIL_FROM` is currently Resend's shared test sender, `onboarding@resend.dev`, which can only
-deliver to the Resend account owner's own address. Before the route is opened to visitors,
-verify `justnotthering.com` in Resend and point `MAIL_FROM` at an address on it.
+`MAIL_FROM` must be an address on a domain verified in Resend. `justnotthering.com` is
+verified. Resend's shared test sender, `onboarding@resend.dev`, only delivers to the account
+owner's own address, so it is no use for visitors.
 
 ## Running it locally
 

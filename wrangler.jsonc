@@ -15,7 +15,7 @@
     { "tag": "v1", "new_sqlite_classes": ["SendLimiter"] }
   ],
   "vars": {
-    "MAIL_FROM": "Just Not The Ring <onboarding@resend.dev>",
+    "MAIL_FROM": "Just Not The Ring <hello@justnotthering.com>",
     "SEND_CEILING_PER_DAY": "80"
   }
 }

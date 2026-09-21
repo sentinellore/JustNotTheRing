@@ -48,6 +48,14 @@ route, `POST /api/plan-email`. Any push to `main` redeploys automatically. Manua
 `npx wrangler deploy`. Secrets (`RESEND_API_KEY`) are set with `wrangler secret put` and never
 committed; the README lists the full environment.
 
+**The Cloudflare dashboard has two separate variable panels for this Worker: build-time and
+runtime.** Anything the code reads through `env` must be in the runtime one (Settings →
+Variables and Secrets), not under the build settings. A secret saved in the build panel looks
+present in the dashboard while `env.RESEND_API_KEY` is `undefined` at request time, and the
+route answers 503 `not_configured`. This cost an afternoon. To check from outside without
+sending mail: `POST /api/plan-email` with body `{}` returns 503 while the key is missing and
+400 `bad_email` once it is there.
+
 ## Content rules
 
 These are what make the site trustworthy. Preserve them.
