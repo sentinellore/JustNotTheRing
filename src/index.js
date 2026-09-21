@@ -12,6 +12,9 @@
  *
  * Required secret:   RESEND_API_KEY      (wrangler secret put RESEND_API_KEY)
  * Required var:      MAIL_FROM           e.g. "Just Not The Ring <hello@justnotthering.com>"
+ * Required binding:  LIMITER             the SendLimiter Durable Object, below. No limiter,
+ *                                        no send — the route fails closed.
+ * Optional var:      SEND_CEILING_PER_DAY  site-wide cap on sends per 24h. Default 80.
  * Optional var:      RESEND_AUDIENCE_ID  only needed for the opt-in list
  * Optional vars:     PARTNER_LINE, PARTNER_URL — the Alexandrite line in the footer.
  *                    Leave unset and the block is omitted entirely.
@@ -19,6 +22,16 @@
 
 const SITE = "https://justnotthering.com";
 const MAX_PLAN = 2000;
+
+/* Sending limits. Per network address: 5 an hour, 20 a day. Site-wide: a hard ceiling per
+   24h, so a distributed attempt cannot run up a bill or burn the sender's reputation. */
+const HOUR = 60 * 60 * 1000;
+const DAY = 24 * HOUR;
+const IP_RULES = [
+  { limit: 5, windowMs: HOUR },
+  { limit: 20, windowMs: DAY },
+];
+const DEFAULT_CEILING_PER_DAY = 80;
 
 export default {
   async fetch(request, env) {
@@ -67,6 +80,11 @@ async function handlePlanEmail(request, env) {
   if (email.length > 254 || !EMAIL_RE.test(email)) return json({ error: "bad_email" }, 400);
   if (plan.length > MAX_PLAN || !PLAN_RE.test(plan)) return json({ error: "bad_plan" }, 400);
 
+  /* Only a request that would otherwise send takes a slot, and it takes it before the
+     send, so a failing send cannot be retried for free. */
+  const limited = await checkLimits(request, env);
+  if (limited) return limited;
+
   const link = `${SITE}/#plan=${plan}`;
   const sent = await sendMail(env, email, link);
   if (!sent.ok) return json({ error: "send_failed" }, 502);
@@ -82,6 +100,110 @@ async function handlePlanEmail(request, env) {
   }
 
   return json({ ok: true });
+}
+
+/* ============================================================
+   RATE LIMITING
+   ============================================================ */
+
+/* The key is the caller's network address, never the email address they typed — nothing
+   about who a plan was sent to is kept. IPv6 is cut to its /64, because one machine
+   holds a whole /64 and could otherwise walk through it for free. */
+function clientKey(request) {
+  const ip = (request.headers.get("cf-connecting-ip") || "unknown").trim().toLowerCase();
+  if (ip.indexOf(":") < 0) return ip;
+  const halves = ip.split("::");
+  const head = halves[0] ? halves[0].split(":") : [];
+  const tail = halves.length > 1 && halves[1] ? halves[1].split(":") : [];
+  const fill = halves.length > 1 ? new Array(Math.max(0, 8 - head.length - tail.length)).fill("0") : [];
+  return head.concat(fill, tail).slice(0, 4).join(":") + "::/64";
+}
+
+function ceilingPerDay(env) {
+  const n = parseInt(env.SEND_CEILING_PER_DAY, 10);
+  return Number.isFinite(n) && n > 0 ? n : DEFAULT_CEILING_PER_DAY;
+}
+
+async function takeSlot(env, name, rules) {
+  const stub = env.LIMITER.get(env.LIMITER.idFromName(name));
+  const res = await stub.fetch("https://limiter/take", { method: "POST", body: JSON.stringify(rules) });
+  if (!res.ok) throw new Error("limiter " + res.status);
+  return res.json();
+}
+
+function tooMany(scope, retryAfter) {
+  const mins = Math.max(1, Math.ceil(retryAfter / 60));
+  const wait = mins >= 90 ? `about ${Math.round(mins / 60)} hours` : mins === 1 ? "a minute" : `about ${mins} minutes`;
+  const message =
+    scope === "site"
+      ? "Email is paused for today — more plans have gone out than we allow in a day. Copy the link above instead; it is the same plan."
+      : `That is the limit for emailed plans from your connection. Copy the link above instead, or try again in ${wait}.`;
+  return json({ error: "rate_limited", scope, retryAfter, message }, 429, { "retry-after": String(retryAfter) });
+}
+
+/* Returns a Response when the request must stop, or null when it may send. Fails closed:
+   if the limiter is missing or broken, nothing is sent. */
+async function checkLimits(request, env) {
+  if (!env.LIMITER) return json({ error: "limiter_unavailable" }, 503);
+  try {
+    const mine = await takeSlot(env, "ip:" + clientKey(request), IP_RULES);
+    if (!mine.ok) return tooMany("you", mine.retryAfter);
+    const site = await takeSlot(env, "site", [{ limit: ceilingPerDay(env), windowMs: DAY }]);
+    if (!site.ok) return tooMany("site", site.retryAfter);
+    return null;
+  } catch {
+    return json({ error: "limiter_unavailable" }, 503);
+  }
+}
+
+/* One instance per network address, plus one named "site". Each holds a list of send
+   times and nothing else: no email address, no plan, not even the address it is counting
+   for (the platform addresses the instance by a hash of its name). An alarm deletes the
+   list once the last entry ages out.
+
+   All requests for one name reach the same single-threaded instance. The list lives in
+   memory and the check-then-count below has no await inside it, so two requests cannot
+   both see the last free slot — that is what makes the site-wide ceiling a hard one.
+   Storage is only there so the count survives the instance being evicted. */
+export class SendLimiter {
+  constructor(state) {
+    this.state = state;
+    this.stamps = null;
+  }
+
+  async fetch(request) {
+    const rules = await request.json();
+    if (this.stamps === null) {
+      const saved = (await this.state.storage.get("stamps")) || [];
+      if (this.stamps === null) this.stamps = saved;
+    }
+
+    /* ---- no await from here to the push ---- */
+    const now = Date.now();
+    const horizon = Math.max.apply(null, rules.map((r) => r.windowMs));
+    this.stamps = this.stamps.filter((t) => now - t < horizon);
+    let retryAfter = 0;
+    for (const r of rules) {
+      const inWindow = this.stamps.filter((t) => now - t < r.windowMs);
+      if (inWindow.length >= r.limit) {
+        /* a slot frees when the oldest of the last `limit` sends leaves the window */
+        const frees = inWindow[inWindow.length - r.limit] + r.windowMs;
+        retryAfter = Math.max(retryAfter, Math.ceil((frees - now) / 1000));
+      }
+    }
+    if (retryAfter > 0) return Response.json({ ok: false, retryAfter });
+    this.stamps.push(now);
+    /* ---- counted ---- */
+
+    await this.state.storage.put("stamps", this.stamps);
+    await this.state.storage.setAlarm(now + horizon);
+    return Response.json({ ok: true });
+  }
+
+  async alarm() {
+    this.stamps = [];
+    await this.state.storage.deleteAll();
+  }
 }
 
 function partnerBlock(env, asText) {

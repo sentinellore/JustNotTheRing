@@ -4,17 +4,21 @@ Guidance for AI agents working in this repo.
 
 ## What this is
 
-A single-file static website. `public/index.html` contains the entire site — markup, CSS and
-JavaScript in one file, roughly 2,500 lines. There is no build step, no bundler, no
-package.json and no dependencies. Cloudflare uploads `public/` and serves it.
+A single-file website plus one small Worker. `public/index.html` contains the entire site —
+markup, CSS and JavaScript in one file, roughly 3,000 lines. `src/index.js` is the Worker: it
+serves `public/` and answers one API route. There is no build step, no bundler, no
+package.json and no dependencies.
 
 ```
 .gitignore
 CLAUDE.md             this file
 README.md
-wrangler.jsonc        name, compatibility_date, assets → ./public
+wrangler.jsonc        main, assets → ./public, the LIMITER Durable Object, vars
+src/index.js          the Worker: POST /api/plan-email and its rate limiter
 public/index.html     the whole site
 ```
+
+Only `index.html` belongs in `public/` — everything in that folder is served to the world.
 
 ## Hard constraints
 
@@ -39,19 +43,20 @@ as out of date.
 
 ## Deploying
 
-Cloudflare Workers, static assets only, no `main` entry. Any push to `main` redeploys
-automatically. Manual deploy: `npx wrangler deploy`.
+Cloudflare Workers: static assets from `public/`, plus a `main` at `src/index.js` serving one
+route, `POST /api/plan-email`. Any push to `main` redeploys automatically. Manual deploy:
+`npx wrangler deploy`. Secrets (`RESEND_API_KEY`) are set with `wrangler secret put` and never
+committed; the README lists the full environment.
 
 ## Content rules
 
 These are what make the site trustworthy. Preserve them.
 
-- **Never invent prices, fares, availability or inventory.** The site shows no prices of its
-  own for flights, hotels or anything with live inventory — those always hand off to a
-  vendor's own search. Editorial price bands for rings and vendors are allowed where they are
-  clearly labelled as orientation ranges and say which are sourced. The trip planner links out
-  to Google Flights and Booking.com with dates pre-filled and says plainly that it has no
-  connection to those sites. Budget figures are labelled orientation ranges, not quotes.
+- **Never invent prices, fares, availability or inventory.** Every figure the site shows
+  traces to a cited, linked source, and where no figure can be sourced the page makes an
+  observation instead of a claim. The trip planner links out to Google Flights and Booking.com
+  with dates pre-filled and says plainly that it has no connection to those sites. Budget
+  figures are labelled orientation ranges, not quotes.
 - **Keep stated limitations visible in the UI.** The free-text quiz answers tell the reader
   they are keyword-matched and to trust themselves over the result. AI suggestions say who
   wrote them and to verify seasons independently. Do not quietly remove these.
@@ -59,13 +64,21 @@ These are what make the site trustworthy. Preserve them.
 
 ## Privacy
 
-Everything runs in the browser. Nothing a user types is sent anywhere — no analytics, no
-backend, no storage. Quiz free-text answers are intimate by nature (people describing their
-partner).
+Everything runs in the browser EXCEPT `POST /api/plan-email`, which receives an email address
+and a validated plan code, hands them to Resend to deliver one message, and stores neither.
+The route is rate-limited: the limiter keeps send times per network address for up to 24
+hours — never an email address, never a plan. There are no analytics, no cookies and no
+database of users.
 
-**Never add code that transmits or stores quiz answers.** If a backend is added for any
-reason, that is a deliberate decision requiring a privacy policy, and the free-text answers
-stay out of it regardless.
+**QUIZ FREE-TEXT ANSWERS NEVER LEAVE THE BROWSER.** They are intimate by nature — people
+describing their partner. Not to this Worker, not to a third party, not in a URL, not in an
+email, not in a log. Nothing that transmits or stores them is acceptable, for any reason, and
+no feature is worth an exception. The plan code carries scores and a city, never the text. If
+a change seems to need them server-side, stop and ask.
+
+The site has a privacy page at `#privacy` — an unnumbered view, in `VIEWS` but deliberately not
+in the nav. **Any change to what the code transmits, or to whom, requires a matching edit to
+that page in the same commit.**
 
 ## Making changes
 
