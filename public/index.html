@@ -1618,7 +1618,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
           <span class="eyebrow">The second thing that leaves</span>
           <h3 style="margin:12px 0 12px">Asking for destination ideas</h3>
           <p class="small">The Trip section can ask a language model — <b>Claude</b>, run by <b>Anthropic</b> — for three destinations that fit what you described. Where that is switched on, pressing <b>Build the trip</b> sends the brief you typed: the thing you want to do, the destination if you named one, where you are leaving from, your dates and your budget. <b>Nothing from the quiz goes with it</b>, and neither does anything you wrote about your partner.</p>
-          <p class="small" style="margin-top:12px">Where it is not switched on, the button builds the flight, hotel and timing searches and sends nothing anywhere. <b>The line under the button tells you which of those two you are looking at, every time</b> — this page does not ask you to take its word for it, because the answer depends on where you are reading this copy of the site.</p>
+          <p class="small" style="margin-top:12px">Where it is not switched on, the button builds the flight, hotel and timing searches and sends nothing anywhere. <b>The line under the button tells you which of those two you are looking at, every time — including while it is still working out which, in the second or so after the page loads</b> — this page does not ask you to take its word for it, because the answer depends on where you are reading this copy of the site.</p>
           <p class="small" style="margin-top:12px">The flight, hotel and map searches themselves are a different thing: they are ordinary links, and nothing reaches Google, Booking.com or Airbnb until you click one.</p>
         </div>
 
@@ -2256,6 +2256,10 @@ function renderTripLinks(){
 
 /* --- Claude-powered destination ideas (optional; page works fully without it) --- */
 var sampleFn=null, tripCtl=null;
+/* "pending" until the viewer has answered, then true or false. The note below
+   is rendered once synchronously before c.use("sample") resolves, and that
+   first render must not claim either outcome. */
+var sampleState="pending";
 
 /* The disclosure under the button is written at runtime, not baked into the
    markup, because this same file is served in two places: inside a Claude viewer,
@@ -2267,8 +2271,10 @@ function renderTripAiNote(){
   if(!el) return;
   el.innerHTML =
     'The flight and hotel searches are built in your browser. <b>Destination ideas are the one part of this site that asks a language model.</b> '+
-    (sampleFn
-      ? 'They are available here, so pressing <b>Build the trip</b> sends the brief above — what you want to do, where, your dates and your budget — to Claude, a model run by Anthropic. Nothing from the quiz goes with it.'
+    (sampleState==="pending"
+      ? 'Whether they are available here is still being checked — this line will say which in a moment, and until it does the button builds only the searches.'
+      : sampleFn
+      ? 'They are available here, so pressing <b>Build the trip</b> sends the brief above — what you want to do, the destination if you named one, where you are leaving from, your dates and your budget — to Claude, a model run by Anthropic. Nothing from the quiz goes with it.'
       : 'They are not available here, so pressing <b>Build the trip</b> sends nothing anywhere: it builds the searches below and says so.')+
     ' <a href="#privacy">The full note on this</a>.';
 }
@@ -2276,12 +2282,12 @@ function renderTripAiNote(){
    hosted anywhere else, it is absent — the page must work exactly the same. */
 (function(){
   var c = (typeof window!=="undefined" && window.claude && typeof window.claude.use==="function") ? window.claude : null;
-  if(!c){ renderTripAiNote(); return; }
+  if(!c){ sampleState=false; renderTripAiNote(); return; }
   try{
     c.use("sample").then(
-      function(s){ sampleFn=s||null; renderTripAiNote(); },
-      function(){ sampleFn=null; renderTripAiNote(); });
-  }catch(err){ sampleFn=null; }
+      function(s){ sampleFn=s||null; sampleState=!!sampleFn; renderTripAiNote(); },
+      function(){ sampleFn=null; sampleState=false; renderTripAiNote(); });
+  }catch(err){ sampleFn=null; sampleState=false; }
   renderTripAiNote();
 })();
 
@@ -2364,6 +2370,13 @@ function runTrip(fresh){
   renderTripLinks();
   if(!b.want && !b.where){
     $("tripStatus").textContent="Tell us what you want to do, or where.";
+    return;
+  }
+  /* Pressed before the viewer has said whether a model is reachable. Neither
+     "not available" nor a send is honest yet, so say what is actually true. */
+  if(sampleState==="pending"){
+    $("tripIdeas").innerHTML="";
+    $("tripStatus").textContent="Still checking whether destination ideas are available here — the searches are built; try the button again in a moment.";
     return;
   }
   if(!sampleFn){
