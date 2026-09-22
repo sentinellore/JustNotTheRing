@@ -319,10 +319,14 @@ h1 .it{font-style:italic;color:var(--accent)}
    because the recommendation is a second opinion — it has to be correctable
    in place, and it has to be overrulable by something the partner said. */
 .adjust{margin-top:26px;border:1px solid var(--line-2);border-radius:14px;background:var(--surface-2);padding:20px 22px}
-.adjust-row{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:15px}
+.adjust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:15px}
 .adjust-row label{display:flex;flex-direction:column;gap:6px;min-width:0}
 .adjust-row select{font-size:.94rem;padding:10px 12px;cursor:pointer}
-@media (max-width:760px){.adjust-row{grid-template-columns:1fr}}
+@media (max-width:1000px){.adjust-row{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.adjust-row{grid-template-columns:1fr}}
+/* Four cards now: where, how it goes, how it is remembered, the ring. */
+.rec-row-4{grid-template-columns:repeat(2,1fr)}
+@media (min-width:1001px){.rec-row-4{grid-template-columns:repeat(4,1fr)}}
 .said-wrap{display:grid;gap:20px;margin-top:24px}
 .said-group .eyebrow{display:block;margin-bottom:11px}
 .said-list{display:grid;gap:2px}
@@ -680,8 +684,8 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       </button>
       <button class="idx-card" data-go="how">
         <span class="eyebrow"><span class="n">07</span> — How</span>
-        <h3>Eight ways to do it</h3>
-        <p>Ordered from most private to most public. Find where your partner sits on that line, then the logistics for the hour before — and the two questions worth settling early.</p>
+        <h3>Six ways to do it</h3>
+        <p>Six ways to ask, ordered from most private to most public, and six ways it can be remembered — which is a separate decision from the one most people fold it into. Plus the logistics for the hour before.</p>
         <span class="go">Read the methods →</span>
       </button>
       <button class="idx-card" data-go="words">
@@ -1368,8 +1372,8 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
   <div class="wrap">
     <div class="view-head">
       <span class="eyebrow"><span class="n">07</span> — How</span>
-      <h2>Eight ways to actually do it</h2>
-      <p class="lede">The method matters more than the venue. These run from most private to most public — find where your partner sits on that line and don't drift past it to impress anyone else.</p>
+      <h2>Six ways to actually do it</h2>
+      <p class="lede">The method matters more than the venue. These run from most private to most public — find where your partner sits on that line and don't drift past it to impress anyone else. How it gets remembered is a separate decision, and it is further down this page.</p>
     </div>
 
     <div class="how-list">
@@ -1384,34 +1388,65 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
         <div class="meta"><span class="chip">Private</span><span class="chip">Weather plan needed</span></div>
       </div></article>
       <article class="how"><span class="idx">03</span><div>
-        <h4>The hidden photographer</h4>
-        <p>A photographer waiting at a distance with a long lens, looking like a tourist. You get their real face in the real second — which is the one photo people actually keep. Proposal shoots typically run 30–60 minutes and a few hundred dollars. Agree a signal, a direction to face, and a plan for if they're late.</p>
-        <div class="meta"><span class="chip">Private moment, kept</span><span class="chip gold">Book 6+ weeks out</span></div>
-      </div></article>
-      <article class="how"><span class="idx">04</span><div>
         <h4>Dinner, then the real reason</h4>
         <p>Propose before or after the meal, never during. Before, and you both get to enjoy dinner engaged; after, and they don't spend two courses suspicious. Doing it at the table in a full restaurant turns strangers into an audience — only choose that deliberately.</p>
         <div class="meta"><span class="chip">Semi-public</span><span class="chip">Call the venue ahead</span></div>
       </div></article>
-      <article class="how"><span class="idx">05</span><div>
+      <article class="how"><span class="idx">04</span><div>
         <h4>The staged errand</h4>
         <p>A believable reason to be somewhere and dressed well — a friend's fake party, a work thing, a portrait session "for your parents". The cover story does the heavy lifting: it explains the outfit, the location, and why you're nervous.</p>
         <div class="meta"><span class="chip">Needs accomplices</span><span class="chip">High surprise</span></div>
       </div></article>
-      <article class="how"><span class="idx">06</span><div>
+      <article class="how"><span class="idx">05</span><div>
         <h4>The long game</h4>
         <p>A letter a week, a photo album finished on the last page, a scavenger hunt through the places that got you here. Takes weeks of preparation and lands hardest with sentimental people who keep things. Make sure the final step is somewhere you can be alone.</p>
         <div class="meta"><span class="chip">High effort</span><span class="chip on">High meaning</span></div>
       </div></article>
-      <article class="how"><span class="idx">07</span><div>
+      <article class="how"><span class="idx">06</span><div>
         <h4>The reveal, then the room</h4>
         <p>Propose just the two of you, then walk into a bar or a living room where everyone they love is already waiting. The best of both — a private yes, followed immediately by the celebration. Give them a moment in the car first.</p>
         <div class="meta"><span class="chip">Private then public</span><span class="chip">Two-part logistics</span></div>
       </div></article>
-      <article class="how"><span class="idx">08</span><div>
-        <h4>Designed together</h4>
-        <p>No surprise at all about the ring — you choose it together, then the timing is the only secret. Increasingly common, and the right answer whenever the ring is something they'll wear every day and have strong opinions about. You can still ambush them with <em>when</em>.</p>
-        <div class="meta"><span class="chip on">Zero ring risk</span><span class="chip">Surprise preserved</span></div>
+    </div>
+
+    <div class="callout">
+      <span class="eyebrow">The one that is not on that list</span>
+      <p><b>Choosing the ring together.</b> This gets written up as a way of proposing, and it isn't one — it answers a different question. You can choose the ring together and still ask on a trailhead, over dinner, or in a room full of people; all six above are still open to you. What it removes is the single risk you cannot undo, which is buying something they will wear every day and quietly not like. Increasingly common, and the right answer whenever they have opinions about jewelry. The only secret left is <em>when</em>, and that is plenty.</p>
+    </div>
+
+    <h3 style="margin:44px 0 10px">How it gets remembered</h3>
+    <p class="small" style="max-width:64ch;margin-bottom:20px">A separate decision from the one above, and one most people reduce to "do we hire a photographer or not". There are six answers, and hiring somebody is only one of them — for a lot of proposals it is the wrong one. The order below runs from the most arranged to the least.</p>
+
+    <div class="how-list">
+      <article class="how"><span class="idx">01</span><div>
+        <h4>A photographer, at a distance</h4>
+        <p>Waiting with a long lens and looking like a tourist. You get their real face in the real second — the one photograph people actually keep — and a short set of portraits once they know. Sessions typically run 30–60 minutes. Agree a signal, a direction to face, and a plan for running late.</p>
+        <div class="meta"><span class="chip">The real face, kept</span><span class="chip gold">Book 6+ weeks out</span></div>
+      </div></article>
+      <article class="how"><span class="idx">02</span><div>
+        <h4>The person who brings them</h4>
+        <p>Whoever is getting them to the spot is already in on it and already going to be there — the sibling, the friend with the excuse about brunch. Give them one job for thirty seconds: stand where you tell them, press record before you start, and keep filming past the part where everyone starts crying. Brief them on the phone, not by text.</p>
+        <div class="meta"><span class="chip on">Already there</span><span class="chip">Free</span><span class="chip">Practise the angle</span></div>
+      </div></article>
+      <article class="how"><span class="idx">03</span><div>
+        <h4>Somebody who works there</h4>
+        <p>The server, the guide, the person on the desk at the conservatory. They are present, it costs nothing, and at a venue that sees proposals they have almost certainly done this before and will have a view on where you should stand. Ask when you call about the booking, not on the day — and get a name.</p>
+        <div class="meta"><span class="chip">No lead time</span><span class="chip">Ask when you book</span></div>
+      </div></article>
+      <article class="how"><span class="idx">04</span><div>
+        <h4>A phone, propped and already running</h4>
+        <p>On a shelf, a wall, a rock, a car roof. Start it early and let it run — storage is cheaper than the moment. It is the only practical way to photograph a proposal at home, and it produces the frame nobody is performing for. Leave it going afterwards: the call they make two minutes later is often the better footage.</p>
+        <div class="meta"><span class="chip on">Works at home</span><span class="chip">Check the frame first</span></div>
+      </div></article>
+      <article class="how"><span class="idx">05</span><div>
+        <h4>Portraits straight afterwards, not during</h4>
+        <p>Nobody captures the moment itself; you take the pictures ten minutes later, with the ring on and the adrenaline still going. Far easier to arrange, much cheaper, and the pictures are of two people who are visibly delighted rather than two people being observed. Get one of just their hand — that is the photograph they will send to everybody.</p>
+        <div class="meta"><span class="chip">Easiest to arrange</span><span class="chip">Pick the spot ahead</span></div>
+      </div></article>
+      <article class="how"><span class="idx">06</span><div>
+        <h4>Nothing at all</h4>
+        <p>No camera, no accomplice, no phone. You keep the only copy, which is the point — a surprising number of people say afterwards that not having it on film is what made it theirs. Tell one person the same evening if you want it witnessed. It is the one choice here that a few people do regret, and the propped phone costs you nothing if you are unsure.</p>
+        <div class="meta"><span class="chip on">Most private</span><span class="chip gold">Irreversible</span></div>
       </div></article>
     </div>
 
@@ -1618,7 +1653,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
           <span class="eyebrow">The second thing that leaves</span>
           <h3 style="margin:12px 0 12px">Asking for destination ideas</h3>
           <p class="small">The Trip section can ask a language model — <b>Claude</b>, run by <b>Anthropic</b> — for three destinations that fit what you described. Where that is switched on, pressing <b>Build the trip</b> sends the brief you typed: the thing you want to do, the destination if you named one, where you are leaving from, your dates and your budget. <b>Nothing from the quiz goes with it</b>, and neither does anything you wrote about your partner.</p>
-          <p class="small" style="margin-top:12px">Where it is not switched on, the button builds the flight, hotel and timing searches and sends nothing anywhere. <b>The line under the button tells you which of those two you are looking at, every time — including while it is still working out which, in the second or so after the page loads</b> — this page does not ask you to take its word for it, because the answer depends on where you are reading this copy of the site.</p>
+          <p class="small" style="margin-top:12px">Where it is not switched on, the button builds the flight, hotel and timing searches and sends nothing anywhere. <b>The line under the button tells you which of those two you are looking at, every time</b> — including while it is still working out which, in the second or so after the page loads. This page does not ask you to take its word for it here, because the answer depends on where you are reading this copy of the site.</p>
           <p class="small" style="margin-top:12px">The flight, hotel and map searches themselves are a different thing: they are ordinary links, and nothing reaches Google, Booking.com or Airbnb until you click one.</p>
         </div>
 
@@ -2256,27 +2291,31 @@ function renderTripLinks(){
 
 /* --- Claude-powered destination ideas (optional; page works fully without it) --- */
 var sampleFn=null, tripCtl=null;
-/* "pending" until the viewer has answered, then true or false. The note below
-   is rendered once synchronously before c.use("sample") resolves, and that
-   first render must not claim either outcome. */
-var sampleState="pending";
 
 /* The disclosure under the button is written at runtime, not baked into the
    markup, because this same file is served in two places: inside a Claude viewer,
    where pressing the button really does send the brief to a model, and on
    justnotthering.com, where window.claude is absent and nothing is sent at all.
    A static sentence would be a lie in one of those two. */
+/* Three states, not two. Whether the model is reachable is only known once
+   c.use("sample") settles, and the first render happens before that — so a
+   two-state note told people in a viewer that nothing is sent, then flipped.
+   The privacy page promises this line is right every time, so it has to be
+   allowed to say it does not know yet. */
+var sampleState="pending";
 function renderTripAiNote(){
   var el=$("tripAiNote");
   if(!el) return;
+  var body;
+  if(sampleState==="pending")
+    body='Whether they are available here is still being checked — this line will say which in a moment, and until it does the button builds only the searches.';
+  else if(sampleState===true)
+    body='They are available here, so pressing <b>Build the trip</b> sends the brief above — what you want to do, the destination if you named one, where you are leaving from, your dates and your budget — to Claude, a model run by Anthropic. Nothing from the quiz goes with it.';
+  else
+    body='They are not available here, so pressing <b>Build the trip</b> sends nothing anywhere: it builds the searches below and says so.';
   el.innerHTML =
     'The flight and hotel searches are built in your browser. <b>Destination ideas are the one part of this site that asks a language model.</b> '+
-    (sampleState==="pending"
-      ? 'Whether they are available here is still being checked — this line will say which in a moment, and until it does the button builds only the searches.'
-      : sampleFn
-      ? 'They are available here, so pressing <b>Build the trip</b> sends the brief above — what you want to do, the destination if you named one, where you are leaving from, your dates and your budget — to Claude, a model run by Anthropic. Nothing from the quiz goes with it.'
-      : 'They are not available here, so pressing <b>Build the trip</b> sends nothing anywhere: it builds the searches below and says so.')+
-    ' <a href="#privacy">The full note on this</a>.';
+    body+' <a href="#privacy">The full note on this</a>.';
 }
 /* window.claude exists only inside a Claude viewer. Opened as a saved file or
    hosted anywhere else, it is absent — the page must work exactly the same. */
@@ -2372,8 +2411,10 @@ function runTrip(fresh){
     $("tripStatus").textContent="Tell us what you want to do, or where.";
     return;
   }
-  /* Pressed before the viewer has said whether a model is reachable. Neither
-     "not available" nor a send is honest yet, so say what is actually true. */
+  /* Pressing the button during the second before window.claude.use() settles
+     used to fall through to the no-connection branch and tell the visitor
+     destination ideas were unavailable here -- a sentence that was about to
+     become false. Pending is its own answer, and it is an honest one. */
   if(sampleState==="pending"){
     $("tripIdeas").innerHTML="";
     $("tripStatus").textContent="Still checking whether destination ideas are available here — the searches are built; try the button again in a moment.";
@@ -2743,14 +2784,14 @@ var SAID=[
 ];
 var STONES=[
   {id:"sapphire",  t:"Sapphire",               mohs:"9",       note:"The serious answer. Mohs 9, and it comes in teal, peach, parti, grey, green and colorless, not only blue. Montana stones have traceable US origin, which answers the sourcing question at the same time."},
-  {id:"emerald",   t:"Emerald",                mohs:"7.5–8",   protect:true, note:"Beautiful and genuinely risky — heavily included and brittle, so it chips. If this is the stone, get it in a bezel or a protective halo, budget for repairs, and say all of that out loud before you buy it."},
-  {id:"ruby",      t:"Ruby",                   mohs:"9",       note:"Corundum, like sapphire, so it takes daily wear as well as anything that isn't a diamond. Colour is the whole price here — judge it in daylight, not under a jeweler's lamp."},
+  {id:"emerald",   t:"Emerald",                mohs:"7.5–8",   protect:true, note:"Beautiful and genuinely risky \u2014 heavily included and brittle, so it chips. If this is the stone, get it in a bezel or a protective halo, budget for repairs, and say all of that out loud before you buy it."},
+  {id:"ruby",      t:"Ruby",                   mohs:"9",       note:"Corundum, like sapphire, so it takes daily wear as well as anything that isn’t a diamond. Colour is the whole price here \u2014 judge it in daylight, not under a jeweler’s lamp."},
   {id:"moissanite",t:"Moissanite",             mohs:"9.25",    note:"Throws more rainbow fire than a diamond, which people either love or immediately clock. Extremely durable and a fraction of the cost, so it frees the budget for the rest of it."},
-  {id:"natural",   t:"A natural diamond",      mohs:"10",      graded:true, plain:true, note:"The conventional answer, and still the one a lot of people mean when they say diamond. It holds its value better than lab-grown and carries a rarity story that some people care about a great deal and others actively don't. It also costs roughly twice as much per carat, so the honest question is not which is the real diamond — they both are — but whether the rarity is the thing being bought. Insist on a GIA or AGS report and check the number is laser-inscribed on the girdle."},
+  {id:"natural",   t:"A natural diamond",      mohs:"10",      graded:true, plain:true, note:"The conventional answer, and still the one a lot of people mean when they say diamond. It holds its value better than lab-grown and carries a rarity story that some people care about a great deal and others actively don’t. It also costs roughly twice as much per carat, so the honest question is not which is the real diamond \u2014 they both are \u2014 but whether the rarity is the thing being bought. Insist on a GIA or AGS report and check the number is laser-inscribed on the girdle."},
   {id:"lab",       t:"A lab-grown diamond",    mohs:"10",      graded:true, plain:true, note:"Chemically a diamond, graded on the same GIA scales as any other, roughly twice the stone per dollar, and resale value close to nothing. That last part only matters if you were ever going to sell it."},
-  {id:"saltpepper",t:"A salt-and-pepper diamond",mohs:"10",    graded:true, note:"A real diamond, and as hard as any other, full of visible black inclusions — the flaws are the design. Cheap, unrepeatable, and no two are alike, which is also why it can never be replaced with a match."},
-  {id:"opal",      t:"Opal or moonstone",      mohs:"5–6.5",   protect:true, note:"Soft enough that daily wear will show within a couple of years. It can still be the right answer — but choose it knowing that, get a bezel, and plan on taking it off for anything physical."},
-  {id:"spinel",    t:"Spinel",                 mohs:"8",       note:"Underrated, naturally vivid and almost never treated. Mohs 8 is the floor for daily wear, so it qualifies — just."},
+  {id:"saltpepper",t:"A salt-and-pepper diamond",mohs:"10",    graded:true, note:"A real diamond, and as hard as any other, full of visible black inclusions \u2014 the flaws are the design. Cheap, unrepeatable, and no two are alike, which is also why it can never be replaced with a match."},
+  {id:"opal",      t:"Opal or moonstone",      mohs:"5–6.5",   protect:true, note:"Soft enough that daily wear will show within a couple of years. It can still be the right answer \u2014 but choose it knowing that, get a bezel, and plan on taking it off for anything physical."},
+  {id:"spinel",    t:"Spinel",                 mohs:"8",       note:"Underrated, naturally vivid and almost never treated. Mohs 8 is the floor for daily wear, so it qualifies \u2014 just."},
   {id:"other",     t:"Something else they named",mohs:"",      protect:true, note:"Check its hardness before anything else: below Mohs 8 and a ring worn every day will scuff and chip visibly within a few years. That is a trade worth making knowingly, and a nasty surprise otherwise."}
 ];
 var said={}, saidStone="", saidText="", overrides={}, naturalPick={};
@@ -2807,8 +2848,8 @@ function scoreText(s, axes){
      reach across one. Without this, "no idea, total surprise" let the "no" of
      "no idea" negate the word "surprise" four tokens later and scored as
      evidence against a surprise -- the exact opposite of the sentence. */
-  var clean=String(s||"").toLowerCase().replace(/[\u2019']/g,"")
-    .replace(/[,;:.!?()\u2014\u2013]/g," | ")
+  var clean=String(s||"").toLowerCase().replace(/[’']/g,"")
+    .replace(/[,;:.!?()\u2014–]/g," | ")
     .replace(/\b(but|although|though|however|whereas|than)\b/g," | ")
     .replace(/[^a-z0-9\s|-]/g," ");
   var toks=clean.split(/\s+/).filter(Boolean);
@@ -2892,23 +2933,23 @@ var LOC_LIB=[
   d:"A summit, a bluff, a fire tower — somewhere the walk up does the work. By the time you are at the top you have been alone together for an hour and the nerves have had somewhere to go. Time it for the hour before sunset.",
   w:"Scout it on the same day of the week at the same hour. Somewhere that is empty on a Wednesday can have twelve people on it on a Saturday.",
   m:{nature:3,priv:2,active:2,pub:-2}},
- {id:"conservatory",lens:"nature",h:"The conservatory, or the glasshouse",
+ {id:"conservatory",lens:"nature",cap:{staff:2.5,photographer:1},h:"The conservatory, or the glasshouse",
   d:"Botanical gardens and glasshouses are the reliable choice: beautiful in any month, warm in February, and staffed by people who have seen a hundred proposals and will help you with this one.",
   w:"Nearly all of them require a permit if you bring a photographer, and several charge a proposal fee. Call two to four weeks ahead and ask about “a proposal with a photographer” — they usually have a standard answer and sometimes a preferred spot.",
   m:{nature:2.5,weather:3,doc:1.5,priv:1,active:-1}},
- {id:"water",lens:"nature",h:"Water's edge, as the light goes",
+ {id:"water",lens:"nature",cap:{photographer:1.5},h:"Water's edge, as the light goes",
   d:"A lake, a coast, a river walk, a harbour at dusk. Open sightlines make a hidden photographer easy, and there is somewhere to walk afterwards while it sinks in — which matters more than people expect.",
   w:"Sunset-dependent and wind-exposed. Check which way the light falls at your spot, and have somewhere indoors to go immediately after.",
   m:{nature:3,priv:2,doc:1.5,pub:-1}},
- {id:"rooftop",lens:"urban",h:"A rooftop or a high view, early rather than at sunset",
+ {id:"rooftop",lens:"urban",cap:{staff:1.5},h:"A rooftop or a high view, early rather than at sunset",
   d:"Skyline, elevation, a drink in hand. A view gives you both a reason to stand still and look at something together, which is most of what a proposal spot actually has to do.",
   w:"Observation decks and rooftop bars are loud and packed at sunset. Go at opening, or book a private corner outright and get it in writing.",
   m:{urban:3,priv:1.5,doc:1,nature:-1}},
- {id:"origin",lens:"urban",h:"Where it started",
+ {id:"origin",lens:"urban",cap:{staff:1},h:"Where it started",
   d:"The bar, the bench, the block you lived on. The place carries the meaning, so it does not have to be beautiful — and everyone you eventually tell already knows the story. This is the archetype people cry at.",
   w:"Check it still exists and still opens at that hour. Places like this close, refurbish and change hands, and finding out on the day is its own particular heartbreak.",
   m:{origin:2.5,meaning:1.5,urban:1.5,home:1,priv:1}},
- {id:"athome",lens:"home",h:"Your own place, on a day with nothing else in it",
+ {id:"athome",lens:"home",capOut:["photographer","staff"],h:"Your own place, on a day with nothing else in it",
   d:"The kitchen, the sofa, whoever else lives there underfoot. For a private person this is the strongest option on the whole list: no audience, no outfit, no travel, and they get to react however they actually feel instead of performing it.",
   w:"It is the hardest setting to photograph. If you want a picture, set a phone running video on a shelf and pull a frame out of it later.",
   m:{home:3.5,priv:3,pub:-1.5}},
@@ -2916,15 +2957,15 @@ var LOC_LIB=[
   d:"Propose on the first or second day, not the last night. Spend the rest of it engaged rather than spending the whole week waiting for it, and let them tell people in their own time from somewhere beautiful.",
   w:"The ring never goes in checked luggage. Carry it on you in a flat case, and know your airport's screening rules before you are standing in the queue.",
   m:{dest:3,priv:1.5,ample:1}},
- {id:"gathering",lens:"home",h:"The gathering that already exists",
+ {id:"gathering",lens:"home",cap:{accomplice:3.5,photographer:3,staff:1.5,tripod:-2},h:"The gathering that already exists",
   d:"A holiday table, a birthday, a reunion — somewhere their people are already in one room, so you are not building an audience from nothing. The audience is the point here, which is exactly why it only works for someone who would genuinely enjoy it.",
   w:"It cannot be undone and there is no quiet version once it starts. Be certain rather than hopeful.",
   m:{pub:3,fam:3,priv:-3}},
- {id:"injoke",lens:"unconv",h:"The place with the in-joke",
+ {id:"injoke",lens:"unconv",cap:{accomplice:1,staff:-1},h:"The place with the in-joke",
   d:"The gas station you broke down at. The bench where the bird took their sandwich. The parking lot of a restaurant that has since closed. Nobody else would photograph it, which is the entire point — the story does all the work.",
   w:"Tell one other person what it means beforehand. Otherwise the photographs are of a parking lot and the meaning lives only in the two of you.",
   m:{injoke:2.5,meaning:1.5,deadpan:1,urban:1,priv:1.5}},
- {id:"hobby",lens:"unconv",h:"Where the thing you do together lives",
+ {id:"hobby",lens:"unconv",cap:{staff:2,accomplice:1},h:"Where the thing you do together lives",
   d:"The climbing gym, the pottery studio, the record shop, the chess club, the seven-in-the-morning park with the same six regulars. You ask inside the thing they have built a life around, and the regulars become witnesses.",
   w:"Ask whoever runs it first. They will almost always say yes and often help — and it stops somebody unlocking a door at the wrong moment.",
   m:{hobby:2.5,meaning:1,active:1.5,urban:1,pub:0.5}},
@@ -2932,23 +2973,23 @@ var LOC_LIB=[
   d:"The town a book is set in, the diner from the film you have watched eleven times, the ground of the team they inherited from somebody. Borrowed meaning — but borrowed from something they already love, which is not at all the same as borrowing someone else's proposal.",
   w:"High effort, and usually travel. Check opening seasons: a surprising number of these places are shut in exactly the month you want them.",
   m:{meaning:1.5,dest:2.5,urban:1}},
- {id:"world",lens:"unconv",h:"A game, or a world you share",
+ {id:"world",lens:"unconv",capOut:["photographer","staff"],cap:{tripod:2},h:"A game, or a world you share",
   d:"Inside the game you have played together for years, on the server you built, in the campaign you have run since 2019. Increasingly common and frequently mocked by people who were not there. Do it there, then do it again in person with the ring.",
   w:"Two-stage by design. Decide in advance which one is the real one, or you will both spend the second one wondering.",
   m:{hobby:2.5,home:2,priv:2}},
- {id:"transit",lens:"destination",h:"Mid-transit",
+ {id:"transit",lens:"destination",cap:{staff:2,photographer:-3},h:"Mid-transit",
   d:"On a train, on a ferry, in the car on a drive you have done a hundred times, on a plane at cruising altitude. Nowhere to escape to and nothing to do but talk, which is either the most romantic thing available or a trap, depending entirely on them.",
   w:"Ask the crew first if you want any help at all. And do not do it at the start of a long journey unless you are certain of the answer.",
   m:{dest:2.5,priv:2.5,urban:0.5}},
- {id:"unromantic",lens:"unconv",h:"The aggressively unromantic",
+ {id:"unromantic",lens:"unconv",cap:{photographer:-1,accomplice:1},h:"The aggressively unromantic",
   d:"The hardware store aisle. The DMV queue. A warehouse-store food court at two in the afternoon. This works only for the couple whose entire register is deadpan — and for them it lands harder than any overlook, because the contrast is the joke and the sincerity underneath it is the whole point.",
   w:"Know which kind of couple you are before you commit. There is no way to redeem this one halfway through.",
   m:{deadpan:3,injoke:2,priv:2,home:1,pub:-1}},
- {id:"animal",lens:"unconv",h:"Around the animal",
+ {id:"animal",lens:"unconv",cap:{accomplice:2.5},h:"Around the animal",
   d:"The shelter you got them from, the barn where they ride, the vet's parking lot after good news. Attaching the moment to the creature they would do anything for is a shortcut straight past their composure, which is either unfair or exactly right.",
   w:"Animals do not take direction. Have somebody else holding the lead or the rope at the actual moment, and accept that there will be a tail in the photographs.",
   m:{animal:2.5,priv:1.5,home:1.5,nature:1}},
- {id:"nowhere",lens:"home",h:"No location at all",
+ {id:"nowhere",lens:"home",capOut:["photographer","staff","accomplice"],cap:{nothing:2},h:"No location at all",
   d:"In bed on a Sunday morning, before either of you has brushed your teeth. The least photogenic option available, and the one a surprising number of people say they would have chosen — because it is the version with no performance anywhere in it.",
   w:"There is nothing to plan, which means there is nothing to hide behind. Know your first two sentences.",
   m:{priv:4,home:2,doc:-1.5,pub:-2}}
@@ -2959,6 +3000,14 @@ var LOC_LIB=[
    you ask and who chooses the ring are now two separate questions: "we picked
    it together" used to decide both, and it says nothing whatsoever about
    whether you ask on a trailhead or in front of forty people. */
+/* ---- The method library ---------------------------------------------------
+   Six occasions, and only occasions. This list used to hold four different
+   kinds of thing at once -- an occasion, whether it was photographed, what
+   happened afterwards, and who chose the ring -- and made you pick one of the
+   four and discard the rest. They compose in real life: an ordinary weeknight,
+   photographed, with everyone waiting after, is an ordinary plan. So the
+   photographer moved to CAPTURE_LIB below, and choosing the ring together moved
+   to the ring card, where it was always an answer to a different question. */
 var METHOD_LIB=[
  {id:"tuesday",h:"The ordinary Tuesday",
   d:"No occasion, no reservation, no warning. Making dinner, out with the animal, halfway through a weeknight. The whole meaning is that it was not a production — that this is what the rest of it looks like, and you wanted to ask in the middle of it.",
@@ -2966,31 +3015,101 @@ var METHOD_LIB=[
  {id:"walk",h:"The walk that ends somewhere",
   d:"A hike, a beach, a route you have done a hundred times, with one spot chosen in advance. The walking gives you both something to do with the nerves, and arriving somewhere makes a natural moment to stop.",
   m:{nature:2,active:1.5,priv:1.5}},
- {id:"photog",h:"The hidden photographer",
-  d:"A photographer waiting at a distance with a long lens, looking like a tourist. You get their real face in the real second, which is the one photograph people actually keep. Agree a signal, a direction to face, and a plan for if you are running late.",
-  m:{doc:3.5,priv:1,pub:-1}},
  {id:"dinner",h:"Dinner, then the real reason",
   d:"Before or after the meal, never during. Before, and you both get to enjoy dinner engaged; after, and they do not spend two courses suspicious. Doing it at the table in a full restaurant turns strangers into an audience — only choose that deliberately.",
   m:{urban:2.5,pub:1.5}},
  {id:"errand",h:"The staged errand",
-  d:"A believable reason to be somewhere and dressed well — a friend's party that is not happening, a work thing, a portrait session “for your parents”. The cover story does the heavy lifting: it explains the outfit, the location, and why you are nervous.",
-  m:{surprise:3,doc:1,pub:0.5}},
+  d:"A believable reason to be somewhere and dressed well — a friend's party that is not happening, a work thing, a portrait session \u201Cfor your parents\u201D. The cover story does the heavy lifting: it explains the outfit, the location, and why you are nervous.",
+  m:{surprise:3,pub:0.5}},
  {id:"longgame",h:"The long game",
   d:"A letter a week, a photo album finished on the last page, a route through the places that got you here. It takes weeks of preparation and lands hardest with sentimental people who keep things. Make sure the final step is somewhere you can be alone.",
   m:{meaning:2.5,ample:2,surprise:1.5}},
  {id:"reveal",h:"The reveal, then the room",
   d:"Ask just the two of you, then walk into a bar or a living room where everyone they love is already waiting. A private yes, followed immediately by the celebration. Give them ten minutes in the car first — they will want to look at their own hand for a while.",
-  m:{pub:2.5,fam:2}},
- {id:"together",h:"Chosen together, timed by you",
-  d:"No surprise about the ring at all — you choose it together, or they choose it outright. The only secret left is when, which is plenty. This is the right call whenever they have strong opinions about something they will wear every day, and it removes the one risk you cannot undo.",
-  m:{collab:3,surprise:-2}}
+  m:{pub:2.5,fam:2}}
 ];
 
-function rank(lib, t, vetoed){
+/* ---- How it gets remembered ------------------------------------------------
+   A separate decision from the occasion, with real alternatives rather than a
+   yes or no. Hiring somebody is only one of them, and for a lot of proposals it
+   is the wrong one: the person already bringing them is in on it and already
+   there, and venue staff have usually done this before and cost nothing. */
+var CAPTURE_LIB=[
+ {id:"photographer",h:"A photographer, at a distance",
+  d:"Waiting with a long lens and looking like a tourist. You get their real face in the real second, which is the one photograph people actually keep, and a short set of portraits once they know. Agree a signal, a direction to face, and a plan for running late.",
+  w:"The one thing on this list you cannot arrange at short notice. Book six weeks out, more between Thanksgiving and Valentine's Day, and settle who is handling the venue permit in writing.",
+  m:{doc:3.5,priv:1,ample:1.5,pub:-0.5}},
+ {id:"accomplice",h:"The person who brings them",
+  d:"Whoever is getting them to the spot is already in on it and already going to be there — the sibling, the friend with the excuse about brunch. Give them one job for thirty seconds: stand where you tell them, press record before you start, and keep filming past the part where everyone starts crying.",
+  w:"Brief them on the phone, not by text, and have them practise the angle once. The commonest failure is a beautiful video of somebody's shoulder.",
+  m:{doc:2,fam:2.5,surprise:1,pub:1}},
+ {id:"staff",h:"Somebody who works there",
+  d:"The server, the guide, the person on the desk at the conservatory. They are already present, it costs nothing, and at a venue that sees proposals they have almost certainly done this before and will have a view on where you should stand.",
+  w:"Ask when you call about the booking, not on the day. Get a name, and have a fallback in case that person is not on shift.",
+  m:{doc:1.8,urban:1.5,dest:1.5,rush:1.5}},
+ {id:"tripod",h:"A phone, propped and already running",
+  d:"On a shelf, a wall, a rock, a car roof. Start it early and let it run — storage is cheaper than the moment. It is the only practical way to photograph a proposal at home, and it produces the frame nobody is performing for.",
+  w:"Check the frame before you start and lock the exposure. And leave it running afterwards: the phone call they make two minutes later is often the better footage.",
+  m:{doc:1.5,home:2.5,priv:1.5}},
+ {id:"after",h:"Portraits straight afterwards, not during",
+  d:"Nobody captures the moment itself; you take the pictures ten minutes later, with the ring on and the adrenaline still going. Far easier to arrange, much cheaper, and the pictures are of two people who are visibly delighted rather than two people being observed.",
+  w:"Decide the spot beforehand while you can still think, and get one of just their hand. That is the photograph they will send to everybody.",
+  m:{doc:1,rush:1.5,priv:1.5}},
+ {id:"nothing",h:"Nothing at all",
+  d:"No camera, no accomplice, no phone. You keep the only copy, which is the point — a surprising number of people say afterwards that not having it on film is what made it theirs. Tell one person the same evening if you want it witnessed.",
+  w:"It is genuinely irreversible, and it is the one choice on this page that a few people do regret. If you are unsure, the propped phone costs you nothing and you can delete it.",
+  m:{doc:-3.5,priv:1.5,pub:-1}}
+];
+
+/* Options a partner has ruled out stay selectable -- somebody may have ticked
+   the wrong box and want to overrule it without going back -- but they are not
+   mixed in with the live ones. An optgroup separates them and says whose "no"
+   it was, which the inline label used to get wrong: it said "you said no to
+   this" when the whole point of that step is that they said it. */
+var VETO_LABEL={said:"They said no to these", place:"Hard to do where you are asking"};
+function rankedOptions(ranked, currentId){
+  var live=[], groups={};
+  ranked.forEach(function(r){
+    var o='<option value="'+esc(r.x.id)+'"'+(r.x.id===currentId?" selected":"")+'>'+esc(r.x.h)+'</option>';
+    if(r.veto){ (groups[r.veto]=groups[r.veto]||[]).push(o); } else live.push(o);
+  });
+  var out=live.join("");
+  ["said","place"].forEach(function(k){
+    if(groups[k]) out+='<optgroup label="'+esc(VETO_LABEL[k])+'">'+groups[k].join("")+'</optgroup>';
+  });
+  return out;
+}
+/* What the place does to how it can be remembered. The per-archetype `cap` and
+   `capOut` fields below add to this; both come straight out of what each
+   location's own copy already says -- water's edge says open sightlines make a
+   hidden photographer easy, the conservatory says staff have seen a hundred
+   proposals, home says a propped phone is the only practical way. */
+var CAP_BY_LENS={
+  home:        {tripod:2, photographer:-2, staff:-2, after:0.8},
+  nature:      {photographer:1.5, staff:-1, after:0.8},
+  urban:       {staff:1.5, after:0.8},
+  destination: {staff:1.5, photographer:0.5, after:0.8},
+  unconv:      {staff:1, accomplice:1, photographer:-0.5, after:0.8}
+};
+/* Portraits afterwards carry the same 0.8 everywhere on purpose. They are the
+   one option that works at any of the sixteen places, which without this leaves
+   them the only entry never receiving a bonus -- quietly ranked last not because
+   they fit badly but because nothing ever argued for them. */
+/* `bonus` nudges an entry's final score directly, by id, for influences that are
+   not axes of the tally at all -- chiefly what the chosen place does to how it
+   can be remembered. Added to the axis map instead, as it was at first, these
+   land on keys no entry scores against and do nothing at all, which is a silent
+   failure: the code reads as though the place matters and the output never
+   moves. Scores sit roughly in -1..2, so the table below is scaled to match. */
+var BONUS_SCALE=0.22;
+function rank(lib, t, vetoed, bonus){
   var scored=lib.map(function(x){
     var s=0, w=0;
     for(var a in x.m){ s+=(t[a]||0)*x.m[a]; w+=Math.abs(x.m[a]); }
-    return {x:x, s:s/(w+2.5), veto:vetoed && vetoed.indexOf(x.id)>-1};
+    /* vetoed is a map of id -> why, so the reason survives into the dropdown. */
+    var v=s/(w+2.5);
+    if(bonus && bonus[x.id]) v+=bonus[x.id]*BONUS_SCALE;
+    return {x:x, s:v, veto:(vetoed && vetoed[x.id])||""};
   });
   scored.sort(function(a,b){
     if(a.veto!==b.veto) return a.veto?1:-1;
@@ -3046,7 +3165,7 @@ function planLink(t){
     var payload={t:t};
     var k=saidList(); if(k.length) payload.k=k;
     var o={}; var any=false;
-    ["loc","method","spec"].forEach(function(f){ if(overrides[f]){o[f]=overrides[f];any=true;} });
+    ["loc","method","capture","spec"].forEach(function(f){ if(overrides[f]){o[f]=overrides[f];any=true;} });
     if(any) payload.o=o;
     if(cityAnswer) payload.c=cityAnswer;
     return location.origin+location.pathname+"#plan="+b64e(JSON.stringify(payload));
@@ -3090,6 +3209,7 @@ function readPlanFromUrl(){
     if(obj.o && typeof obj.o==="object"){
       if(LOC_LIB.some(function(x){return x.id===obj.o.loc;})) overrides.loc=obj.o.loc;
       if(METHOD_LIB.some(function(x){return x.id===obj.o.method;})) overrides.method=obj.o.method;
+      if(CAPTURE_LIB.some(function(x){return x.id===obj.o.capture;})) overrides.capture=obj.o.capture;
       /* SPEC_REC is a plain object, so a bare lookup also finds "toString" and
          "constructor" off the prototype and waves them through -- which put the
          literal word "undefined" in the spec line a visitor takes to a jeweler. */
@@ -3104,13 +3224,12 @@ function composeResult(forced){
   var t=forced||tally();
 
   /* --- what they have actually said comes first ------------------------- */
-  var locVeto=[], methVeto=[];
-  if(saidOn("nopublic")) locVeto.push("gathering");
-  if(saidOn("wantpeople")) locVeto.push("nowhere","transit");
-  if(saidOn("nosurprise")) methVeto.push("errand","longgame");
-  if(saidOn("wantsurprise")) methVeto.push("together");
-  if(saidOn("nophotos")) methVeto.push("photog");
-  if(saidOn("nopublic")) methVeto.push("reveal","dinner");
+  var locVeto={}, methVeto={};
+  function noSaid(map){ for(var i=1;i<arguments.length;i++) map[arguments[i]]="said"; }
+  if(saidOn("nopublic")) noSaid(locVeto,"gathering");
+  if(saidOn("wantpeople")) noSaid(locVeto,"nowhere","transit");
+  if(saidOn("nosurprise")) noSaid(methVeto,"errand","longgame");
+  if(saidOn("nopublic")) noSaid(methVeto,"reveal","dinner");
 
   /* Stated facts are applied as weights heavy enough to beat any inferred axis,
      because a partner who has said something out loud is not a guess. They are
@@ -3131,34 +3250,64 @@ function composeResult(forced){
   /* "We have already decided; this is the moment, not the question" changes what
      the moment is for. Nobody is being asked anything, so staging and cover
      stories stop making sense and the meaning of the place does the work. */
-  if(saidOn("decided")){ push("meaning",3); push("surprise",-3); methVeto.push("errand"); }
-  if(saidOn("bothasking")){ push("collab",4); push("surprise",-3); methVeto.push("errand"); }
+  if(saidOn("decided")){ push("meaning",3); push("surprise",-3); methVeto.errand="said"; }
+  if(saidOn("bothasking")){ push("collab",4); push("surprise",-3); methVeto.errand="said"; }
 
-  /* Whether they want a photographer decides how you ask, not where. Fed into
-     the location ranking it quietly argued that "no photographer" meant "pick
-     somewhere unphotographable", and sent people to bed on a Sunday morning. */
-  var wMeth={}; for(var k1 in w) wMeth[k1]=w[k1];
-  if(saidOn("nophotos")) wMeth.doc=(wMeth.doc||0)-4;
-  if(saidOn("wantphotos")) wMeth.doc=(wMeth.doc||0)+4;
+  /* Whether they want it photographed decides how it is captured, not where it
+     happens. Fed into the location ranking it quietly argued that "no
+     photographer" meant "pick somewhere unphotographable", and sent people to
+     bed on a Sunday morning. */
+  var wCap={}; for(var k1 in w) wCap[k1]=w[k1];
+  /* "No photographer" means no stranger in the bushes, not no record at all.
+     Ruling out the hired option is the whole of it. Pushing doc down as well --
+     first by 4, then by 1.5 -- still sent people who had asked for "one good
+     picture" to "nothing at all", which is the opposite of what they said. */
+  if(saidOn("wantphotos")) wCap.doc=(wCap.doc||0)+4;
+  /* "They said no photographer" rules out hiring one. It does not rule out the
+     sibling with a phone, so only the hired option is vetoed. */
+  var capVeto={};
+  if(saidOn("nophotos")) capVeto.photographer="said";
 
   var locRank=rank(LOC_LIB,w,locVeto);
-  var methRank=rank(METHOD_LIB,wMeth,methVeto);
+  var methRank=rank(METHOD_LIB,w,methVeto);
   var locPick=locRank[0], locAlt=locRank[1];
   var methPick=methRank[0], methAlt=methRank[1];
   if(overrides.loc){ LOC_LIB.forEach(function(x){ if(x.id===overrides.loc) locPick={x:x,s:locPick.s}; }); }
   if(overrides.method){ METHOD_LIB.forEach(function(x){ if(x.id===overrides.method) methPick={x:x,s:methPick.s}; }); }
   var loc=locPick.x, method=methPick.x;
+
+  /* How it gets remembered depends on WHERE, and the place has to be settled
+     first -- including any hand override -- or the two cards contradict each
+     other. Ranked against the tally alone, a home plan kept the propped phone
+     after you moved it to a rooftop, and a hidden photographer was offered for
+     a proposal in bed, which the phone copy itself says is the only option
+     there. Two dimensions that compose, ranked as if they were independent:
+     the same mistake as the method list, one level further down. */
+  var capBonus={};
+  var lensCap=CAP_BY_LENS[loc.lens]||{};
+  for(var ck in lensCap) capBonus[ck]=(capBonus[ck]||0)+lensCap[ck];
+  for(var ck2 in (loc.cap||{})) capBonus[ck2]=(capBonus[ck2]||0)+loc.cap[ck2];
+  (loc.capOut||[]).forEach(function(id){ if(!capVeto[id]) capVeto[id]="place"; });
+
+  var capRank=rank(CAPTURE_LIB,wCap,capVeto,capBonus);
+  var capPick=capRank[0], capAlt=capRank[1];
+  if(overrides.capture){ CAPTURE_LIB.forEach(function(x){ if(x.id===overrides.capture) capPick={x:x,s:capPick.s}; }); }
+  var capture=capPick.x;
+  /* What the answers alone would have chosen, given the place now showing. The
+     adjuster compares against this so that re-selecting what is already there
+     is not recorded as a change. */
+  naturalPick={loc:locRank[0].x.id, method:methRank[0].x.id, capture:capRank[0].x.id,
+               spec:((t.unconv||0)>=2 ? "unconv" : prio0(t))};
   /* What the answers alone would have chosen. The adjuster compares against this
      so that re-selecting the option already shown is not recorded as a change,
      announced as one, or written into the link. */
-  naturalPick={loc:locRank[0].x.id, method:methRank[0].x.id,
-               spec:((t.unconv||0)>=2 ? "unconv" : prio0(t))};
   window.__topEnv=loc.lens;
 
   /* How close was it? A margin this small means the quiz genuinely could not
      tell, and saying so is more use than pretending otherwise. */
   var closeLoc = !overrides.loc && locAlt && (locPick.s-locAlt.s)<0.10 && locAlt.x.id!==loc.id;
   var closeMeth = !overrides.method && methAlt && (methPick.s-methAlt.s)<0.10 && methAlt.x.id!==method.id;
+  var closeCap = !overrides.capture && capAlt && (capPick.s-capAlt.s)<0.10 && capAlt.x.id!==capture.id;
 
   /* --- the ring, assembled from four independent decisions --------------- */
   /* The named stone is resolved first. It used to be resolved after the ring, so
@@ -3181,11 +3330,15 @@ function composeResult(forced){
     ring.shape=stoneName(stoneObj)+(stoneObj.mohs?" · Mohs "+stoneObj.mohs:"")+
       (stoneObj.plain?"" : ", in a shape they can choose by eye");
     if(stoneObj.protect) ring.set="Full bezel, or a halo with metal all the way round the girdle — "+
-      (stoneObj.mohs ? "at Mohs "+stoneObj.mohs+" this stone chips" : "unless it is Mohs 8 or harder, this stone chips")+
+      (stoneObj.mohs ? "at Mohs "+stoneObj.mohs+" this stone chips" : "unless it is Mohs 8 or harder this stone will chip")+
       ", and the setting is what stands between it and a doorframe";
     else if((t.bezel||0)<2 && (t.active||0)<2)
       ring.set=ring.set+". At Mohs "+stoneObj.mohs+" the stone itself is hard enough that the setting is a taste decision rather than a durability one";
   }
+  /* Who picks the ring was, for a while, an answer in the "how you ask" list,
+     which is a different question -- choosing it together says nothing about
+     whether you ask on a trailhead or in front of forty people. It lives here. */
+  var chosenTogether = saidOn("ringtogether") || saidOn("bothasking") || (t.collab||0)>=3;
   if(saidOn("tworings")) ring.shape=ring.shape+" — and a second band for you, ordered at the same time so the metals match";
   if(saidOn("noring")) { ring.shape="Not a ring"; ring.set="A necklace, a watch, a tattoo appointment booked for the week after, a tree in the yard — they told you, so believe them"; ring.metal="Nothing to resize, which removes the one measurement everybody gets wrong"; }
 
@@ -3219,11 +3372,18 @@ function composeResult(forced){
   /* --- timing ------------------------------------------------------------ */
   var runway=(t.rush||0)>=2?"rush":((t.ample||0)>=2?"ample":((t.normal||0)>=2?"normal":"normal"));
   var timing={
-    rush:"You are weeks out, so custom is off the table. Buy a ready-to-ship setting with a stone already in stock, or propose with an heirloom or a plain band and design the real ring together afterwards. Book the photographer today if you want one — that is the binding constraint, not the ring.",
-    normal:"A couple of months is comfortable for a ready-made ring plus a resize, and tight for a full custom order. Work backwards from the date in the planner: photographer at eight weeks, stone at six, permits at four.",
+    rush:"You are weeks out, so custom is off the table. Buy a ready-to-ship setting with a stone already in stock, or propose with an heirloom or a plain band and design the real ring together afterwards.",
+    normal:"A couple of months is comfortable for a ready-made ring plus a resize, and tight for a full custom order. Work backwards from the date in the planner: stone at six weeks, permits at four.",
     ample:"You have room to do this properly. Spend it on two things people skip: getting the size right without tipping them off, and scouting the location in the same season and at the same hour you will actually propose."
   }[runway];
   if(saidOn("sizeknown")) timing=timing.replace("getting the size right without tipping them off","scouting a second location you would be equally happy with");
+  /* At short notice the binding constraint is whatever has a lead time, and that
+     depends on how it is being remembered -- it used to name the photographer
+     even for the people who had just been told to prop up a phone. */
+  if(runway==="normal" && capture.id==="photographer") timing=timing+" Add the photographer at eight weeks — they are the only part of this with a real lead time.";
+  if(runway==="rush") timing=timing+(capture.id==="photographer"
+    ? " Book the photographer today — at this notice they are the binding constraint, not the ring."
+    : " Nothing about how it gets remembered needs weeks of notice, which is one less thing against you here.");
 
   /* --- what to do this week ---------------------------------------------- */
   var moves=[];
@@ -3233,12 +3393,24 @@ function composeResult(forced){
       : "Get their ring size this week. It is the step that delays everything else, and it takes longer than you think.");
   }
   if(saidOn("ringtogether") || (t.collab||0)>=2) moves.push("Bring them into the ring decision properly — they have already told you they want a say. Keep the timing to yourself.");
-  else if(!saidOn("noring")) moves.push("Recruit exactly one accomplice — the person who can keep a secret and borrow a ring.");
+  else if(!saidOn("noring")) moves.push(capture.id==="accomplice"
+    /* Otherwise the list recruits two people for what is usually one person. */
+    ? "Recruit exactly one accomplice — the person who can keep a secret, borrow a ring, and hold the phone on the day. It is almost always the same person."
+    : "Recruit exactly one accomplice — the person who can keep a secret and borrow a ring.");
   if(saidOn("person")) moves.push("Work out what the person they want there actually needs to know, and when. Tell them the date and the city, not the details — every extra person is another chance at a leak.");
-  if(saidOn("wantphotos") || ((t.doc||0)>=2 && !saidOn("nophotos"))) moves.push("Enquire with two proposal photographers now. They book out months ahead between Thanksgiving and Valentine's Day.");
+  /* The action follows whichever way it is actually being captured. It used to
+     send everybody to a photographer, including the people who had just been
+     told to prop a phone on a shelf. */
+  moves.push({
+    photographer:"Enquire with two proposal photographers now. They book out months ahead between Thanksgiving and Valentine's Day, and they are the only part of this you cannot arrange late.",
+    accomplice:"Ask the person who is bringing them, on the phone rather than by text, and have them practise the angle once. Give them one job and a signal, not a running commentary.",
+    staff:"When you call the venue about the booking or the permit, ask then whether somebody on shift can take a few photographs. Get a name, and a fallback if that person is not working that day.",
+    tripod:"Work out where the phone goes and check the frame at the hour you will actually be there. Start it recording early and leave it running afterwards.",
+    after:"Pick the spot for the portraits now, while you can still think clearly, and make sure one of them is just their hand.",
+    nothing:"Decide now who you will tell that evening, so it is witnessed by somebody even though none of it is on film."
+  }[capture.id]);
   if(loc.lens==="nature"||loc.lens==="urban"||loc.id==="origin"||loc.id==="injoke") moves.push("Visit the location in person at the hour you plan to propose, on the same day of the week. Check the light, the crowds, and where somebody could stand unseen.");
   if(loc.lens==="destination") moves.push("Check your airline and airport's rules for carrying the ring, and never put it in checked luggage.");
-  if(loc.lens==="home") moves.push("Set a phone recording video on a shelf. It is the only practical way to get a picture of this one.");
   if(loc.id==="hobby"||loc.id==="animal"||loc.id==="world") moves.push("Ask whoever runs the place — the gym, the barn, the server — before you commit to it. They almost always say yes, and they can stop somebody walking in at the wrong moment.");
   if(!saidOn("noring")) moves.push("Insure the ring the day you collect it, before you start carrying it around waiting for the right moment.");
 
@@ -3275,10 +3447,11 @@ function composeResult(forced){
   }
 
   var altBlock="";
-  if(closeLoc||closeMeth){
+  if(closeLoc||closeMeth||closeCap){
     var bits=[];
     if(closeLoc) bits.push("the place could as easily be <b>"+esc(locAlt.x.h.toLowerCase())+"</b>");
-    if(closeMeth) bits.push("the method could as easily be <b>"+esc(methAlt.x.h.toLowerCase())+"</b>");
+    if(closeMeth) bits.push("how it goes could as easily be <b>"+esc(methAlt.x.h.toLowerCase())+"</b>");
+    if(closeCap) bits.push("it could as easily be remembered by <b>"+esc(capAlt.x.h.toLowerCase())+"</b>");
     altBlock='<p class="small" style="margin-top:16px;max-width:64ch"><b>It was close.</b> On your answers '+bits.join(", and ")+
       '. That is not a hedge — it means the two of you sit between them, so pick whichever you can already picture, or swap it below.</p>';
   }
@@ -3290,10 +3463,13 @@ function composeResult(forced){
       '<p class="small" style="margin-top:9px">Change any of these and the rest of the plan moves with it — the action list, the timing note and the link all follow. Changing them tells us nothing: it happens in your browser, and we do not count it. The link below carries whichever you pick, so a plan you send yourself is the plan you fixed.</p>'+
       '<div class="adjust-row" role="group" aria-labelledby="adjustTitle">'+
         '<label><span class="tiny">Where</span><select class="field" id="adjLoc">'+
-          locRank.map(function(r){ return '<option value="'+esc(r.x.id)+'"'+(r.x.id===loc.id?" selected":"")+'>'+esc(r.x.h)+(r.veto?" (they said no to this)":"")+'</option>'; }).join("")+
+          rankedOptions(locRank, loc.id)+
         '</select></label>'+
-        '<label><span class="tiny">How</span><select class="field" id="adjMethod">'+
-          methRank.map(function(r){ return '<option value="'+esc(r.x.id)+'"'+(r.x.id===method.id?" selected":"")+'>'+esc(r.x.h)+(r.veto?" (you said no to this)":"")+'</option>'; }).join("")+
+        '<label><span class="tiny">How it goes</span><select class="field" id="adjMethod">'+
+          rankedOptions(methRank, method.id)+
+        '</select></label>'+
+        '<label><span class="tiny">How it is remembered</span><select class="field" id="adjCapture">'+
+          rankedOptions(capRank, capture.id)+
         '</select></label>'+
         '<label><span class="tiny">The ring, roughly</span><select class="field" id="adjSpec">'+
           [["size","Biggest stone the budget allows"],["quality","A smaller, better stone"],["ethics","Origin and materials first"],["thrift","Spend less here, more on the life"],["unconv","Something unconventional"]]
@@ -3324,10 +3500,13 @@ function composeResult(forced){
       '<p class="watch" style="margin-top:16px;max-width:64ch"><b>Watch out:</b> '+esc(loc.w)+'</p>'+
       altBlock+
     '</div>'+
-    '<div class="rec-row">'+
-      '<div class="rec"><span class="eyebrow">How</span><h3>'+esc(method.h)+'</h3><p>'+esc(method.d)+'</p></div>'+
+    '<div class="rec-row rec-row-4">'+
+      '<div class="rec"><span class="eyebrow">How it goes</span><h3>'+esc(method.h)+'</h3><p>'+esc(method.d)+'</p></div>'+
+      '<div class="rec"><span class="eyebrow">How it is remembered</span><h3>'+esc(capture.h)+'</h3><p>'+esc(capture.d)+'</p>'+
+        '<p style="margin-top:9px"><b>Watch out:</b> '+esc(capture.w)+'</p></div>'+
       '<div class="rec"><span class="eyebrow">The ring</span><h3>'+esc(ring.shape)+'</h3>'+
-        '<p><b>Setting:</b> '+esc(ring.set)+'</p><p style="margin-top:7px"><b>Metal:</b> '+esc(ring.metal)+'</p></div>'+
+        '<p><b>Setting:</b> '+esc(ring.set)+'</p><p style="margin-top:7px"><b>Metal:</b> '+esc(ring.metal)+'</p>'+
+        (chosenTogether?'<p style="margin-top:7px"><b>Chosen together</b>, so the only secret left is when — which is plenty.</p>':'')+'</div>'+
       '<div class="rec"><span class="eyebrow">Timing</span><h3>'+
         (runway==="rush"?"Move now":(runway==="ample"?"Use the runway":"Comfortable, if you start"))+'</h3><p>'+esc(timing)+'</p></div>'+
     '</div>'+
@@ -3390,7 +3569,7 @@ function wireResult(){
      re-runs the same function the quiz runs, and the link updates to match.
      Nothing is sent, counted or recorded — if the recommendation is wrong for
      somebody, the useful thing is for them to fix it, not for us to find out. */
-  ["loc","method","spec"].forEach(function(f){
+  ["loc","method","capture","spec"].forEach(function(f){
     var id="adj"+f.charAt(0).toUpperCase()+f.slice(1);
     var sel=$(id);
     if(!sel) return;

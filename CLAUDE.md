@@ -102,6 +102,14 @@ that page in the same commit.**
 - Key structures: `showView()` for routing; `SHAPES`/`CUTS`/`COLORS`/`CLARITY` drive the
   diamond bench; `Q` and `LEXICON` drive the quiz; `composeResult()` builds the
   recommendation; `buildNote()` holds the venue outreach templates.
+- **When a result has several parts and the UI says changing one moves the rest, test that
+  claim directly.** Three times the same bug has shipped in the quiz result: dimensions that
+  compose in real life (place, occasion, how it is remembered) were ranked as if independent,
+  and a control that promised to move the whole plan moved only part of it. Override each
+  control in turn and check every other card actually changes, with a strongly-weighted
+  profile as well as a neutral one; a nudge that moves a neutral tally can be too small to
+  move a decided one. And when a weight is added by id or key, confirm something reads that
+  key, or the code will describe an influence the output never shows.
 
 ## Known gap
 

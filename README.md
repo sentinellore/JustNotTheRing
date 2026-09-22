@@ -40,11 +40,11 @@ public/index.html     the whole site
 The quiz result carries a link of the form `https://justnotthering.com/#plan=<code>`. The code
 is base64url JSON with four fields: `t`, the computed axis scores; `k`, the fixed ids of the
 boxes ticked on the final step, plus `stone.<id>` if a stone was picked; `o`, any location,
-method or spec changed by hand on the result; and `c`, the city, if one was typed. Never the
-answers themselves and never the free text. Every id in `k` and `o` is checked against the
-page's own lists on read, and anything unrecognised is dropped. Because it sits after the `#`,
-browsers do not send it to any server; the page decodes it and rebuilds the same
-recommendation, on load and on `hashchange`.
+method, capture (how it is remembered) or spec changed by hand on the result; and `c`, the city,
+if one was typed. Never the answers themselves and never the free text. Every id in `k` and `o`
+is checked against the page's own lists on read, and anything unrecognised is dropped. Because
+it sits after the `#`, browsers do not send it to any server; the page decodes it and rebuilds
+the same recommendation, on load and on `hashchange`.
 
 ## The Worker route
 
