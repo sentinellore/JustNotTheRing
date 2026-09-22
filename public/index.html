@@ -314,6 +314,24 @@ h1 .it{font-style:italic;color:var(--accent)}
 #planStatus.ok{color:var(--good)}
 #planStatus.bad{color:var(--crit)}
 @media (max-width:640px){.share-row{grid-template-columns:1fr}}
+
+/* The adjuster on the result, and the "what they have said" step. Both exist
+   because the recommendation is a second opinion — it has to be correctable
+   in place, and it has to be overrulable by something the partner said. */
+.adjust{margin-top:26px;border:1px solid var(--line-2);border-radius:14px;background:var(--surface-2);padding:20px 22px}
+.adjust-row{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:15px}
+.adjust-row label{display:flex;flex-direction:column;gap:6px;min-width:0}
+.adjust-row select{font-size:.94rem;padding:10px 12px;cursor:pointer}
+@media (max-width:760px){.adjust-row{grid-template-columns:1fr}}
+.said-wrap{display:grid;gap:20px;margin-top:24px}
+.said-group .eyebrow{display:block;margin-bottom:11px}
+.said-list{display:grid;gap:2px}
+.said-item{display:flex;gap:13px;align-items:flex-start;padding:11px 13px;border:1px solid transparent;
+  border-radius:5px;cursor:pointer;font-size:1rem;line-height:1.5;color:var(--ink)}
+.said-item:hover{background:var(--surface-2);border-color:var(--line)}
+.said-item input{margin-top:4px;width:18px;height:18px;flex:none;accent-color:var(--accent);cursor:pointer}
+.said-item:has(input:checked){background:var(--accent-soft);border-color:var(--accent)}
+.said-pick{margin:4px 0 10px 44px}
 .watch{border-left:3px solid var(--warn);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
 .note-good{border-left:3px solid var(--good);padding-left:15px;font-size:.97rem;color:var(--ink-2);line-height:1.6}
 
@@ -595,9 +613,9 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
           <span class="rule"></span>
         </div>
         <h1>You have one shot,<br>and about <span class="it">nine decisions</span><br>to make first.</h1>
-        <p class="lede hero-sub">Where, when, how, and what they'll wear for the next fifty years. Answer nine questions about your partner and we'll hand you a specific starting point — a place, a method, and a ring spec you can walk into a jeweler with.</p>
+        <p class="lede hero-sub">Where, when, how, and what gets worn for the next fifty years. Answer ten questions about your partner — and tell us anything they've already said out loud — and we'll hand you a specific starting point: a place, a method, and a ring spec you can walk into a jeweler with.</p>
         <div class="hero-cta">
-          <button class="btn" data-go="quiz">Take the nine questions</button>
+          <button class="btn" data-go="quiz">Take the ten questions</button>
           <button class="btn ghost" data-go="diamonds">Just explain the 4Cs</button>
         </div>
       </div>
@@ -627,13 +645,13 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       <button class="idx-card" data-go="quiz">
         <span class="eyebrow"><span class="n">01</span> — The quiz</span>
         <h3>Start with them</h3>
-        <p>Nine questions about your partner and your relationship. The answer combines a location, a method, and a ring specification — with the reasoning shown, so you can argue with it.</p>
+        <p>Ten questions about your partner and your relationship, then a chance to tell us what they've actually said. The answer combines a location, a method and a ring specification — with the reasoning shown, and every part of it changeable, so you can argue with it.</p>
         <span class="go">Take the quiz →</span>
       </button>
       <button class="idx-card" data-go="locations">
         <span class="eyebrow"><span class="n">02</span> — Locations</span>
         <h3>Where to ask</h3>
-        <p>Eight archetypes that cover nearly every proposal spot, the permit rules nobody mentions, and a city lens that turns the archetypes into real searches near you.</p>
+        <p>Sixteen archetypes that cover nearly every proposal spot — the quiz picks from all of them — plus the permit rules nobody mentions and a city lens that turns them into real searches near you.</p>
         <span class="go">See the archetypes →</span>
       </button>
       <button class="idx-card" data-go="trip">
@@ -693,13 +711,13 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
   <div class="wrap">
     <div class="view-head">
       <span class="eyebrow"><span class="n">01</span> — The quiz</span>
-      <h2>Nine questions about them, not you</h2>
-      <p class="lede">Answer as your partner would, not as you'd like them to. The recommendation at the end combines a location archetype, a proposal method, and a ring specification.</p>
+      <h2>Ten questions about them, not you</h2>
+      <p class="lede">Answer as your partner would, not as you'd like them to. The recommendation at the end combines a location archetype, a proposal method and a ring specification — and when the answer is close, it says so and names the runner-up. If it gets something wrong, you can change it on the spot and the rest of the plan moves with it.</p>
     </div>
 
     <div id="quizpanel">
       <div class="quiz-top" id="quizTop">
-        <span class="eyebrow" id="qcount">Question 1 of 9</span>
+        <span class="eyebrow" id="qcount">Question 1 of 10</span>
         <div class="progress"><i id="qbar"></i></div>
       </div>
       <div class="quiz-body" id="quizStage"></div>
@@ -712,8 +730,8 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
   <div class="wrap">
     <div class="view-head">
       <span class="eyebrow"><span class="n">02</span> — Locations</span>
-      <h2>Eight archetypes, then your own map</h2>
-      <p class="lede">Almost every proposal location is a version of one of these. Find the one that sounds like your partner, then use the city lens to find the real version of it near you.</p>
+      <h2>Sixteen archetypes, then your own map</h2>
+      <p class="lede">Almost every proposal location is a version of one of these sixteen. The quiz recommends from exactly this list and ranks the rest behind it, so anything here can be the answer — find the one that sounds like your partner, then use the city lens to find the real version of it near you.</p>
     </div>
 
     <div class="loc-grid">
@@ -744,7 +762,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       </article>
       <article class="loc">
         <h4>Home</h4>
-        <p>Your kitchen, your living room, the dog underfoot. Deeply underrated for a private person: no audience, no travel, no outfit anxiety, and they can cry in peace.</p>
+        <p>Your kitchen, your living room, whoever else lives there underfoot. Deeply underrated for a private person: no audience, no travel, no outfit anxiety, and they can cry in peace.</p>
         <div class="meta"><span class="chip on">Most private</span><span class="chip">Hard to photograph</span></div>
       </article>
       <article class="loc">
@@ -776,12 +794,12 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       </article>
       <article class="loc">
         <h4>Where the hobby lives</h4>
-        <p>The climbing gym, the pottery studio, the record shop, the chess club, the dog park at 7am with the same six regulars. You propose inside the thing they've built a life around, and the regulars become witnesses.</p>
+        <p>The climbing gym, the pottery studio, the record shop, the chess club, the park at seven in the morning with the same six regulars. You propose inside the thing they've built a life around, and the regulars become witnesses.</p>
         <div class="meta"><span class="chip">Built-in audience</span><span class="chip">Ask the owner first</span></div>
       </article>
       <article class="loc">
         <h4>Inside the story</h4>
-        <p>The town a book is set in, the diner from the film you've watched eleven times, the stadium of the team they inherited from their father. Borrowed meaning, but borrowed from something they already love.</p>
+        <p>The town a book is set in, the diner from the film you've watched eleven times, the ground of the team somebody in their family handed down to them. Borrowed meaning, but borrowed from something they already love.</p>
         <div class="meta"><span class="chip">High effort</span><span class="chip">Travel likely</span></div>
       </article>
       <article class="loc">
@@ -801,7 +819,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       </article>
       <article class="loc">
         <h4>Around the animal</h4>
-        <p>The shelter where you got the dog, the barn where they ride, the vet's parking lot after good news. Attaching the moment to the creature they'd do anything for is a shortcut straight past their composure.</p>
+        <p>The shelter you got them from, the barn where they ride, the vet's parking lot after good news. Attaching the moment to the creature they'd do anything for is a shortcut straight past their composure.</p>
         <div class="meta"><span class="chip on">Emotionally unfair</span><span class="chip">In the best way</span></div>
       </article>
       <article class="loc">
@@ -881,6 +899,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
       </div>
       <div class="quiz-foot" style="margin-top:22px">
         <button class="btn" id="tripGo" type="button">Build the trip</button>
+        <p class="tiny" id="tripAiNote" style="margin-top:11px;max-width:66ch"></p>
         <button class="linkbtn" id="tripStop" type="button" hidden>Stop</button>
         <div class="spacer"></div>
         <span class="tiny" id="tripStatus"></span>
@@ -903,6 +922,12 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
         <button class="modechip" type="button" data-kind="picnic">Picnic or setup company</button>
         <button class="modechip" type="button" data-kind="charter">Boat, guide or private hire</button>
       </div>
+
+      <div class="lensmodes" id="noteSecrecy" role="group" aria-label="Whether it's a surprise" style="margin-top:10px">
+        <button class="modechip" type="button" data-secret="1" aria-pressed="true">They don't know</button>
+        <button class="modechip" type="button" data-secret="0">We're planning it together</button>
+      </div>
+      <p class="tiny" style="margin-top:9px;max-width:66ch">Plenty of people plan this jointly and keep only the moment to themselves — and for some couples there is nothing to hide at all. The message changes accordingly.</p>
 
       <div class="brief-grid" style="margin-top:18px">
         <div class="bf bf-wide">
@@ -1276,14 +1301,17 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
 
     <div class="grid g2" style="margin-top:28px">
       <div class="card" style="padding:24px">
-        <span class="eyebrow">Getting the size without asking</span>
-        <h3 style="margin:12px 0 14px">Four methods that work</h3>
+        <span class="eyebrow">Getting the size</span>
+        <h3 style="margin:12px 0 14px">If they don't know you're asking</h3>
         <ul class="moves">
           <li data-n="1">Borrow a ring they already wear on that finger — the ring finger or the one next to it — and take it to a jeweler. Don't guess from a different finger.</li>
           <li data-n="2">Press that ring into a bar of soap or plasticine for a clean impression if you can't leave the house with it.</li>
           <li data-n="3">Recruit their most discreet friend or sibling to go "ring shopping for themselves" and try things on together.</li>
           <li data-n="4">Accept a near miss. The average US size is around 6 to 6.5, and resizing a plain band is routine.</li>
         </ul>
+        <h3 style="margin:22px 0 14px">If you're doing this together</h3>
+        <p class="small">Plenty of couples are — they picked the ring, or you're both getting one, or the whole thing was decided over dinner months ago and only the moment is still a secret. Then don't do any of the above. Go and get properly sized at a jeweler, on a normal weekday, in the afternoon.</p>
+        <p class="small" style="margin-top:11px">It takes ten minutes, it is free, it removes the single most common reason a ring has to go back, and it is the one part of this that is genuinely better when nobody is being clever about it. If you're both wearing something, get both fingers measured in the same visit and order the pair together so the metals match.</p>
         <p class="small" style="margin-top:16px"><b>Fingers change size.</b> They swell in heat, after salt, at the end of the day and on flights. Measure at normal room temperature, and remember a wide band fits tighter than a thin one — go up about a quarter size for anything over 4mm.</p>
       </div>
 
@@ -1347,7 +1375,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     <div class="how-list">
       <article class="how"><span class="idx">01</span><div>
         <h4>The ordinary Tuesday</h4>
-        <p>No occasion, no reservation, no warning. Making dinner, walking the dog, on the sofa. The whole meaning is that it wasn't a production — that this is what the rest of it looks like. Impossible to see coming, and the version most private people describe afterwards as perfect.</p>
+        <p>No occasion, no reservation, no warning. Making dinner, out with the animal, on the sofa. The whole meaning is that it wasn't a production — that this is what the rest of it looks like. Impossible to see coming, and the version most private people describe afterwards as perfect.</p>
         <div class="meta"><span class="chip on">Most private</span><span class="chip">No cost</span></div>
       </div></article>
       <article class="how"><span class="idx">02</span><div>
@@ -1548,7 +1576,7 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
     <div class="view-head">
       <span class="eyebrow">Privacy</span>
       <h2>What happens to what you type here</h2>
-      <p class="lede">You are describing someone you love, and planning a surprise. Both are reasons to know exactly where the words go. The short version: what you type stays in your browser unless you press a button that sends it, and there is exactly one such button.</p>
+      <p class="lede">You are describing someone you love, and planning a surprise. Both are reasons to know exactly where the words go. The short version: what you type stays in your browser unless you press a button that sends it, and there are exactly two such buttons — <b>Send it</b> on the plan email, and <b>Build the trip</b> when it asks for destination ideas. Nothing you write about your partner goes through either one.</p>
     </div>
 
     <div class="grid g2">
@@ -1556,32 +1584,42 @@ footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(-
         <div class="card" style="padding:24px">
           <span class="eyebrow">The quiz</span>
           <h3 style="margin:12px 0 12px">Stays on your device</h3>
-          <p class="small">Every answer you give — the multiple choice and the free text where you describe your partner in your own words — is read by code running inside your own browser. It is matched against a keyword list that is part of this page. None of it is sent to us, and none of it is written to your device. Close the tab and it is gone.</p>
+          <p class="small">Every answer you give — the multiple choice, the boxes you tick about what your partner has actually said, and the free text where you describe them in your own words — is read by code running inside your own browser. It is matched against a keyword list that is part of this page. None of it is sent to us, and none of it is written to your device. Close the tab and it is gone.</p>
+          <p class="small" style="margin-top:12px">Changing the recommendation afterwards — swapping the place, the method or the ring — also happens entirely in your browser. We do not learn that you changed it, or what you changed it to. That is a real cost to us: it is the single most useful thing we could know about whether any of this works, and we would rather have the promise than the data.</p>
           <p class="small" style="margin-top:12px">The same is true of the diamond bench, the date timeline, the budget figures and the outreach notes. This site has no database. There is no account to make, and nothing to log in to.</p>
         </div>
 
         <div class="card" style="padding:24px;margin-top:18px">
           <span class="eyebrow">The plan link</span>
-          <h3 style="margin:12px 0 12px">Carries scores, not sentences</h3>
-          <p class="small">The link you can copy at the end of the quiz holds two things: the numeric scores your answers added up to, and the city you typed, if you typed one. It never holds what you wrote about your partner.</p>
-          <p class="small" style="margin-top:12px">That data sits after the <code>#</code> in the address. Browsers do not send the part after a <code>#</code> to the server, so when you copy the link or paste it somewhere, we do not see it and neither does anyone hosting it. The link decodes in whichever browser opens it.</p>
+          <h3 style="margin:12px 0 12px">Carries scores and ticks, not sentences</h3>
+          <p class="small">The link you can copy at the end of the quiz holds four things: the numeric scores your answers added up to, the boxes you ticked on the last step, anything you changed by hand afterwards, and the city you typed, if you typed one.</p>
+          <p class="small" style="margin-top:12px">The ticks and the changes travel as short fixed labels from a list built into this page — <code>nopublic</code>, <code>sizeknown</code>, <code>stone.sapphire</code> — the same kind of thing as a multiple-choice answer. Some of them — a stone they named, that they do not want a ring, that a particular person should be there — say something the scores alone do not, which is the point of asking. <b>What the link never holds is a sentence you wrote.</b> Neither the free text on any question nor the box at the end of the last step goes into the link, which is why the quotes you see in the result do not come back when you reopen it. That is deliberate, and it is the reason it is safe to send this link to yourself.</p>
+          <p class="small" style="margin-top:12px">That data sits after the <code>#</code> in the address. Browsers do not send the part after a <code>#</code> to the server, so when you copy the link or paste it somewhere, we do not see it and neither does anyone hosting it. The link decodes in whichever browser opens it, and anything in it that this page does not recognise is thrown away rather than shown to you.</p>
         </div>
 
         <div class="card" style="padding:24px;margin-top:18px">
           <span class="eyebrow">Leaving this site</span>
           <h3 style="margin:12px 0 12px">Where the links take you</h3>
-          <p class="small">Several links here are built out of what you typed, and clicking one hands that much to wherever it lands. Typed text reaches exactly three companies this way: <b>Google</b>, <b>Booking.com</b> and <b>Airbnb</b>. Under Trip, the flight, hotel and stay links carry your city and your dates, and the sunset and weather searches carry the place and the date as well. Under Locations and Who to hire, the map searches carry the place you named. Nothing goes anywhere until you click, and you can always run the same search yourself.</p>
+          <p class="small">Several links here are built out of what you typed, and clicking one hands that much to wherever it lands. Typed text reaches exactly three companies this way: <b>Google</b>, <b>Booking.com</b> and <b>Airbnb</b>. A fourth, <b>Anthropic</b>, receives the trip brief where destination ideas are switched on — see the card below, which also tells you whether they are switched on for you. Under Trip, the flight, hotel and stay links carry your city and your dates, and the sunset and weather searches carry the place and the date as well. Under Locations and Who to hire, the map searches carry the place you named. Nothing goes anywhere until you click, and you can always run the same search yourself.</p>
           <p class="small" style="margin-top:12px">Once you follow any link out — to those sites, to a jeweler, to a photographer — you are on their site and their terms apply, not ours. We have no relationship with any of them and are paid nothing for sending you.</p>
         </div>
       </div>
 
       <div>
         <div class="card" style="padding:24px">
-          <span class="eyebrow">The one thing that leaves</span>
+          <span class="eyebrow">The first thing that leaves</span>
           <h3 style="margin:12px 0 12px">Emailing yourself the plan</h3>
-          <p class="small">If you use the email button, two things travel to our server and on to Resend, the service that delivers the message: <b>the address you typed</b> and <b>the plan link</b>. Nothing else. We do not keep a copy of either.</p>
+          <p class="small">If you use the email button, two things travel to our server and on to Resend, the service that delivers the message: <b>the address you typed</b> and <b>the plan link</b> — plus, if you ticked it, the fact that you ticked the box. Nothing else, and no part of the quiz beyond what the link already holds. We do not keep a copy of any of it.</p>
           <p class="small" style="margin-top:12px">Resend keeps delivery records — that a message to that address was sent, and whether it arrived — the way every email service does. Their privacy terms are at <a href="https://resend.com/legal/privacy-policy">resend.com/legal/privacy-policy</a>.</p>
           <p class="small" style="margin-top:12px">If you tick the box asking to hear from us, your address is added to a mailing list and stays there until you unsubscribe, which every message we send will let you do in one click. Leave it unticked and your address is used once, to send you that one email, and then not again.</p>
+        </div>
+
+        <div class="card" style="padding:24px;margin-top:18px">
+          <span class="eyebrow">The second thing that leaves</span>
+          <h3 style="margin:12px 0 12px">Asking for destination ideas</h3>
+          <p class="small">The Trip section can ask a language model — <b>Claude</b>, run by <b>Anthropic</b> — for three destinations that fit what you described. Where that is switched on, pressing <b>Build the trip</b> sends the brief you typed: the thing you want to do, the destination if you named one, where you are leaving from, your dates and your budget. <b>Nothing from the quiz goes with it</b>, and neither does anything you wrote about your partner.</p>
+          <p class="small" style="margin-top:12px">Where it is not switched on, the button builds the flight, hotel and timing searches and sends nothing anywhere. <b>The line under the button tells you which of those two you are looking at, every time</b> — this page does not ask you to take its word for it, because the answer depends on where you are reading this copy of the site.</p>
+          <p class="small" style="margin-top:12px">The flight, hotel and map searches themselves are a different thing: they are ordinary links, and nothing reaches Google, Booking.com or Airbnb until you click one.</p>
         </div>
 
         <div class="card" style="padding:24px;margin-top:18px">
@@ -2097,7 +2135,12 @@ $("cityInput").addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.pr
 var PIN='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>';
 var EXT='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
 function ln(href,label,icon){
-  return '<a class="lenslink" target="_blank" rel="noopener" href="'+href+'">'+(icon||EXT)+esc(label)+'</a>';
+  /* Every caller builds this URL through encodeURIComponent, except the date
+     fragments, which are safe only because <input type="date"> constrains its
+     own value. That is one refactor away from being a live XSS, so escape here
+     and stop depending on it. &amp; in an attribute decodes back to & -- the
+     links behave identically. */
+  return '<a class="lenslink" target="_blank" rel="noopener" href="'+esc(href)+'">'+(icon||EXT)+esc(label)+'</a>';
 }
 function enc(s){ return encodeURIComponent(String(s||"").trim()); }
 function prettyDay(iso){
@@ -2121,7 +2164,7 @@ function tripBrief(){
   };
 }
 /* Every link below opens a real search on the site named. Nothing is fetched or
-   priced here — the page has no network access and will never show a made-up fare. */
+   priced here — the page makes no request of its own here and will never show a made-up fare. */
 /* The date fields open on a sample window, so someone who changes the outbound
    date and not the return can leave a return that falls BEFORE it. Sites accept
    that silently and return nothing useful, so it is dropped rather than sent.
@@ -2213,31 +2256,48 @@ function renderTripLinks(){
 
 /* --- Claude-powered destination ideas (optional; page works fully without it) --- */
 var sampleFn=null, tripCtl=null;
+
+/* The disclosure under the button is written at runtime, not baked into the
+   markup, because this same file is served in two places: inside a Claude viewer,
+   where pressing the button really does send the brief to a model, and on
+   justnotthering.com, where window.claude is absent and nothing is sent at all.
+   A static sentence would be a lie in one of those two. */
+function renderTripAiNote(){
+  var el=$("tripAiNote");
+  if(!el) return;
+  el.innerHTML =
+    'The flight and hotel searches are built in your browser. <b>Destination ideas are the one part of this site that asks a language model.</b> '+
+    (sampleFn
+      ? 'They are available here, so pressing <b>Build the trip</b> sends the brief above — what you want to do, where, your dates and your budget — to Claude, a model run by Anthropic. Nothing from the quiz goes with it.'
+      : 'They are not available here, so pressing <b>Build the trip</b> sends nothing anywhere: it builds the searches below and says so.')+
+    ' <a href="#privacy">The full note on this</a>.';
+}
 /* window.claude exists only inside a Claude viewer. Opened as a saved file or
    hosted anywhere else, it is absent — the page must work exactly the same. */
 (function(){
   var c = (typeof window!=="undefined" && window.claude && typeof window.claude.use==="function") ? window.claude : null;
-  if(!c) return;
+  if(!c){ renderTripAiNote(); return; }
   try{
-    c.use("sample").then(function(s){ sampleFn=s||null; }, function(){ sampleFn=null; });
+    c.use("sample").then(
+      function(s){ sampleFn=s||null; renderTripAiNote(); },
+      function(){ sampleFn=null; renderTripAiNote(); });
   }catch(err){ sampleFn=null; }
+  renderTripAiNote();
 })();
 
 function tripPrompt(b){
-  var quizLine="";
-  var t=tally();
-  if(answers.some(function(a){return a!==null;})){
-    var env=top(t,["nature","urban","home","dest"],"nature");
-    var privacy=((t.priv||0)-(t.pub||0))>=0?"strongly prefers privacy and would hate an audience":"is comfortable being celebrated in front of people";
-    quizLine="\nFrom a quiz they took about their partner: happiest in "+env+" settings, and "+privacy+".";
-  }
+  /* Nothing from the quiz goes in here. Two coarse labels used to, derived from
+     the tally -- which is derived in part from keyword-scoring the sentences
+     people type about their partner. Derived is not the same as the text, but
+     the promise on this site has no "derived" clause in it, and the two labels
+     added almost nothing the brief does not already say. */
   return "Help someone plan a trip on which they intend to propose marriage. Be concrete and specific. Never invent prices, fares or availability — you cannot know them.\n\n"+
     "THE BRIEF\n"+
     "- What they want to do: "+(b.want||"(not said)")+"\n"+
     "- Destination they have in mind: "+(b.where||"(open — suggest)")+"\n"+
     "- Departing from: "+(b.from||"(not said)")+"\n"+
     "- Dates: "+(b.out?prettyDay(b.out):"(flexible)")+(b.back?" to "+prettyDay(b.back):"")+"\n"+
-    "- Budget: "+b.budget+quizLine+"\n\n"+
+    "- Budget: "+b.budget+"\n\n"+
     "Suggest exactly 3 destinations that genuinely deliver what they described. If their dates are wrong for it — wrong season, wrong hemisphere, the thing does not happen then — say so plainly in seasonNote and give the nearest workable alternative instead of pretending it works. If they named a destination, keep it as the first suggestion but still say honestly whether the dates suit it.\n\n"+
     "For each, name the specific place within the destination where they should actually propose — a named viewpoint, garden, beach or room, not 'the old town'.\n\n"+
     'Reply with only JSON of exactly this shape:\n'+
@@ -2344,6 +2404,10 @@ $("tripStop").addEventListener("click",function(){ if(tripCtl) tripCtl.abort(); 
 
 /* --- The outreach kit: entirely local, no network, no model --- */
 var NOTE_KIND="hotel";
+/* Whether this is a surprise changes several sentences in every template, and
+   the templates used to assume it always was. sec(a,b) picks the wording. */
+var NOTE_SECRET=true;
+function sec(a,b){ return NOTE_SECRET?a:b; }
 function noteTime(){
   var v=$("noteTime").value;
   if(!v) return "early evening";
@@ -2363,32 +2427,32 @@ function buildNote(){
   t.hotel={
     subject:"Proposal at "+place+" on "+when,
     body:hi+
-"I'm planning to propose to my partner during our stay at "+place+" on "+when+", and I'd be grateful for your help with a few details.\n\n"+
+sec("I'm planning to propose to my partner during our stay at ","My partner and I are getting engaged during our stay at ")+place+" on "+when+", and I'd be grateful for your help with a few details.\n\n"+
 "What I'm hoping for is a quiet spot on the property at around "+time+" where we can be alone for a few minutes. A few questions:\n\n"+
 "1. Is there somewhere on the grounds you'd recommend at that hour — somewhere that isn't busy and gets decent light?\n"+
 "2. Do you allow an outside photographer on the property? If so, is there a fee or a form?\n"+
-"3. Could you hold the ring in the hotel safe until that afternoon, under my name only?\n"+
+sec("3. Could you hold the ring in the hotel safe until that afternoon, under my name only?\n","3. Could you hold a small item in the hotel safe until that afternoon?\n")+
 "4. Is a room with a terrace or a view available for those nights, and could you note the occasion on the booking?\n"+
 "5. If I wanted flowers or champagne in the room afterwards, what's the lead time and cost?\n\n"+
-"One request: my partner is travelling with me and doesn't know. Please don't mention any of this at check-in or in any confirmation sent to both of us — I'm reachable at this address only.\n\n"+
+sec("One request: my partner is travelling with me and doesn't know. Please don't mention any of this at check-in or in any confirmation sent to both of us — I'm reachable at this address only.\n\n","One note: we're planning this together, so you can put anything in writing to either of us. Only the timing is a secret, and only from one of us.\n\n")+
 "Happy to confirm anything by phone if that's easier."+sign};
 
   t.restaurant={
     subject:"Table for 2 on "+when+" — proposal, one small request",
     body:hi+
-"I'd like to book a table for two at "+place+" on "+when+" at around "+time+". I'm planning to propose to my partner that evening, and I wanted to give you a heads-up rather than spring it on your staff.\n\n"+
+"I'd like to book a table for two at "+place+" on "+when+" at around "+time+". "+sec("I'm planning to propose to my partner that evening","We're getting engaged that evening")+", and I wanted to give you a heads-up rather than spring it on your staff.\n\n"+
 "A few questions:\n\n"+
 "1. Could we have a quieter corner or a table that isn't in the middle of the room?\n"+
 "2. Is there somewhere just outside or nearby — a terrace, a garden, a landing — where I could ask privately before or after the meal? I'd rather not do it at the table with the room watching.\n"+
 "3. If I give a signal to our server, could champagne come out afterwards?\n"+
 "4. Is a photographer allowed inside, or would you prefer they stay outside?\n\n"+
-"Please don't announce anything to the room or bring the whole staff over unless I ask — my partner would find that mortifying. Quiet is very much the goal.\n\n"+
-"If the booking confirmation goes to both of us, please leave any mention of the occasion off it."+sign};
+"Please don't announce anything to the room or bring the whole staff over unless we ask — it would be mortifying. Quiet is very much the goal.\n\n"+
+sec("If the booking confirmation goes to both of us, please leave any mention of the occasion off it.","Confirmations can go to either of us — nothing here needs hiding.")+sign};
 
   t.venue={
     subject:"Proposal and photography at "+place+" — "+when,
     body:hi+
-"I'd like to propose to my partner at "+place+" on "+when+", at around "+time+", and I want to make sure I do it in a way that works for you.\n\n"+
+sec("I'd like to propose to my partner at ","My partner and I are getting engaged at ")+place+" on "+when+", at around "+time+", and I want to make sure we do it in a way that works for you.\n\n"+
 "Could you tell me:\n\n"+
 "1. Do you have a policy on proposals, and is there a spot you usually recommend?\n"+
 "2. Do I need a photography permit to bring a photographer for 30–45 minutes, and what does it cost?\n"+
@@ -2401,21 +2465,21 @@ function buildNote(){
   t.photo={
     subject:"Proposal shoot — "+when+", "+time,
     body:hi+
-"I'm proposing to my partner on "+when+" at around "+time+", at "+place+", and I'm looking for someone to photograph it without being seen.\n\n"+
-"What I'm after is roughly 30–60 minutes: the moment itself from a distance, then a short set of portraits once they know what's happening.\n\n"+
+sec("I'm proposing to my partner on ","My partner and I are getting engaged on ")+when+" at around "+time+", at "+place+", and I'm looking for someone to photograph it"+sec(" without being seen","")+".\n\n"+
+"What I'm after is roughly 30–60 minutes: "+sec("the moment itself from a distance, then a short set of portraits once they know what's happening","the moment itself, then a short set of portraits straight afterwards")+".\n\n"+
 "Could you let me know:\n\n"+
 "1. Are you free that day, and what's your rate for a proposal session?\n"+
 "2. Have you shot at this location before? Do you know whether it needs a permit?\n"+
 "3. How do you want to handle the signal — where will you position yourself, and which way should I face?\n"+
-"4. What will you wear so you read as a tourist rather than a photographer?\n"+
+sec("4. What will you wear so you read as a tourist rather than a photographer?\n","4. Where will you set up, and how visible will you be before the moment?\n")+
 "5. What's your turnaround on the images, and do we get a couple of previews the same day? We'll want something to send to family that night.\n"+
 "6. What happens if the weather turns or we're running late — how flexible is the window?\n\n"+
-"Please send any correspondence to this address only. My partner has no idea."+sign};
+sec("Please send any correspondence to this address only. My partner has no idea.","We're both across the planning, so either of us can be copied on anything.")+sign};
 
   t.charter={
     subject:"Private booking on "+when+" — proposal",
     body:hi+
-"I'd like to book with "+place+" on "+when+", starting around "+time+", for two people. I'm planning to propose during the trip.\n\n"+
+"I'd like to book with "+place+" on "+when+", starting around "+time+", for two people. "+sec("I'm planning to propose during the trip","We're getting engaged during the trip")+".\n\n"+
 "A few things I'd want to confirm first:\n\n"+
 "1. Would it be just the two of us, or shared with other guests? Privacy matters more than anything else here.\n"+
 "2. Can you time the route so we're somewhere worth looking at as the light goes?\n"+
@@ -2423,12 +2487,12 @@ function buildNote(){
 "4. Would you be able to take a few photos on my phone straight afterwards?\n"+
 "5. What's your weather cancellation policy, and how late can we decide?\n"+
 "6. Is there anything I should bring or avoid bringing?\n\n"+
-"Please keep it off any confirmation my partner might see — I'm the only one who should get the details."+sign};
+sec("Please keep it off any confirmation my partner might see — I'm the only one who should get the details.","Either of us can be copied on the booking — the date is not a secret, only the exact moment.")+sign};
 
   t.picnic={
     subject:"Proposal setup on "+when,
     body:hi+
-"I am planning to propose to my partner on "+when+" at around "+time+", and I would like to book a setup with "+place+".\n\n"+
+sec("I am planning to propose to my partner on ","My partner and I are getting engaged on ")+when+" at around "+time+", and I would like to book a setup with "+place+".\n\n"+
 "A few things I need to get straight before I book:\n\n"+
 "1. What time would you arrive, and how long does setup take? I need to know exactly when the spot is ready.\n"+
 "2. Do you need vehicle access to the location, and can you tell me whether this particular spot allows it?\n"+
@@ -2437,7 +2501,7 @@ function buildNote(){
 "5. What is your weather policy, and how late can I move the date?\n"+
 "6. Who packs everything down, and how long after are you gone?\n\n"+
 "I am also booking a photographer, so if you have worked with anyone locally I would be glad of a name.\n\n"+
-"Please keep it off anything my partner might see — I am the only one who should get the details."+sign};
+sec("Please keep it off anything my partner might see — I am the only one who should get the details.","Either of us can be copied on anything — we are arranging this together.")+sign};
 
   return t[NOTE_KIND]||t.hotel;
 }
@@ -2450,6 +2514,15 @@ function renderNote(){
   b.addEventListener("click",function(){
     NOTE_KIND=b.getAttribute("data-kind");
     [].slice.call(document.querySelectorAll("#noteKinds .modechip")).forEach(function(o){
+      o.setAttribute("aria-pressed", o===b);
+    });
+    renderNote();
+  });
+});
+[].slice.call(document.querySelectorAll("#noteSecrecy .modechip")).forEach(function(b){
+  b.addEventListener("click",function(){
+    NOTE_SECRET = b.getAttribute("data-secret")==="1";
+    [].slice.call(document.querySelectorAll("#noteSecrecy .modechip")).forEach(function(o){
       o.setAttribute("aria-pressed", o===b);
     });
     renderNote();
@@ -2566,79 +2639,202 @@ function renderTimeline(){
    ============================================================ */
 var Q=[
   {p:"When your partner has news, who hears about it first?",n:"Start with how much of their life is lived in public.",
-   own:"tell me how they share things",ph:"e.g. She tells her sister everything but would hate a crowd knowing before her friends did.",
+   own:"tell me how they share things",ph:"e.g. They tell their sister everything, but would hate a crowd knowing before their closest friends did.",
+   ax:["priv","pub","fam","doc"],
    o:[["It's on their story within the hour",{pub:2,doc:1}],["The group chat of four closest friends",{pub:1}],
-      ["Me, then their mother",{priv:1,fam:1}],["Just me. They like to sit with things",{priv:2}]]},
+      ["Me, then whoever they call on the drive home",{priv:1,fam:1}],["Just me. They like to sit with things",{priv:2}]]},
+
   {p:"Your best days together usually look like…",n:"Where they're happiest is where they should be when you ask.",
-   own:"describe one of your best days",ph:"e.g. Driving out to the coast with the dog, stopping at the same diner, home by dark.",
-   o:[["A trailhead at six in the morning",{nature:2,active:1}],["A new neighborhood, a long walk, three coffee stops",{urban:2}],
-      ["The sofa, good food, nowhere to be",{home:2,priv:1}],["An airport gate with carry-ons",{dest:2}]]},
+   own:"describe one of your best days",ph:"e.g. Driving out to the coast, stopping at the same diner, home before dark.",
+   ax:["nature","urban","home","dest","active","weather"],
+   o:[["A trailhead at six in the morning",{nature:2,active:2}],["A new neighborhood, a long walk, three coffee stops",{urban:2,active:1}],
+      ["The sofa, good food, nowhere to be",{home:2,priv:1,weather:1}],["An airport gate with carry-ons",{dest:2}]]},
+
+  {p:"Is there a place that already means something to the two of you?",n:"The strongest proposals usually happen where the story already is.",
+   own:"describe the place",ph:"e.g. The parking lot of the diner we went to after every hospital appointment. It closed last year and the sign is still up.",
+   ax:["meaning","origin","injoke","hobby","animal","deadpan"],implies:{meaning:2},
+   o:[["Where we met, or where we first knew",{meaning:2,origin:2}],
+      ["A place only the two of us would find funny",{meaning:2,injoke:2,deadpan:1.5}],
+      ["Wherever the thing we do together happens",{meaning:2,hobby:2,active:1}],
+      ["Somewhere tied to an animal we'd both do anything for",{meaning:2,animal:2}],
+      ["Nothing like that — the place isn't the point for us",{}]]},
+
   {p:"How do they feel about being the center of attention?",n:"Answer honestly. This is the question people get wrong about their partner.",
-   own:"describe how they handle it",ph:"e.g. Loves a party but freezes if a room turns to look at her.",
+   own:"describe how they handle it",ph:"e.g. Loves a party, but freezes if a room turns to look at them.",
+   ax:["priv","pub","fam","deadpan"],
    o:[["They live for it",{pub:2}],["Fine, if the people watching are theirs",{pub:1,fam:2}],
       ["They'll tolerate about ninety seconds of it",{priv:1}],["They would genuinely hate it",{priv:2}]]},
+
   {p:"Their jewelry, honestly:",n:"Look at what they already wear, not what you'd like to buy.",
    own:"describe what they actually wear",ph:"e.g. Big silver rings from a market in Oaxaca, nothing matching, no diamonds ever.",
+   ax:["classic","modern","vintage","unconv"],
    o:[["One or two pieces they never take off",{classic:2}],["Gold, layered, always something new",{modern:2}],
-      ["Estate shops and their grandmother's things",{vintage:2}],["Nothing conventional — they'd want something strange and theirs",{unconv:2}]]},
+      ["Estate shops and inherited things",{vintage:2}],["Nothing conventional — they'd want something strange and theirs",{unconv:2}]]},
+
   {p:"Their hands during an average week:",n:"This decides the setting more than any aesthetic preference does.",
    own:"describe what their hands do",ph:"e.g. Pottery three nights a week, clay under the nails, rings always come off.",
-   o:[["Keyboard and coffee cup",{}],["Gym, garden, dog leash, dishwater",{active:2}],
-      ["Gloves at work — healthcare, kitchen, lab",{active:2,bezel:2}],["Rings come off constantly anyway",{active:1,bezel:1}]]},
+   ax:["active","bezel","hardy","delicate"],
+   o:[["Keyboard and coffee cup",{delicate:2}],["Gym, garden, leash, dishwater",{active:2,hardy:1}],
+      ["Gloves at work — healthcare, kitchen, lab",{active:2,bezel:2,hardy:2}],["Rings come off constantly anyway",{active:1,bezel:1,hardy:1}]]},
+
   {p:"If they could only have one, they'd pick:",n:"The trade-off everyone has to make and nobody enjoys making.",
-   own:"say what matters most to them",ph:"e.g. She'd want to know where the stone came from more than how big it is.",
+   own:"say what matters most to them",ph:"e.g. They'd want to know where the stone came from more than how big it is.",
+   ax:["size","quality","ethics","thrift","vintage"],
    o:[["The biggest stone the budget allows",{size:2}],["A smaller stone that's noticeably better",{quality:2}],
       ["The ring that means something — who made it, what it's made of",{ethics:2,vintage:1}],["Spend less on the ring, more on the life after it",{thrift:2}]]},
+
   {p:"Have the two of you talked about the ring?",n:"There is no wrong answer here, only a different plan.",
-   own:"describe where you've landed",ph:"e.g. We agreed on a sapphire together, but he has no idea I already had it made.",
+   own:"describe where you've landed",ph:"e.g. We agreed on a sapphire together, but they have no idea I already had it made.",
+   ax:["collab","surprise"],
    o:[["They've sent me links. Several.",{collab:2}],["Hints, nothing explicit",{collab:1}],
-      ["Nothing, and I want it to stay that way",{surprise:2}],["We're shopping together and both know it",{collab:2}]]},
+      ["Nothing, and I want it to stay that way",{surprise:2}],["We're shopping together and both know it",{collab:3}]]},
+
   {p:"Five years from now, what do you want to be able to show someone?",n:"Whether a photographer belongs in this plan.",
    own:"say what you want to keep",ph:"e.g. Just the ticket stub. We'd both hate a photographer in the bushes.",
+   ax:["doc","priv"],
    o:[["Everything. Photos from their face onward.",{doc:2}],["One good picture",{doc:1}],
       ["A shaky video off a phone",{}],["Nothing. It was ours.",{doc:-2,priv:1}]]},
-  {p:"How much runway do you have?",n:"Last one.",
-   own:"describe your timing",ph:"e.g. No rush at all, but her grandmother is ill and we'd want her there.",
+
+  {p:"How much runway do you have?",n:"Last one before the part where you get to correct us.",
+   own:"describe your timing",ph:"e.g. No rush at all, but someone we'd both want there is ill.",
+   ax:["rush","ample","fam"],
    o:[["Weeks — something's coming up",{rush:2}],["A couple of months",{normal:2}],
       ["Six months or more",{ample:2}],["No deadline. I just want to get it right.",{ample:2,collab:1}]]}
 ];
 var qi=0, answers=new Array(Q.length).fill(null), customs=new Array(Q.length).fill(""), cityAnswer="";
 
-/* Free-text answers are read by keyword against the same axes the multiple-choice
-   options score on. It is matching words, not understanding sentences — the result
-   says so, and quotes what you wrote back to you. */
+/* ---- What they have actually said ----------------------------------------
+   These are the only inputs that are allowed to overrule an inferred axis. A
+   quiz guesses; a partner who has said something out loud is not a guess. Every
+   one is a fixed id from the list below — never free text — so it can travel in
+   a plan link without carrying a sentence about a person. */
+var SAID=[
+  {id:"decided",     g:"Between you", t:"We've already decided we're getting married. This is the moment, not the question."},
+  {id:"nosurprise",  g:"Between you", t:"They've said they don't like surprises."},
+  {id:"wantsurprise",g:"Between you", t:"They've said they want to be surprised."},
+  {id:"ringtogether",g:"Between you", t:"We're choosing the ring together, and we both know it."},
+  {id:"bothasking",  g:"Between you", t:"We're both asking, or we haven't decided who asks."},
+
+  {id:"nopublic",    g:"The moment",  t:"They'd hate being asked in front of people."},
+  {id:"wantpeople",  g:"The moment",  t:"They want people there when it happens."},
+  {id:"person",      g:"The moment",  t:"There's someone in particular they'd want there, or told first."},
+  {id:"nophotos",    g:"The moment",  t:"They've said no photographer."},
+  {id:"wantphotos",  g:"The moment",  t:"They want it photographed properly."},
+  {id:"place",       g:"The moment",  t:"They've named a place they'd want it to happen."},
+
+  {id:"stone",       g:"The ring",    t:"They've named a stone they want.", pick:true},
+  {id:"nodiamond",   g:"The ring",    t:"They've said they don't want a diamond."},
+  {id:"noring",      g:"The ring",    t:"They've said they don't want a ring at all."},
+  {id:"tworings",    g:"The ring",    t:"We both want rings."},
+  {id:"sizeknown",   g:"The ring",    t:"We already know the size — nothing to find out."}
+];
+var STONES=[
+  {id:"sapphire",  t:"Sapphire",               mohs:"9",       note:"The serious answer. Mohs 9, and it comes in teal, peach, parti, grey, green and colorless, not only blue. Montana stones have traceable US origin, which answers the sourcing question at the same time."},
+  {id:"emerald",   t:"Emerald",                mohs:"7.5–8",   protect:true, note:"Beautiful and genuinely risky — heavily included and brittle, so it chips. If this is the stone, get it in a bezel or a protective halo, budget for repairs, and say all of that out loud before you buy it."},
+  {id:"ruby",      t:"Ruby",                   mohs:"9",       note:"Corundum, like sapphire, so it takes daily wear as well as anything that isn't a diamond. Colour is the whole price here — judge it in daylight, not under a jeweler's lamp."},
+  {id:"moissanite",t:"Moissanite",             mohs:"9.25",    note:"Throws more rainbow fire than a diamond, which people either love or immediately clock. Extremely durable and a fraction of the cost, so it frees the budget for the rest of it."},
+  {id:"saltpepper",t:"A salt-and-pepper diamond",mohs:"10",    graded:true, note:"A real diamond, and as hard as any other, full of visible black inclusions — the flaws are the design. Cheap, unrepeatable, and no two are alike, which is also why it can never be replaced with a match."},
+  {id:"lab",       t:"A lab-grown diamond",    mohs:"10",      graded:true, plain:true, note:"Chemically a diamond, graded on the same GIA scales as any other, roughly twice the stone per dollar, and resale value close to nothing. That last part only matters if you were ever going to sell it."},
+  {id:"opal",      t:"Opal or moonstone",      mohs:"5–6.5",   protect:true, note:"Soft enough that daily wear will show within a couple of years. It can still be the right answer — but choose it knowing that, get a bezel, and plan on taking it off for anything physical."},
+  {id:"spinel",    t:"Spinel",                 mohs:"8",       note:"Underrated, naturally vivid and almost never treated. Mohs 8 is the floor for daily wear, so it qualifies — just."},
+  {id:"other",     t:"Something else they named",mohs:"",      protect:true, note:"Check its hardness before anything else: below Mohs 8 and a ring worn every day will scuff and chip visibly within a few years. That is a trade worth making knowingly, and a nasty surprise otherwise."}
+];
+var said={}, saidStone="", saidText="", overrides={}, naturalPick={};
+function prio0(t){ return top(t,["size","quality","ethics","thrift"],"quality"); }
+function saidOn(id){ return !!said[id]; }
+/* "A lab-grown diamond" reads correctly in a checkbox list and wrongly as the
+   first word of a heading. Drop the article and put the capital back. */
+function stoneName(x){ var n=String(x&&x.t||"").replace(/^A /,""); return n.charAt(0).toUpperCase()+n.slice(1); }
+
+/* Free-text answers are read by keyword against only the axes that question
+   asks about — a timing answer can no longer move the ring aesthetic — and a
+   negator in front of a word flips it. "We'd both hate a photographer" used to
+   score as the maximum possible enthusiasm for photographers. */
 var LEXICON={
-  nature:["hike","hiking","trail","mountain","beach","ocean","lake","river","forest","park","camp","outdoor","garden","sunrise","sunset","stars","waterfall","climb","ski","snow","desert","canyon","woods","field","farm","botanic"],
-  urban:["city","downtown","bar","restaurant","museum","gallery","concert","rooftop","skyline","street","cafe","coffee","brewery","theater","theatre","bookstore","market","subway","gig","show"],
-  home:["home","house","apartment","couch","sofa","kitchen","cook","cooking","dog","cat","pet","bed","pajamas","movie night","backyard","porch","our place","stay in"],
-  dest:["travel","trip","flight","abroad","vacation","holiday","japan","italy","paris","europe","island","cruise","road trip","airbnb","hotel","passport","mexico","iceland"],
-  priv:["private","alone","just us","quiet","introvert","shy","hates attention","hate attention","intimate","small","no audience","embarrassed","low key","low-key"],
-  pub:["party","everyone","friends","family","crowd","celebration","extrovert","loud","social","big group","audience","announce"],
-  fam:["family","parents","mom","mother","dad","father","siblings","sister","brother","grandparents","kids","cousins"],
-  doc:["photo","photos","photographer","picture","pictures","camera","film","video","instagram","posted","memories"],
-  active:["gym","lifting","weights","climbing","garden","gardening","nurse","doctor","surgeon","chef","cook","baker","mechanic","potter","ceramics","horse","riding","swim","dishes","hands on","hands-on","lab","hospital","vet"],
-  bezel:["gloves","snag","catch","hospital","surgery","kitchen","climbing","rough on"],
-  vintage:["vintage","antique","estate","grandmother","grandma","heirloom","deco","art deco","victorian","edwardian","old","thrift","secondhand","second-hand","retro"],
+  nature:["hike","hiking","trail","mountain","beach","coast","coastline","ocean","lake","river","forest","park","camp","camping","outdoor","outdoors","garden","sunrise","sunset","stars","waterfall","climb","ski","snow","desert","canyon","woods","field","farm","botanic","botanical","cabin","tent"],
+  urban:["city","downtown","bar","restaurant","museum","gallery","concert","rooftop","skyline","street","cafe","coffee","brewery","theater","theatre","bookstore","market","subway","gig","show","neighborhood","neighbourhood"],
+  home:["home","house","apartment","flat","couch","sofa","kitchen","cook","cooking","pet","dog","cat","bed","pajamas","pyjamas","movie night","backyard","porch","our place","stay in","stayed in"],
+  dest:["travel","trip","flight","abroad","vacation","holiday","japan","italy","paris","europe","island","cruise","road trip","airbnb","hotel","passport","mexico","iceland","train","ferry","plane"],
+  priv:["private","alone","just us","quiet","introvert","shy","intimate","small","no audience","embarrassed","low key","low-key","the two of us","ourselves"],
+  pub:["party","everyone","friends","crowd","crowds","celebration","extrovert","loud","social","big group","audience","announce","attention","spotlight","centre of attention","center of attention"],
+  fam:["family","parents","mom","mum","mother","dad","father","siblings","sister","brother","sibling","grandparents","grandmother","grandfather","kids","cousins","nieces","nephews"],
+  doc:["photo","photos","photographer","photographed","picture","pictures","camera","film","video","instagram","posted","memories","album"],
+  active:["gym","lifting","weights","climbing","garden","gardening","nurse","doctor","surgeon","chef","cook","baker","mechanic","potter","pottery","ceramics","horse","riding","swim","swimming","dishes","hands on","hands-on","lab","hospital","vet","builder","carpenter","welding"],
+  bezel:["gloves","snag","snags","catch","catches","hospital","surgery","kitchen","climbing","rough on","scrubs"],
+  hardy:["gloves","tough","rough","knocks","batter","beat up"],
+  vintage:["vintage","antique","estate","grandmother","grandma","heirloom","deco","art deco","victorian","edwardian","old","thrift","secondhand","second-hand","retro","inherited"],
   modern:["modern","minimal","minimalist","clean","contemporary","sleek","simple lines","architectural"],
-  unconv:["unusual","weird","unique","different","alternative","nontraditional","non-traditional","not traditional","quirky","punk","goth","witchy","colorful","colourful","color stone","sapphire","emerald","opal","moss","agate","salt and pepper","salt-and-pepper","toi et moi","no diamond","not a diamond","hates diamonds","raw","rough","hexagon","kite","black","green","teal","purple","tattoo","weird taste"],
-  classic:["classic","timeless","traditional","elegant","understated","simple","never take it off","plain"],
-  ethics:["ethical","ethically","sustainable","recycled","conflict","conflict-free","lab grown","lab-grown","labgrown","moissanite","fair trade","fairmined","provenance","origin","where it came from","secondhand","reclaimed"],
-  size:["big","bigger","large","huge","statement","carat","sparkle big","as big as"],
-  quality:["quality","brilliant","brilliance","clarity","best stone","well cut","cut quality","fire"],
-  thrift:["cheap","budget","affordable","save","frugal","inexpensive","not much","spend less","practical","down payment","house"],
-  collab:["together","she picked","he picked","they picked","shopping","sent me","links","pinterest","we chose","wants to pick","her idea","their idea","board"],
-  surprise:["surprise","secret","no idea","clueless","doesn't suspect","does not suspect","blindside"],
-  rush:["soon","weeks","next month","asap","hurry","already booked","running out"],
-  ample:["no rush","next year","someday","eventually","whenever","plenty of time","a year"]
+  unconv:["unusual","weird","unique","different","alternative","nontraditional","non-traditional","not traditional","quirky","punk","goth","witchy","colorful","colourful","color stone","colour stone","sapphire","emerald","opal","moss","agate","salt and pepper","salt-and-pepper","toi et moi","raw","rough","hexagon","kite","black","green","teal","purple","tattoo","silver","chunky","stacked","handmade","artisan","secondhand"],
+  classic:["classic","timeless","traditional","elegant","understated","simple","never take it off","never takes it off","plain","diamond","diamonds","solitaire"],
+  ethics:["ethical","ethically","sustainable","recycled","conflict","conflict-free","lab grown","lab-grown","labgrown","moissanite","fair trade","fairmined","provenance","origin","traceable","where it came from","came from","comes from","sourced","source","secondhand","reclaimed","mine","mined"],
+  size:["big","bigger","large","huge","statement","carat","as big as"],
+  quality:["quality","brilliant","brilliance","clarity","best stone","well cut","cut quality","fire","sparkle"],
+  thrift:["cheap","budget","affordable","save","saving","frugal","inexpensive","not much","spend less","practical","down payment","mortgage","house deposit"],
+  collab:["together","picked","picking","shopping","sent me","links","pinterest","we chose","wants to pick","their idea","her idea","his idea","board","showed me"],
+  surprise:["surprise","surprises","surprised","secret","no idea","clueless","suspect","suspects","blindside"],
+  rush:["soon","weeks","next month","asap","hurry","already booked","running out","before"],
+  ample:["no rush","next year","someday","eventually","whenever","plenty of time","a year","in no hurry"],
+  meaning:["where we met","first date","first kiss","anniversary","our spot","our place","the bench","the bar","means something","meant something","significant","history","story","every time","used to","we always","went to","for years","ever since"],
+  origin:["where we met","first date","first kiss","met at","met there","first night","matched"],
+  injoke:["joke","funny","ridiculous","stupid","silly","broke down","in-joke","inside joke","laugh"],
+  hobby:["climbing gym","studio","record shop","record store","band","chess","league","team","raid","server","campaign","dnd","d&d","bouldering","choir","run club","book club"],
+  animal:["dog","cat","horse","shelter","rescue","barn","stable","vet","puppy","kitten","pony","goat","chickens","rabbit","ferret","parrot"],
+  deadpan:["deadpan","dry","sarcastic","sarcasm","unromantic","cynical","allergic to"],
+  weather:["rain","rains","cold","winter","february","indoor","indoors","all weather","all-weather","warm"],
+  delicate:["desk","office","keyboard","screen","laptop","admin","writer"]
 };
-function scoreText(s){
-  var out={}, txt=" "+String(s||"").toLowerCase().replace(/[^a-z0-9\s'-]/g," ")+" ";
-  if(txt.trim().length<2) return out;
-  for(var axis in LEXICON){
-    var hits=0;
-    LEXICON[axis].forEach(function(w){ if(txt.indexOf(" "+w)>-1 || txt.indexOf(w+" ")>-1) hits++; });
-    if(hits) out[axis]=Math.min(2,hits);
-  }
+var NEG=["not","no","never","hate","hates","hated","hating","without","avoid","avoids","dislike","dislikes","dislikes","anti","doesnt","dont","wouldnt","wont","cant","cannot","isnt","arent","aint","against","zero","none","nothing","neither","nor","far from","allergic"];
+/* Bipolar axes: a negated hit on one is real evidence for the other. */
+var OPP={priv:"pub",pub:"priv",collab:"surprise",surprise:"collab",rush:"ample",ample:"rush",size:"thrift",thrift:"size",classic:"unconv",unconv:"classic"};
+
+function scoreText(s, axes){
+  var out={}, bonus={};
+  /* Punctuation and "but" become clause boundaries, because a negator does not
+     reach across one. Without this, "no idea, total surprise" let the "no" of
+     "no idea" negate the word "surprise" four tokens later and scored as
+     evidence against a surprise -- the exact opposite of the sentence. */
+  var clean=String(s||"").toLowerCase().replace(/[\u2019']/g,"")
+    .replace(/[,;:.!?()\u2014\u2013]/g," | ")
+    .replace(/\b(but|although|though|however|whereas|than)\b/g," | ")
+    .replace(/[^a-z0-9\s|-]/g," ");
+  var toks=clean.split(/\s+/).filter(Boolean);
+  if(!toks.length) return out;
+  var pos={}, neg={};
+  var list = axes && axes.length ? axes : Object.keys(LEXICON);
+  list.forEach(function(axis){
+    var terms=LEXICON[axis]; if(!terms) return;
+    terms.forEach(function(w){
+      var wt=w.split(" "), L=wt.length;
+      for(var i=0;i+L<=toks.length;i++){
+        var hit=true;
+        for(var j=0;j<L;j++){ if(toks[i+j]!==wt[j]){hit=false;break;} }
+        if(!hit) continue;
+        var negated=false;
+        for(var k=i-1;k>=0 && k>=i-4;k--){
+          if(toks[k]==="|") break;
+          if(NEG.indexOf(toks[k])>-1){negated=true;break;}
+        }
+        if(negated) neg[axis]=(neg[axis]||0)+1; else pos[axis]=(pos[axis]||0)+1;
+      }
+    });
+  });
+  /* Opposite-axis credit is collected separately and applied at the end. Written
+     inline it landed on axes that had not been scored yet, and the guard against
+     double-processing then threw their own direct evidence away -- so adding
+     emphasis to a sentence could lower its score. */
+  var seen={};
+  list.concat(Object.keys(neg)).concat(Object.keys(pos)).forEach(function(axis){
+    if(seen[axis]) return; seen[axis]=1;
+    var p=pos[axis]||0, n=neg[axis]||0;
+    if(!p && !n) return;
+    /* A clear single keyword has to be worth as much as tapping an option, or
+       answering in your own words quietly weakens your own result. An explicit
+       "no" outweighs a bare mention. */
+    var v=(p?(p>1?2.5:1.5):0)-(n?(n>1?3:1.9):0);
+    if(v) out[axis]=v;
+    if(v<0 && OPP[axis]) bonus[OPP[axis]]=(bonus[OPP[axis]]||0)+Math.min(1.5,-v);
+  });
+  for(var a in bonus){ out[a]=Math.max(-2.5,Math.min(2.5,(out[a]||0)+bonus[a])); }
   return out;
 }
 function isOther(i,a){ return a===Q[i].o.length; }
@@ -2647,8 +2843,16 @@ function tally(){
   var t={};
   answers.forEach(function(a,i){
     if(a===null) return;
-    var w = isOther(i,a) ? scoreText(customs[i]) : Q[i].o[a][1];
-    for(var k in w) t[k]=(t[k]||0)+w[k];
+    var w;
+    if(isOther(i,a)){
+      w=scoreText(customs[i], Q[i].ax);
+      /* Reaching for the box on "is there a place that means something" is itself
+         a yes, whichever words they happen to use. */
+      if(Q[i].implies && String(customs[i]||"").trim().length>1){
+        for(var ik in Q[i].implies) w[ik]=Math.max(w[ik]||0, Q[i].implies[ik]);
+      }
+    } else w=Q[i].o[a][1];
+    for(var k in w) t[k]=Math.round(((t[k]||0)+w[k])*10)/10;
   });
   return t;
 }
@@ -2662,42 +2866,147 @@ function top(t,keys,dflt){
   keys.forEach(function(k){ var v=t[k]||0; if(v>bv){bv=v;best=k;} });
   return bv<=0?dflt:best;
 }
-var LOCATION_REC={
-  nature_priv:{h:"An overlook at golden hour, just the two of you",d:"A summit, a bluff or a quiet stretch of trail you've walked before, timed for the hour before sunset. The climb burns off the nerves and gives you an hour alone before the moment — and there's no audience to manage when it lands.",w:"Scout it on the same day of the week at the same hour. Somewhere that's empty on a Wednesday can have twelve people on it on a Saturday."},
-  nature_pub:{h:"Somewhere outdoors with your people waiting at the end",d:"Ask on the trail, at the overlook, at the water — then bring them back to a garden, a park shelter or a backyard where everyone they love is already there. Nature for the moment, people for the hour after.",w:"Two locations means two sets of logistics and one way for it to leak. Give the waiting group a strict no-phones-until rule."},
-  urban_priv:{h:"A rooftop or a high view, early rather than at sunset",d:"The skyline at the hour before the crowd arrives, or a terrace you reserve outright. A city view gives you a reason to stand still and look at something together, which is all a proposal spot really has to do.",w:"Observation decks and rooftop bars are loud and packed at sunset. Go at opening, or book a private corner in writing."},
-  urban_pub:{h:"The bar or block where it started, full of your people",d:"Not the most beautiful place in your city — the most loaded one. The first date bar, the corner you lived on, the restaurant you go back to. Meaning beats scenery, and everyone in the room already knows the story.",w:"Tell the venue and put it in writing. A double-booked back room has ended better plans than yours."},
-  home_priv:{h:"Your own place, on a day with nothing else in it",d:"The kitchen, the sofa, the dog underfoot. For a private person this is the strongest option on the whole list: no audience, no outfit, no travel, and they can react however they actually feel instead of performing it.",w:"It's the hardest setting to photograph. If you want pictures, set a phone on a tripod running video and pull a frame from it later."},
-  home_pub:{h:"Dinner at home that turns into a room full of people",d:"Ask them in the kitchen, then have everyone arrive an hour later. You get the private yes and the celebration, in that order, which is the order almost everyone says they'd have chosen.",w:"Somebody will arrive early. Give one person the job of holding the group until you text."},
-  dest_priv:{h:"A trip they believe is just a trip",d:"Propose on the first or second day, not the last night. Spend the rest of the trip engaged rather than spending the whole trip waiting for it, and let them tell people in their own time from somewhere beautiful.",w:"The ring never goes in checked luggage. Carry it on you, in a flat case, and know your airport's screening rules before you're in the queue."},
-  dest_pub:{h:"A trip everyone else is secretly already on",d:"They think it's the two of you. It is, for the first day — and then the people they love turn up. Expensive and complicated, and the single most-watched version of this if that's genuinely their thing.",w:"Every extra person is another chance at a leak. Tell people the date and the city, and nothing else, until 24 hours before."}
-};
-var METHOD_REC={
-  quiet:{h:"The ordinary-day ambush",d:"No occasion and no warning. Making dinner, walking the dog, halfway through a Tuesday. The whole meaning is that it wasn't staged — that this is what the rest of your life looks like, and you wanted to ask in the middle of it."},
-  quiet_doc:{h:"A private moment, quietly photographed",d:"Just the two of you, with a photographer at a distance with a long lens looking like a tourist. You get the real face in the real second and nobody else in the frame. Agree a signal, a direction to face, and what happens if they're running late."},
-  reveal:{h:"The reveal, then the room",d:"Ask them alone, then walk into a bar or a living room where everyone they love is already waiting. The private yes first, the celebration second. Give them ten minutes in the car before you go in — they'll want to look at their own hand for a while."},
-  public:{h:"In front of the people who matter",d:"A gathering that already exists — a holiday table, a birthday, a reunion. The audience is the point, so make sure they're the kind of person for whom that's true. There is no quiet version of this once it starts."},
-  collab:{h:"Chosen together, timed by you",d:"No surprise about the ring at all — you pick it together, or they pick it outright. The only secret left is when, which is plenty. This is the right call whenever they have strong opinions about something they'll wear every day, and it removes the one risk you can't undo."}
-};
+
+/* ---- The location library -------------------------------------------------
+   Sixteen archetypes, which are the same sixteen written out in the Locations
+   section. The quiz used to run on its own private set of eight generic cells,
+   so half of what this site says about where to propose could never be
+   recommended to anybody. Each one is scored against the tally rather than
+   looked up in a grid, which is what makes a second-place reading possible. */
+var LOC_LIB=[
+ {id:"overlook",lens:"nature",h:"The overlook you have to earn",
+  d:"A summit, a bluff, a fire tower — somewhere the walk up does the work. By the time you are at the top you have been alone together for an hour and the nerves have had somewhere to go. Time it for the hour before sunset.",
+  w:"Scout it on the same day of the week at the same hour. Somewhere that is empty on a Wednesday can have twelve people on it on a Saturday.",
+  m:{nature:3,priv:2,active:2,pub:-2}},
+ {id:"conservatory",lens:"nature",h:"The conservatory, or the glasshouse",
+  d:"Botanical gardens and glasshouses are the reliable choice: beautiful in any month, warm in February, and staffed by people who have seen a hundred proposals and will help you with this one.",
+  w:"Nearly all of them require a permit if you bring a photographer, and several charge a proposal fee. Call two to four weeks ahead and ask about “a proposal with a photographer” — they usually have a standard answer and sometimes a preferred spot.",
+  m:{nature:2.5,weather:3,doc:1.5,priv:1,active:-1}},
+ {id:"water",lens:"nature",h:"Water's edge, as the light goes",
+  d:"A lake, a coast, a river walk, a harbour at dusk. Open sightlines make a hidden photographer easy, and there is somewhere to walk afterwards while it sinks in — which matters more than people expect.",
+  w:"Sunset-dependent and wind-exposed. Check which way the light falls at your spot, and have somewhere indoors to go immediately after.",
+  m:{nature:3,priv:2,doc:1.5,pub:-1}},
+ {id:"rooftop",lens:"urban",h:"A rooftop or a high view, early rather than at sunset",
+  d:"Skyline, elevation, a drink in hand. A view gives you both a reason to stand still and look at something together, which is most of what a proposal spot actually has to do.",
+  w:"Observation decks and rooftop bars are loud and packed at sunset. Go at opening, or book a private corner outright and get it in writing.",
+  m:{urban:3,priv:1.5,doc:1,nature:-1}},
+ {id:"origin",lens:"urban",h:"Where it started",
+  d:"The bar, the bench, the block you lived on. The place carries the meaning, so it does not have to be beautiful — and everyone you eventually tell already knows the story. This is the archetype people cry at.",
+  w:"Check it still exists and still opens at that hour. Places like this close, refurbish and change hands, and finding out on the day is its own particular heartbreak.",
+  m:{origin:2.5,meaning:1.5,urban:1.5,home:1,priv:1}},
+ {id:"athome",lens:"home",h:"Your own place, on a day with nothing else in it",
+  d:"The kitchen, the sofa, whoever else lives there underfoot. For a private person this is the strongest option on the whole list: no audience, no outfit, no travel, and they get to react however they actually feel instead of performing it.",
+  w:"It is the hardest setting to photograph. If you want a picture, set a phone running video on a shelf and pull a frame out of it later.",
+  m:{home:3.5,priv:3,pub:-1.5}},
+ {id:"trip",lens:"destination",h:"A trip they believe is just a trip",
+  d:"Propose on the first or second day, not the last night. Spend the rest of it engaged rather than spending the whole week waiting for it, and let them tell people in their own time from somewhere beautiful.",
+  w:"The ring never goes in checked luggage. Carry it on you in a flat case, and know your airport's screening rules before you are standing in the queue.",
+  m:{dest:3,priv:1.5,ample:1}},
+ {id:"gathering",lens:"home",h:"The gathering that already exists",
+  d:"A holiday table, a birthday, a reunion — somewhere their people are already in one room, so you are not building an audience from nothing. The audience is the point here, which is exactly why it only works for someone who would genuinely enjoy it.",
+  w:"It cannot be undone and there is no quiet version once it starts. Be certain rather than hopeful.",
+  m:{pub:3,fam:3,priv:-3}},
+ {id:"injoke",lens:"unconv",h:"The place with the in-joke",
+  d:"The gas station you broke down at. The bench where the bird took their sandwich. The parking lot of a restaurant that has since closed. Nobody else would photograph it, which is the entire point — the story does all the work.",
+  w:"Tell one other person what it means beforehand. Otherwise the photographs are of a parking lot and the meaning lives only in the two of you.",
+  m:{injoke:2.5,meaning:1.5,deadpan:1,urban:1,priv:1.5}},
+ {id:"hobby",lens:"unconv",h:"Where the thing you do together lives",
+  d:"The climbing gym, the pottery studio, the record shop, the chess club, the seven-in-the-morning park with the same six regulars. You ask inside the thing they have built a life around, and the regulars become witnesses.",
+  w:"Ask whoever runs it first. They will almost always say yes and often help — and it stops somebody unlocking a door at the wrong moment.",
+  m:{hobby:2.5,meaning:1,active:1.5,urban:1,pub:0.5}},
+ {id:"story",lens:"destination",h:"Inside the story",
+  d:"The town a book is set in, the diner from the film you have watched eleven times, the ground of the team they inherited from somebody. Borrowed meaning — but borrowed from something they already love, which is not at all the same as borrowing someone else's proposal.",
+  w:"High effort, and usually travel. Check opening seasons: a surprising number of these places are shut in exactly the month you want them.",
+  m:{meaning:1.5,dest:2.5,urban:1}},
+ {id:"world",lens:"unconv",h:"A game, or a world you share",
+  d:"Inside the game you have played together for years, on the server you built, in the campaign you have run since 2019. Increasingly common and frequently mocked by people who were not there. Do it there, then do it again in person with the ring.",
+  w:"Two-stage by design. Decide in advance which one is the real one, or you will both spend the second one wondering.",
+  m:{hobby:2.5,home:2,priv:2}},
+ {id:"transit",lens:"destination",h:"Mid-transit",
+  d:"On a train, on a ferry, in the car on a drive you have done a hundred times, on a plane at cruising altitude. Nowhere to escape to and nothing to do but talk, which is either the most romantic thing available or a trap, depending entirely on them.",
+  w:"Ask the crew first if you want any help at all. And do not do it at the start of a long journey unless you are certain of the answer.",
+  m:{dest:2.5,priv:2.5,urban:0.5}},
+ {id:"unromantic",lens:"unconv",h:"The aggressively unromantic",
+  d:"The hardware store aisle. The DMV queue. A warehouse-store food court at two in the afternoon. This works only for the couple whose entire register is deadpan — and for them it lands harder than any overlook, because the contrast is the joke and the sincerity underneath it is the whole point.",
+  w:"Know which kind of couple you are before you commit. There is no way to redeem this one halfway through.",
+  m:{deadpan:3,injoke:2,priv:2,home:1,pub:-1}},
+ {id:"animal",lens:"unconv",h:"Around the animal",
+  d:"The shelter you got them from, the barn where they ride, the vet's parking lot after good news. Attaching the moment to the creature they would do anything for is a shortcut straight past their composure, which is either unfair or exactly right.",
+  w:"Animals do not take direction. Have somebody else holding the lead or the rope at the actual moment, and accept that there will be a tail in the photographs.",
+  m:{animal:2.5,priv:1.5,home:1.5,nature:1}},
+ {id:"nowhere",lens:"home",h:"No location at all",
+  d:"In bed on a Sunday morning, before either of you has brushed your teeth. The least photogenic option available, and the one a surprising number of people say they would have chosen — because it is the version with no performance anywhere in it.",
+  w:"There is nothing to plan, which means there is nothing to hide behind. Know your first two sentences.",
+  m:{priv:4,home:2,doc:-1.5,pub:-2}}
+];
+
+/* ---- The method library ---------------------------------------------------
+   The eight written out in the How section, for the same reason. Note that how
+   you ask and who chooses the ring are now two separate questions: "we picked
+   it together" used to decide both, and it says nothing whatsoever about
+   whether you ask on a trailhead or in front of forty people. */
+var METHOD_LIB=[
+ {id:"tuesday",h:"The ordinary Tuesday",
+  d:"No occasion, no reservation, no warning. Making dinner, out with the animal, halfway through a weeknight. The whole meaning is that it was not a production — that this is what the rest of it looks like, and you wanted to ask in the middle of it.",
+  m:{priv:3.5,home:1.5,pub:-1.5}},
+ {id:"walk",h:"The walk that ends somewhere",
+  d:"A hike, a beach, a route you have done a hundred times, with one spot chosen in advance. The walking gives you both something to do with the nerves, and arriving somewhere makes a natural moment to stop.",
+  m:{nature:2,active:1.5,priv:1.5}},
+ {id:"photog",h:"The hidden photographer",
+  d:"A photographer waiting at a distance with a long lens, looking like a tourist. You get their real face in the real second, which is the one photograph people actually keep. Agree a signal, a direction to face, and a plan for if you are running late.",
+  m:{doc:3.5,priv:1,pub:-1}},
+ {id:"dinner",h:"Dinner, then the real reason",
+  d:"Before or after the meal, never during. Before, and you both get to enjoy dinner engaged; after, and they do not spend two courses suspicious. Doing it at the table in a full restaurant turns strangers into an audience — only choose that deliberately.",
+  m:{urban:2.5,pub:1.5}},
+ {id:"errand",h:"The staged errand",
+  d:"A believable reason to be somewhere and dressed well — a friend's party that is not happening, a work thing, a portrait session “for your parents”. The cover story does the heavy lifting: it explains the outfit, the location, and why you are nervous.",
+  m:{surprise:3,doc:1,pub:0.5}},
+ {id:"longgame",h:"The long game",
+  d:"A letter a week, a photo album finished on the last page, a route through the places that got you here. It takes weeks of preparation and lands hardest with sentimental people who keep things. Make sure the final step is somewhere you can be alone.",
+  m:{meaning:2.5,ample:2,surprise:1.5}},
+ {id:"reveal",h:"The reveal, then the room",
+  d:"Ask just the two of you, then walk into a bar or a living room where everyone they love is already waiting. A private yes, followed immediately by the celebration. Give them ten minutes in the car first — they will want to look at their own hand for a while.",
+  m:{pub:2.5,fam:2}},
+ {id:"together",h:"Chosen together, timed by you",
+  d:"No surprise about the ring at all — you choose it together, or they choose it outright. The only secret left is when, which is plenty. This is the right call whenever they have strong opinions about something they will wear every day, and it removes the one risk you cannot undo.",
+  m:{collab:3,surprise:-2}}
+];
+
+function rank(lib, t, vetoed){
+  var scored=lib.map(function(x){
+    var s=0, w=0;
+    for(var a in x.m){ s+=(t[a]||0)*x.m[a]; w+=Math.abs(x.m[a]); }
+    return {x:x, s:s/(w+2.5), veto:vetoed && vetoed.indexOf(x.id)>-1};
+  });
+  scored.sort(function(a,b){
+    if(a.veto!==b.veto) return a.veto?1:-1;
+    if(b.s!==a.s) return b.s-a.s;
+    return lib.indexOf(a.x)-lib.indexOf(b.x);
+  });
+  return scored;
+}
+
 var RING_REC={
   classic:{shape:"Round brilliant",set:"Six-prong solitaire, or a hidden halo if you want more sparkle without the era stamp",metal:"Platinum or 14k white gold"},
   modern:{shape:"Oval or elongated cushion",set:"Thin-band solitaire in a low basket, or east-west if they like being slightly ahead of things",metal:"14k yellow gold"},
   vintage:{shape:"Old European cut, antique cushion, or an emerald cut",set:"Milgrain detailing or a three-stone, ideally a genuine estate piece",metal:"18k yellow gold"},
-  unconv:{shape:"Emerald, kite, hexagon, or a sapphire in a color they'd actually choose",set:"Full bezel — modern, protective, and it makes an unusual stone look deliberate",metal:"14k yellow or rose gold"}
+  unconv:{shape:"Emerald, kite, hexagon, or a stone in a colour they would actually choose",set:"Full bezel — modern, protective, and it makes an unusual stone look deliberate",metal:"14k yellow or rose gold"}
 };
 var SPEC_REC={
   size:{line:"Lab-grown · 1.8–2.2 ct · G · VS2 · Excellent cut · elongated shape",why:"Lab-grown is the only honest route to real size at a normal budget, and an elongated shape covers more finger per carat. Buy just under a magic weight — 1.9 ct looks identical to 2.0 and costs meaningfully less."},
-  quality:{line:"1.00–1.20 ct · F–G · VS1 · GIA Excellent cut, polish and symmetry",why:"Cut first, because it's the only C visible across a room. F to G faces up perfectly white in any metal, and VS1 is guaranteed eye-clean without paying for grades nobody can see."},
-  ethics:{line:"Recycled metal · documented-origin or reclaimed stone · report number in hand",why:"Ask for the specific claim in writing — origin country, recycled content, or the estate the stone came from. Adjectives like 'ethical' and 'conflict-free' are unregulated marketing. A reset heirloom beats all of it."},
-  thrift:{line:"0.70–1.00 ct lab-grown · G–H · SI1 eye-clean · 14k gold solitaire",why:"Gold hides warmth, so H does the work of an F. SI1 is where the value lives if you look at the stone or its plot first. And buy at 0.92 rather than 1.00 — the price wall is at the round number, not at the size."}
+  quality:{line:"1.00–1.20 ct · F–G · VS1 · GIA Excellent cut, polish and symmetry",why:"Cut first, because it is the only C visible across a room. F to G faces up perfectly white in any metal, and VS1 is guaranteed eye-clean without paying for grades nobody can see."},
+  ethics:{line:"Recycled metal · documented-origin or reclaimed stone · report number in hand",why:"Ask for the specific claim in writing — origin country, recycled content, or the estate the stone came from. Adjectives like “ethical” and “conflict-free” are unregulated marketing. A reset heirloom beats all of it."},
+  thrift:{line:"0.70–1.00 ct lab-grown · G–H · SI1 eye-clean · 14k gold solitaire",why:"Gold hides warmth, so H does the work of an F. SI1 is where the value lives if you look at the stone or its plot first. And buy at 0.92 rather than 1.00 — the price wall is at the round number, not at the size."},
+  unconv:{line:"Teal or parti sapphire, salt-and-pepper diamond, or a rose cut · 1.2–2.0 ct · bezel or low basket",why:"Skip the grading-report language entirely — coloured stones are not graded on D-to-Z or VS scales, so you are buying with your eyes. Check hardness first (sapphire 9, spinel 8, and nothing below 8 for daily wear), get it bezel-set, and buy from someone who will name the cutter."}
 };
 
 /* ---- Shareable plan links ----
    The payload lives in the URL fragment, which browsers never send to a server, so a plan
-   link reaches nobody but the person holding it. We encode the computed axis scores plus the
-   city, never the answers, and never the free text.
-   composeResult() is a pure function of the tally, so a link reproduces the exact same
-   recommendation while carrying nothing a person wrote about their partner. */
+   link reaches nobody but the person holding it. We encode the computed axis scores, the
+   fixed ids of anything the visitor ticked or changed by hand, and the city — never the
+   answers, and never the free text.
+   composeResult() is a pure function of those three things, so a link reproduces the exact
+   same recommendation while carrying nothing a person wrote about their partner. */
 var restoredTally=null;
 function b64e(s){
   var bytes=new TextEncoder().encode(s), bin="";
@@ -2710,10 +3019,23 @@ function b64d(s){
   for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
   return new TextDecoder().decode(bytes);
 }
+function saidList(){
+  var o=[];
+  /* Ticking "they have named a stone" and never picking one is not a named
+     stone. It used to assert one over a diamond spec. */
+  SAID.forEach(function(s){ if(said[s.id] && !(s.id==="stone" && !saidStone)) o.push(s.id); });
+  if(said.stone && saidStone) o.push("stone."+saidStone);
+  return o;
+}
 function planLink(t){
   try{
-    var code=b64e(JSON.stringify({t:t, c:cityAnswer||undefined}));
-    return location.origin+location.pathname+"#plan="+code;
+    var payload={t:t};
+    var k=saidList(); if(k.length) payload.k=k;
+    var o={}; var any=false;
+    ["loc","method","spec"].forEach(function(f){ if(overrides[f]){o[f]=overrides[f];any=true;} });
+    if(any) payload.o=o;
+    if(cityAnswer) payload.c=cityAnswer;
+    return location.origin+location.pathname+"#plan="+b64e(JSON.stringify(payload));
   }catch(err){ return ""; }
 }
 function currentPlanCode(){
@@ -2729,9 +3051,36 @@ function readPlanFromUrl(){
     var code=h.slice(6);
     if(!code) return null;
     var obj=JSON.parse(b64d(code));
-    if(!obj || typeof obj.t!=="object" || obj.t===null) return null;
+    if(!obj || typeof obj.t!=="object" || obj.t===null || Array.isArray(obj.t)) return null;
     var clean={};
-    for(var k in obj.t){ if(typeof obj.t[k]==="number" && isFinite(obj.t[k])) clean[k]=obj.t[k]; }
+    for(var key in obj.t){ if(typeof obj.t[key]==="number" && isFinite(obj.t[key])) clean[key]=obj.t[key]; }
+    /* Everything below is matched against the fixed lists above rather than trusted.
+       A link is a thing a stranger can hand you, so nothing in it reaches the page
+       unless the page already knew the word. */
+    /* A link opened in a tab that has already been used must not inherit that
+       session. Leaving these behind quoted the previous visitor's own words
+       under someone else's plan, and re-encoded a city they never typed. */
+    said={}; saidStone=""; saidText=""; overrides={};
+    answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill("");
+    cityAnswer="";
+    var ids=SAID.map(function(s){return s.id;});
+    if(Array.isArray(obj.k)) obj.k.slice(0,24).forEach(function(v){
+      if(typeof v!=="string") return;
+      if(v.indexOf("stone.")===0){
+        var sid=v.slice(6);
+        if(STONES.some(function(s){return s.id===sid;})){ said.stone=true; saidStone=sid; }
+        return;
+      }
+      if(ids.indexOf(v)>-1) said[v]=true;
+    });
+    if(obj.o && typeof obj.o==="object"){
+      if(LOC_LIB.some(function(x){return x.id===obj.o.loc;})) overrides.loc=obj.o.loc;
+      if(METHOD_LIB.some(function(x){return x.id===obj.o.method;})) overrides.method=obj.o.method;
+      /* SPEC_REC is a plain object, so a bare lookup also finds "toString" and
+         "constructor" off the prototype and waves them through -- which put the
+         literal word "undefined" in the spec line a visitor takes to a jeweler. */
+      if(Object.prototype.hasOwnProperty.call(SPEC_REC, obj.o.spec)) overrides.spec=obj.o.spec;
+    }
     if(typeof obj.c==="string") cityAnswer=obj.c.slice(0,80);
     return clean;
   }catch(err){ return null; }
@@ -2739,64 +3088,218 @@ function readPlanFromUrl(){
 
 function composeResult(forced){
   var t=forced||tally();
-  var env=top(t,["nature","urban","home","dest"],"nature");
-  var priv=(t.priv||0)-(t.pub||0);
-  var pubKey=priv>=0?"priv":"pub";
-  window.__topEnv={nature:"nature",urban:"urban",home:"home",dest:"destination"}[env];
-  var loc=LOCATION_REC[env+"_"+pubKey]||LOCATION_REC.nature_priv;
 
-  var method;
-  if((t.collab||0)>=2 && !(t.surprise||0)) method=METHOD_REC.collab;
-  else if(priv>=2 && (t.doc||0)>=2) method=METHOD_REC.quiet_doc;
-  else if(priv>=2) method=METHOD_REC.quiet;
-  else if(priv<=-2 && (t.fam||0)>=2) method=METHOD_REC.public;
-  else if(priv<0) method=METHOD_REC.reveal;
-  else method=(t.doc||0)>=2?METHOD_REC.quiet_doc:METHOD_REC.reveal;
+  /* --- what they have actually said comes first ------------------------- */
+  var locVeto=[], methVeto=[];
+  if(saidOn("nopublic")) locVeto.push("gathering");
+  if(saidOn("wantpeople")) locVeto.push("nowhere","transit");
+  if(saidOn("nosurprise")) methVeto.push("errand","longgame");
+  if(saidOn("wantsurprise")) methVeto.push("together");
+  if(saidOn("nophotos")) methVeto.push("photog");
+  if(saidOn("nopublic")) methVeto.push("reveal","dinner");
 
+  /* Stated facts are applied as weights heavy enough to beat any inferred axis,
+     because a partner who has said something out loud is not a guess. They are
+     deliberately not heavy enough to pin the result to an extreme: "not in front
+     of people" rules out an audience, it does not mean they want to be asked in
+     bed before anyone has brushed their teeth. The vetoes above do the ruling
+     out; these only lean. */
+  var w={}; for(var k0 in t) w[k0]=t[k0];
+  function push(a,v){ w[a]=(w[a]||0)+v; }
+  if(saidOn("nopublic")){ push("priv",2); push("pub",-6); }
+  if(saidOn("wantpeople")){ push("pub",4); push("fam",3); push("priv",-2); }
+  if(saidOn("nosurprise")){ push("collab",4); push("surprise",-5); }
+  if(saidOn("wantsurprise")){ push("surprise",4); push("collab",-3); }
+  if(saidOn("ringtogether")) push("collab",5);
+  if(saidOn("place")) push("meaning",4);
+  if(saidOn("person")){ push("fam",3); push("pub",1); }
+  if(saidOn("nodiamond")||saidOn("stone")) push("unconv",2);
+  /* "We have already decided; this is the moment, not the question" changes what
+     the moment is for. Nobody is being asked anything, so staging and cover
+     stories stop making sense and the meaning of the place does the work. */
+  if(saidOn("decided")){ push("meaning",3); push("surprise",-3); methVeto.push("errand"); }
+  if(saidOn("bothasking")){ push("collab",4); push("surprise",-3); methVeto.push("errand"); }
+
+  /* Whether they want a photographer decides how you ask, not where. Fed into
+     the location ranking it quietly argued that "no photographer" meant "pick
+     somewhere unphotographable", and sent people to bed on a Sunday morning. */
+  var wMeth={}; for(var k1 in w) wMeth[k1]=w[k1];
+  if(saidOn("nophotos")) wMeth.doc=(wMeth.doc||0)-4;
+  if(saidOn("wantphotos")) wMeth.doc=(wMeth.doc||0)+4;
+
+  var locRank=rank(LOC_LIB,w,locVeto);
+  var methRank=rank(METHOD_LIB,wMeth,methVeto);
+  var locPick=locRank[0], locAlt=locRank[1];
+  var methPick=methRank[0], methAlt=methRank[1];
+  if(overrides.loc){ LOC_LIB.forEach(function(x){ if(x.id===overrides.loc) locPick={x:x,s:locPick.s}; }); }
+  if(overrides.method){ METHOD_LIB.forEach(function(x){ if(x.id===overrides.method) methPick={x:x,s:methPick.s}; }); }
+  var loc=locPick.x, method=methPick.x;
+  /* What the answers alone would have chosen. The adjuster compares against this
+     so that re-selecting the option already shown is not recorded as a change,
+     announced as one, or written into the link. */
+  naturalPick={loc:locRank[0].x.id, method:methRank[0].x.id,
+               spec:((t.unconv||0)>=2 ? "unconv" : prio0(t))};
+  window.__topEnv=loc.lens;
+
+  /* How close was it? A margin this small means the quiz genuinely could not
+     tell, and saying so is more use than pretending otherwise. */
+  var closeLoc = !overrides.loc && locAlt && (locPick.s-locAlt.s)<0.10 && locAlt.x.id!==loc.id;
+  var closeMeth = !overrides.method && methAlt && (methPick.s-methAlt.s)<0.10 && methAlt.x.id!==method.id;
+
+  /* --- the ring, assembled from four independent decisions --------------- */
+  /* The named stone is resolved first. It used to be resolved after the ring, so
+     "classic jewelry, and they asked for a sapphire" rendered a six-prong
+     solitaire in one card and "bezel or protective setting" in the next. */
+  var stoneObj=null;
+  if(said.stone && saidStone){ STONES.forEach(function(x){ if(x.id===saidStone) stoneObj=x; }); }
   var aes=top(t,["classic","modern","vintage","unconv"],"classic");
   var ring={shape:RING_REC[aes].shape,set:RING_REC[aes].set,metal:RING_REC[aes].metal};
   if((t.bezel||0)>=2) ring.set="Full bezel or a low-profile basket — their hands are in things all week, and a raised prong setting will snag and loosen";
   else if((t.active||0)>=2) ring.set=ring.set+". Skip full pavé and ask for platinum prongs — they hold up better under daily wear";
+  if((t.delicate||0)>=2 && (t.bezel||0)<2 && (t.active||0)<2)
+    ring.set=ring.set+". Their hands are kind to jewelry, so the fragile options are genuinely open to you here — pavé, a thin band, a raised setting — where most people have to rule them out";
+  if((t.hardy||0)>=2 && aes!=="vintage") ring.metal="Platinum, or 14k gold — skip 18k, it is softer and this ring is going to take knocks";
+  if((t.ethics||0)>=2) ring.metal=ring.metal+", recycled if they will document it";
+  /* A stone they asked for by name outranks the aesthetic bucket for the shape,
+     and decides the setting only when the stone actually needs protecting. A lab
+     diamond is a plain-solitaire candidate; an opal is not. */
+  if(stoneObj && !saidOn("noring")){
+    ring.shape=stoneName(stoneObj)+(stoneObj.mohs?" · Mohs "+stoneObj.mohs:"")+
+      (stoneObj.plain?"" : ", in a shape they can choose by eye");
+    if(stoneObj.protect) ring.set="Full bezel, or a halo with metal all the way round the girdle — "+
+      (stoneObj.mohs ? "at Mohs "+stoneObj.mohs+" this stone chips" : "unless it is Mohs 8 or harder, this stone chips")+
+      ", and the setting is what stands between it and a doorframe";
+    else if((t.bezel||0)<2 && (t.active||0)<2)
+      ring.set=ring.set+". At Mohs "+stoneObj.mohs+" the stone itself is hard enough that the setting is a taste decision rather than a durability one";
+  }
+  if(saidOn("tworings")) ring.shape=ring.shape+" — and a second band for you, ordered at the same time so the metals match";
+  if(saidOn("noring")) { ring.shape="Not a ring"; ring.set="A necklace, a watch, a tattoo appointment booked for the week after, a tree in the yard — they told you, so believe them"; ring.metal="Nothing to resize, which removes the one measurement everybody gets wrong"; }
 
-  var spec=SPEC_REC[top(t,["size","quality","ethics","thrift"],"quality")];
-  var unconv=(t.unconv||0)>=2;
-  if(unconv) spec={
-    line:"Teal or parti sapphire, salt-and-pepper diamond, or a rose-cut · 1.2–2.0 ct · bezel or low basket",
-    why:"Skip the grading-report language entirely — colored stones aren't graded on D-to-Z or VS scales, so you're buying with your eyes. Check hardness first (sapphire 9, spinel 8, and nothing below 8 for daily wear), get it bezel-set, and buy from someone who will name the cutter."
+  /* --- the spec ---------------------------------------------------------- */
+  var prio=top(t,["size","quality","ethics","thrift"],"quality");
+  var specKey = overrides.spec || ((t.unconv||0)>=2 ? "unconv" : prio);
+  var spec={line:SPEC_REC[specKey].line, why:SPEC_REC[specKey].why};
+  /* What they would trade off for still has to change something once the stone
+     itself is settled -- otherwise the third control on the result promises to
+     move the plan and, for anyone who named a stone or ruled out a diamond,
+     silently does nothing at all. */
+  var PRIO_NOTE={
+    size:"On the trade-off you named: push the carat rather than the rarity. Coloured stones are far cheaper per carat than diamonds, which is the one place this choice saves you real money.",
+    quality:"On the trade-off you named: in a coloured stone, better means colour saturation and cut, not a clarity grade — there is no grade to buy. Look at three side by side in daylight and pick with your eyes.",
+    ethics:"On the trade-off you named: this is where provenance is easiest to satisfy. Montana sapphire, Australian parti and reclaimed stones all come with a traceable answer a seller will put in writing.",
+    thrift:"On the trade-off you named: this is the cheapest good answer on the page. A sapphire or spinel of real quality costs a fraction of the equivalent diamond, which leaves the budget where you said you wanted it.",
+    unconv:"You have pointed this at the unconventional end deliberately. That being so, spend the attention on the cut and the setting rather than on the category — an unusual stone badly cut just looks like a mistake. Ask who cut it, and have it bezelled."
   };
-  var runway=(t.rush||0)>=2?"rush":((t.ample||0)>=2?"ample":"normal");
+  var prioNote=(t[prio]||0)>=2 || overrides.spec ? PRIO_NOTE[overrides.spec && PRIO_NOTE[overrides.spec] ? overrides.spec : prio] : "";
+  if(specKey==="unconv" && prioNote) spec.why=spec.why+" "+prioNote;
+  if(stoneObj){
+    spec={line:stoneName(stoneObj)+(stoneObj.mohs?" · Mohs "+stoneObj.mohs:"")+" · 1.2–2.0 ct · "+
+            (stoneObj.protect?"bezel or protective setting":"setting to taste")+" · "+
+            (stoneObj.graded?"ask for the report and check the number is inscribed on the girdle":"ask who cut it, and buy from someone who will tell you"),
+          why:"They named the stone, so the stone is settled and everything else bends around it. "+stoneObj.note+(prioNote?" "+prioNote:"")};
+  } else if(saidOn("nodiamond") && specKey!=="unconv"){
+    spec={line:SPEC_REC.unconv.line, why:"They have said no diamond, so this is the sapphire-and-spinel end of the market. "+SPEC_REC.unconv.why+(prioNote?" "+prioNote:"")};
+  }
+  if(saidOn("noring")) spec={line:"No stone, no setting, no size",why:"They have told you they do not want a ring. Spend the budget on the thing they do want and on the day itself — and if you want something to hand over in the moment, a single flower or the empty box both work better than a ring they will quietly never wear."};
+
+  /* --- timing ------------------------------------------------------------ */
+  var runway=(t.rush||0)>=2?"rush":((t.ample||0)>=2?"ample":((t.normal||0)>=2?"normal":"normal"));
   var timing={
-    rush:"You're weeks out, so custom is off the table. Buy a ready-to-ship setting with a stone already in stock, or propose with an heirloom or plain band and design the real ring together afterwards. Book the photographer today if you want one — that's the binding constraint, not the ring.",
+    rush:"You are weeks out, so custom is off the table. Buy a ready-to-ship setting with a stone already in stock, or propose with an heirloom or a plain band and design the real ring together afterwards. Book the photographer today if you want one — that is the binding constraint, not the ring.",
     normal:"A couple of months is comfortable for a ready-made ring plus a resize, and tight for a full custom order. Work backwards from the date in the planner: photographer at eight weeks, stone at six, permits at four.",
-    ample:"You have room to do this properly. Spend it on two things people skip: getting the ring size right without tipping them off, and scouting the location in the same season and at the same hour you'll actually propose."
+    ample:"You have room to do this properly. Spend it on two things people skip: getting the size right without tipping them off, and scouting the location in the same season and at the same hour you will actually propose."
   }[runway];
+  if(saidOn("sizeknown")) timing=timing.replace("getting the size right without tipping them off","scouting a second location you would be equally happy with");
 
-  var moves=["Get their ring size this week. It's the step that delays everything else, and it takes longer than you think."];
-  if((t.collab||0)>=2) moves.push("Bring them into the ring decision properly — they've already told you they want a say. Keep the timing to yourself.");
-  else moves.push("Recruit exactly one accomplice — the sibling or friend who can keep a secret and borrow a ring.");
-  if((t.doc||0)>=2) moves.push("Enquire with two proposal photographers now. They book out months ahead between Thanksgiving and Valentine's Day.");
-  if(env==="nature"||env==="urban") moves.push("Visit the location in person at the hour you plan to propose, on the same day of the week. Check light, crowds and where someone could stand unseen.");
-  if(env==="dest") moves.push("Check your airline and airport's rules for carrying the ring, and never put it in checked luggage.");
-  if(env==="home") moves.push("Set a phone recording video on a shelf. It's the only practical way to get a picture of an at-home proposal.");
-  moves.push("Insure the ring the day you collect it, before you start carrying it around waiting for the right moment.");
+  /* --- what to do this week ---------------------------------------------- */
+  var moves=[];
+  if(!saidOn("sizeknown") && !saidOn("noring")){
+    moves.push(((t.collab||0)>=3 || saidOn("ringtogether"))
+      ? "Measure the size together properly at a jeweler rather than guessing at home. You are not hiding anything, so use that — a sized band is the one thing that delays everything else."
+      : "Get their ring size this week. It is the step that delays everything else, and it takes longer than you think.");
+  }
+  if(saidOn("ringtogether") || (t.collab||0)>=2) moves.push("Bring them into the ring decision properly — they have already told you they want a say. Keep the timing to yourself.");
+  else if(!saidOn("noring")) moves.push("Recruit exactly one accomplice — the person who can keep a secret and borrow a ring.");
+  if(saidOn("person")) moves.push("Work out what the person they want there actually needs to know, and when. Tell them the date and the city, not the details — every extra person is another chance at a leak.");
+  if(saidOn("wantphotos") || ((t.doc||0)>=2 && !saidOn("nophotos"))) moves.push("Enquire with two proposal photographers now. They book out months ahead between Thanksgiving and Valentine's Day.");
+  if(loc.lens==="nature"||loc.lens==="urban"||loc.id==="origin"||loc.id==="injoke") moves.push("Visit the location in person at the hour you plan to propose, on the same day of the week. Check the light, the crowds, and where somebody could stand unseen.");
+  if(loc.lens==="destination") moves.push("Check your airline and airport's rules for carrying the ring, and never put it in checked luggage.");
+  if(loc.lens==="home") moves.push("Set a phone recording video on a shelf. It is the only practical way to get a picture of this one.");
+  if(loc.id==="hobby"||loc.id==="animal"||loc.id==="world") moves.push("Ask whoever runs the place — the gym, the barn, the server — before you commit to it. They almost always say yes, and they can stop somebody walking in at the wrong moment.");
+  if(!saidOn("noring")) moves.push("Insure the ring the day you collect it, before you start carrying it around waiting for the right moment.");
 
+  /* --- the blocks -------------------------------------------------------- */
   var cityBlock = cityAnswer
-    ? '<p class="small" style="margin-top:18px">The city lens in Locations is set to <b>'+esc(cityAnswer)+'</b> and tuned to '+esc(window.__topEnv)+' spots. <button class="linkbtn" style="color:var(--accent);font-size:inherit;padding:0" data-go="locations">Go see the map searches →</button></p>'
+    ? '<p class="small" style="margin-top:18px">The city lens in Locations is set to <b>'+esc(cityAnswer)+'</b> and tuned to '+esc(loc.lens==="unconv"?"unconventional":loc.lens)+' spots. <button class="linkbtn" style="color:var(--accent);font-size:inherit;padding:0" data-go="locations">Go see the map searches →</button></p>'
     : '';
 
   var owns=customAnswers();
+  if(saidText) owns.push({q:"What they have said, in their words", a:saidText});
   var ownBlock = owns.length
     ? '<div class="own-echo"><span class="eyebrow">In your words</span>'+
       owns.map(function(o){
         return '<blockquote><span class="oq">'+esc(o.q)+'</span>“'+esc(o.a)+'”</blockquote>';
       }).join("")+
-      '<p class="tiny" style="margin-top:12px">Matched by keyword, which is a blunt instrument. If the recommendation above missed what you meant, trust yourself over it.</p></div>'
+      '<p class="tiny" style="margin-top:12px">Matched by keyword, which is a blunt instrument: it reads “not” and “hate” as reversals, and it still cannot read a sentence. If the recommendation above missed what you meant, change it below — and trust yourself over it either way.</p></div>'
     : '';
 
-  var unconvBlock = unconv
-    ? '<div class="callout" style="margin-top:26px"><span class="eyebrow">You said they\'d want something unconventional</span>'+
-      '<p>Two things that trip people up here. First, an unusual ring is harder to replace and harder to resize — a toi et moi, an east-west setting or an odd-shaped stone often can\'t be sized more than half a step, so the measurement has to be right the first time. Second, unconventional does not mean unprotected: the weirder the stone, the more it needs a bezel and the more the hardness number matters.</p>'+
-      '<p>And for the location — the rule is that it should be specific to the two of you, not just odd. A record shop means something if that\'s where you spent every Saturday. It means nothing if you picked it because it photographs interestingly. '+
+  var saidIds=saidList();
+  var saidBlock="";
+  if(saidIds.length){
+    var labels=[];
+    SAID.forEach(function(s){
+      if(!said[s.id]) return;
+      if(s.id==="stone"){
+        if(!stoneObj) return;
+        labels.push("They have named the stone: "+stoneName(stoneObj).toLowerCase()+".");
+        return;
+      }
+      labels.push(s.t);
+    });
+    saidBlock='<div class="note-good" style="margin-top:26px"><b>What you told us they have actually said</b> — this outranked the rest of the quiz wherever the two disagreed:<br>'+
+      labels.map(function(l){return esc(l);}).join("<br>")+'</div>';
+  }
+
+  var altBlock="";
+  if(closeLoc||closeMeth){
+    var bits=[];
+    if(closeLoc) bits.push("the place could as easily be <b>"+esc(locAlt.x.h.toLowerCase())+"</b>");
+    if(closeMeth) bits.push("the method could as easily be <b>"+esc(methAlt.x.h.toLowerCase())+"</b>");
+    altBlock='<p class="small" style="margin-top:16px;max-width:64ch"><b>It was close.</b> On your answers '+bits.join(", and ")+
+      '. That is not a hedge — it means the two of you sit between them, so pick whichever you can already picture, or swap it below.</p>';
+  }
+
+  var adjustBlock=
+    '<div class="adjust" id="adjustBox">'+
+      '<span class="eyebrow" id="adjustTitle">Not quite it?</span>'+
+      '<p class="tiny" id="adjustLive" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap"></p>'+
+      '<p class="small" style="margin-top:9px">Change any of these and the rest of the plan moves with it — the action list, the timing note and the link all follow. Changing them tells us nothing: it happens in your browser, and we do not count it. The link below carries whichever you pick, so a plan you send yourself is the plan you fixed.</p>'+
+      '<div class="adjust-row" role="group" aria-labelledby="adjustTitle">'+
+        '<label><span class="tiny">Where</span><select class="field" id="adjLoc">'+
+          locRank.map(function(r){ return '<option value="'+esc(r.x.id)+'"'+(r.x.id===loc.id?" selected":"")+'>'+esc(r.x.h)+(r.veto?" (they said no to this)":"")+'</option>'; }).join("")+
+        '</select></label>'+
+        '<label><span class="tiny">How</span><select class="field" id="adjMethod">'+
+          methRank.map(function(r){ return '<option value="'+esc(r.x.id)+'"'+(r.x.id===method.id?" selected":"")+'>'+esc(r.x.h)+(r.veto?" (you said no to this)":"")+'</option>'; }).join("")+
+        '</select></label>'+
+        '<label><span class="tiny">The ring, roughly</span><select class="field" id="adjSpec">'+
+          [["size","Biggest stone the budget allows"],["quality","A smaller, better stone"],["ethics","Origin and materials first"],["thrift","Spend less here, more on the life"],["unconv","Something unconventional"]]
+            .map(function(p){ return '<option value="'+p[0]+'"'+(p[0]===specKey?" selected":"")+'>'+esc(p[1])+'</option>'; }).join("")+
+        '</select></label>'+
+      '</div>'+
+      (stoneObj
+        ? '<p class="tiny" style="margin-top:12px">The third control sets the direction of the budget. The stone itself is already settled — you told us they asked for '+esc(stoneObj.t.toLowerCase())+', and that stays whatever you pick here.</p>'
+        : '')+
+      (Object.keys(overrides).length
+        ? '<p class="tiny" style="margin-top:12px">You have changed this from what your answers suggested. <button class="linkbtn" style="color:var(--accent);font-size:inherit;padding:0" id="adjReset" type="button">Put it back →</button></p>'
+        : '<p class="tiny" style="margin-top:12px">These are ordered by how well they fit what you told us, best first.</p>')+
+    '</div>';
+
+  /* A lab-grown diamond is graded on the ordinary scales and sits happily in a
+     plain solitaire, so none of the warnings below apply to it. */
+  var unconvBlock = (specKey==="unconv" || saidOn("nodiamond") || (stoneObj && !stoneObj.plain))
+    ? '<div class="callout" style="margin-top:26px"><span class="eyebrow">Because this one is not a plain solitaire</span>'+
+      '<p>Two things trip people up here. First, an unusual ring is harder to replace and harder to resize — a toi et moi, an east-west setting or an odd-shaped stone often cannot be sized more than half a step, so the measurement has to be right the first time. Second, unconventional does not mean unprotected: the hardness number decides how much setting the stone needs, and anything under Mohs 8 will show daily wear within a couple of years whatever it is set in.</p>'+
+      '<p>And for the location — the rule is that it should be specific to the two of you, not merely odd. A record shop means something if that is where you spent every Saturday. It means nothing if you picked it because it photographs interestingly. '+
       '<button class="linkbtn" style="color:var(--accent);font-size:inherit;padding:0" data-go="locations">See the unconventional locations →</button></p></div>'
     : '';
 
@@ -2805,6 +3308,7 @@ function composeResult(forced){
       '<h2 style="margin-top:12px">'+esc(loc.h)+'</h2>'+
       '<p class="small" style="margin-top:14px;max-width:64ch">'+esc(loc.d)+'</p>'+
       '<p class="watch" style="margin-top:16px;max-width:64ch"><b>Watch out:</b> '+esc(loc.w)+'</p>'+
+      altBlock+
     '</div>'+
     '<div class="rec-row">'+
       '<div class="rec"><span class="eyebrow">How</span><h3>'+esc(method.h)+'</h3><p>'+esc(method.d)+'</p></div>'+
@@ -2817,19 +3321,21 @@ function composeResult(forced){
       '<span class="eyebrow">Take this to a jeweler</span>'+
       '<div class="spec-line"><span class="tag">SPEC</span> &nbsp;'+esc(spec.line)+'</div>'+
       '<p class="small" style="margin-top:13px;max-width:68ch">'+esc(spec.why)+'</p>'+
+      saidBlock+
       cityBlock+
+      adjustBlock+
       ownBlock+
       unconvBlock+
       '<h3 style="margin:30px 0 16px">What to do this week</h3>'+
       '<ul class="moves">'+moves.map(function(m,i){return '<li data-n="'+(i+1)+'">'+esc(m)+'</li>';}).join("")+'</ul>'+
       '<div class="share">'+
         '<span class="eyebrow">Keep this</span>'+
-        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation — no account, and nothing to sign up for.</p>'+
+        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation, including anything you changed — no account, and nothing to sign up for.</p>'+
         '<div class="share-row">'+
           '<input class="field" id="shareUrl" readonly value="'+esc(planLink(t))+'" aria-label="Link to this plan">'+
           '<button class="btn ghost" id="shareCopy" type="button">Copy link</button>'+
         '</div>'+
-        '<p class="tiny" style="margin-top:10px"><b>The link carries your scores and the city you named — never anything you wrote about your partner.</b> It sits after the # in the address, which browsers never send to a server, so copying it involves us not at all. Wherever it ends up, check that inbox is yours alone — a plan sitting in a shared inbox is how a surprise stops being one.</p>'+
+        '<p class="tiny" style="margin-top:10px"><b>The link carries your scores, the boxes you ticked, anything you swapped and the city you named — never a word you wrote about your partner.</b> It sits after the # in the address, which browsers never send to a server, so copying it involves us not at all. Wherever it ends up, check that inbox is yours alone — a plan sitting in a shared inbox is how a surprise stops being one.</p>'+
         '<div class="mailrow">'+
           '<label class="eyebrow" for="planEmail">Or have it emailed to you</label>'+
           '<div class="share-row" style="margin-top:11px">'+
@@ -2845,120 +3351,254 @@ function composeResult(forced){
         '<button class="btn" data-go="diamonds">Now learn the 4Cs</button>'+
         '<button class="linkbtn" id="restart" type="button">Start over</button>'+
       '</div>'+
-      '<p class="tiny" style="margin-top:20px">A starting point, not an instruction. You know them; this is a structured second opinion.</p>'+
+      '<p class="tiny" style="margin-top:20px">A starting point, not an instruction. You know them; this is a structured second opinion, and the controls above are there because it will sometimes be wrong.</p>'+
     '</div>';
+}
+
+var STEPS=function(){ return Q.length+1; };   /* the questions, then the one about what they have said */
+var OPTKEYS=["A","B","C","D","E","F","G"];
+
+function wireResult(){
+  var sc=$("shareCopy");
+  if(sc) sc.addEventListener("click",function(){
+    var box=$("shareUrl");
+    var done=function(ok){ sc.textContent = ok?"Copied":"Press Ctrl/Cmd-C"; setTimeout(function(){sc.textContent="Copy link";},2200); };
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(box.value).then(function(){done(true);},function(){box.select();done(false);});
+        return;
+      }
+    }catch(err){}
+    box.select(); done(false);
+  });
+
+  /* The adjuster. Everything here happens in this browser: changing the plan
+     re-runs the same function the quiz runs, and the link updates to match.
+     Nothing is sent, counted or recorded — if the recommendation is wrong for
+     somebody, the useful thing is for them to fix it, not for us to find out. */
+  ["loc","method","spec"].forEach(function(f){
+    var id="adj"+f.charAt(0).toUpperCase()+f.slice(1);
+    var sel=$(id);
+    if(!sel) return;
+    sel.addEventListener("change",function(){
+      /* Choosing the option that was already showing is not an override. */
+      if(sel.value===naturalPick[f]) delete overrides[f];
+      else overrides[f]=sel.value;
+      /* Re-rendering replaces the select the person is operating, so the focus
+         has to be put back on its replacement or a keyboard user is dropped at
+         the top of the document after every single change. */
+      rerenderResult(id);
+    });
+  });
+  var reset=$("adjReset");
+  if(reset) reset.addEventListener("click",function(){ overrides={}; rerenderResult("adjLoc"); });
+
+  var sendBtn=$("planSend");
+  if(sendBtn) sendBtn.addEventListener("click",function(){
+    /* Status goes in its own element. #planMsg is the standing disclosure of
+       what sending does, and a validation error must not wipe it. */
+    var box=$("planEmail"), st=$("planStatus"), note=$("planOptIn");
+    var addr=(box.value||"").trim();
+    function say(kind, text){ st.className="tiny"+(kind?" "+kind:""); st.textContent=text; }
+    if(addr.indexOf("@")<1 || addr.length>254){
+      say("bad","That does not look like an email address.");
+      box.focus(); return;
+    }
+    sendBtn.disabled=true; sendBtn.textContent="Sending…";
+    say("","Sending…");
+    fetch("/api/plan-email",{
+      method:"POST",
+      headers:{"content-type":"application/json"},
+      body:JSON.stringify({ email:addr, plan:currentPlanCode(), optIn: !!(note && note.checked) })
+    }).then(function(r){
+      if(r.ok){
+        say("ok","Sent. If it is not there in a minute, check the spam folder — and delete it if that inbox is shared.");
+        box.value="";
+        return;
+      }
+      /* The cap is per internet connection, not per address — say so, or a
+         household on one router reads the fallback as an accusation. */
+      var capped="That is more of these than we send to one internet connection. Copy the link above instead.";
+      if(r.status===429){
+        /* The limiter writes a message meant to be shown as-is, because the
+           wait can be hours and "try again in a moment" would be a lie. */
+        return r.json().then(function(b){
+          say("bad", (b && b.message) ? String(b.message).slice(0,200) : capped);
+        },function(){ say("bad",capped); });
+      }
+      if(r.status===503){
+        /* 503 covers two different things: email was never configured, and
+           the limiter is momentarily unreachable. Only the first is permanent. */
+        return r.json().then(function(b){
+          say("bad", (b && b.error==="not_configured")
+            ? "Email is not switched on yet. Copy the link above instead."
+            : "Email is briefly unavailable. Copy the link above, or try again in a few minutes.");
+        },function(){
+          say("bad","Email is not available right now. Copy the link above instead.");
+        });
+      }
+      if(r.status===404 || r.status===405){
+        say("bad","Email only works on justnotthering.com. Copy the link above instead.");
+      } else {
+        say("bad","That did not send. Try again in a moment, or copy the link above.");
+      }
+    }).catch(function(){
+      say("bad","Could not reach the server. Copy the link above instead.");
+    }).then(function(){
+      sendBtn.disabled=false; sendBtn.textContent="Send it";
+    });
+  });
+
+  $("restart").addEventListener("click",function(){
+    qi=0;
+    answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill("");
+    said={}; saidStone=""; saidText=""; overrides={}; restoredTally=null;
+    /* The city is part of the previous person's answers too. Left behind, it
+       pre-filled the next run and rode along in their link. */
+    cityAnswer=""; lensMode="auto";
+    if($("cityInput")) $("cityInput").value="";
+    if($("lensOut")) $("lensOut").innerHTML="";
+    /* lensMode went back to auto but the chip the last person pressed stayed
+       pressed, so the control disagreed with the state it controls. */
+    [].slice.call(document.querySelectorAll("#lensModes .modechip")).forEach(function(o){
+      o.setAttribute("aria-pressed", o.getAttribute("data-mode")==="auto");
+    });
+    if((location.hash||"").indexOf("#plan=")===0) history.replaceState({}, "", location.pathname+"#quiz");
+    $("quizStage").className="quiz-body";
+    renderQ();
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+}
+
+function rerenderResult(refocusId){
+  var stage=$("quizStage");
+  stage.className="";
+  stage.innerHTML=composeResult(restoredTally);
+  wireResult();
+  if(cityAnswer) renderLens(cityAnswer, window.__topEnv);
+  if(refocusId){
+    var box=$("adjustBox");
+    if(box && box.scrollIntoView) box.scrollIntoView({block:"center",behavior:"auto"});
+    var back=$(refocusId);
+    if(back && back.focus) back.focus({preventScroll:true});
+    var live=$("adjustLive");
+    if(live) live.textContent="Plan updated. "+((stage.querySelector("h2")||{}).textContent||"");
+  }
+}
+
+function renderSaidStep(){
+  var stage=$("quizStage");
+  $("qcount").textContent="Last one — what they have said";
+  $("qbar").style.width="100%";
+  stage.className="quiz-body";
+
+  var groups=[];
+  SAID.forEach(function(s){ if(groups.indexOf(s.g)<0) groups.push(s.g); });
+  var body=groups.map(function(g){
+    var gid="saidgrp"+groups.indexOf(g);
+    return '<div class="said-group" role="group" aria-labelledby="'+gid+'"><span class="eyebrow" id="'+gid+'">'+esc(g)+'</span><div class="said-list">'+
+      SAID.filter(function(s){return s.g===g;}).map(function(s){
+        return '<label class="said-item"><input type="checkbox" data-said="'+esc(s.id)+'"'+(said[s.id]?" checked":"")+
+          (s.pick?' aria-controls="stonePick"':'')+
+          '><span>'+esc(s.t)+'</span></label>'+
+          (s.pick
+            ? '<div class="said-pick" id="stonePick"'+(said[s.id]?"":" hidden")+'>'+
+              '<label class="tiny" for="stoneSel" style="display:block;margin-bottom:7px">Which one?</label>'+
+              '<select class="field" id="stoneSel" style="max-width:340px">'+
+                '<option value="">Pick the stone…</option>'+
+                STONES.map(function(st){ return '<option value="'+esc(st.id)+'"'+(saidStone===st.id?" selected":"")+'>'+esc(st.t)+'</option>'; }).join("")+
+              '</select></div>'
+            : '');
+      }).join("")+'</div></div>';
+  }).join("");
+
+  stage.innerHTML=
+    '<p class="q-prompt">Has your partner actually said anything about this?</p>'+
+    '<p class="q-note">Everything above this was us inferring. Anything you tick here is something they told you, so it outranks the inference — tick nothing and the plan runs on the ten answers alone.</p>'+
+    '<div class="said-wrap">'+body+'</div>'+
+    '<div class="own-wrap" style="margin-top:20px">'+
+      '<label class="eyebrow" for="saidText" style="display:block;margin-bottom:9px">Anything else they have said, in their words</label>'+
+      '<textarea class="field" id="saidText" rows="2" placeholder="e.g. They keep saying they want their brother to be the first person who knows.">'+esc(saidText||"")+'</textarea>'+
+      '<p class="tiny" style="margin-top:8px">Quoted back to you at the top of the plan and nowhere else. Unlike the boxes above, this one deliberately does not travel in the shareable link — the same rule the rest of your own words follow.</p>'+
+    '</div>'+
+    '<div style="margin-top:24px"><label class="eyebrow" for="quizCity" style="display:block;margin-bottom:9px">Optional — where are you?</label>'+
+      '<input class="field" id="quizCity" type="text" placeholder="City or region" style="max-width:340px" value="'+esc(cityAnswer)+'"></div>'+
+    '<div class="quiz-foot">'+
+      '<button class="linkbtn" id="backBtn" type="button">← Back</button>'+
+      '<div class="spacer"></div>'+
+      '<button class="btn" id="nextBtn" type="button">See the plan</button></div>';
+
+  [].slice.call(stage.querySelectorAll("[data-said]")).forEach(function(cb){
+    cb.addEventListener("change",function(){
+      var id=cb.getAttribute("data-said");
+      if(cb.checked) said[id]=true; else delete said[id];
+      var pick=$("stonePick");
+      if(id==="stone" && pick){
+        /* aria-expanded is not valid on a checkbox, so the reveal is announced by
+           moving focus into it instead. */
+        pick.hidden=!cb.checked;
+        if(cb.checked){ var sel=$("stoneSel"); if(sel && sel.focus) sel.focus(); }
+        else { saidStone=""; }
+      }
+    });
+  });
+  var ss=$("stoneSel");
+  if(ss) ss.addEventListener("change",function(){ saidStone=ss.value; });
+  var st=$("saidText");
+  if(st) st.addEventListener("input",function(){ saidText=this.value; });
+  /* Read on the way past as well as on Next, or pressing Back throws it away. */
+  var cf0=$("quizCity");
+  if(cf0) cf0.addEventListener("input",function(){ cityAnswer=this.value.trim(); });
+
+  $("backBtn").addEventListener("click",function(){ qi--; renderQ(); });
+  $("nextBtn").addEventListener("click",function(){
+    var cf=$("quizCity");
+    if(cf){
+      cityAnswer=cf.value.trim();
+      if(cityAnswer) $("cityInput").value=cityAnswer;
+    }
+    if(st) saidText=(st.value||"").trim();
+    qi++;
+    renderQ();
+    if(cityAnswer) renderLens(cityAnswer, window.__topEnv);
+  });
 }
 
 function renderQ(){
   var stage=$("quizStage");
-  if(qi>=Q.length){
+  if(qi>Q.length){
     $("qcount").textContent="Result";
     $("qbar").style.width="100%";
     stage.className="";
     stage.innerHTML=composeResult(restoredTally);
-    var sc=$("shareCopy");
-    if(sc) sc.addEventListener("click",function(){
-      var box=$("shareUrl");
-      var done=function(ok){ sc.textContent = ok?"Copied":"Press Ctrl/Cmd-C"; setTimeout(function(){sc.textContent="Copy link";},2200); };
-      try{
-        if(navigator.clipboard && navigator.clipboard.writeText){
-          navigator.clipboard.writeText(box.value).then(function(){done(true);},function(){box.select();done(false);});
-          return;
-        }
-      }catch(err){}
-      box.select(); done(false);
-    });
-    var sendBtn=$("planSend");
-    if(sendBtn) sendBtn.addEventListener("click",function(){
-      /* Status goes in its own element. #planMsg is the standing disclosure of
-         what sending does, and a validation error must not wipe it. */
-      var box=$("planEmail"), st=$("planStatus"), note=$("planOptIn");
-      var addr=(box.value||"").trim();
-      function say(kind, text){ st.className="tiny"+(kind?" "+kind:""); st.textContent=text; }
-      if(addr.indexOf("@")<1 || addr.length>254){
-        say("bad","That does not look like an email address.");
-        box.focus(); return;
-      }
-      sendBtn.disabled=true; sendBtn.textContent="Sending…";
-      say("","Sending…");
-      fetch("/api/plan-email",{
-        method:"POST",
-        headers:{"content-type":"application/json"},
-        body:JSON.stringify({ email:addr, plan:currentPlanCode(), optIn: !!(note && note.checked) })
-      }).then(function(r){
-        if(r.ok){
-          say("ok","Sent. If it is not there in a minute, check the spam folder — and delete it if that inbox is shared.");
-          box.value="";
-          return;
-        }
-        /* The cap is per internet connection, not per address — say so, or a
-           household on one router reads the fallback as an accusation. */
-        var capped="That is more of these than we send to one internet connection. Copy the link above instead.";
-        if(r.status===429){
-          /* The limiter writes a message meant to be shown as-is, because the
-             wait can be hours and "try again in a moment" would be a lie. */
-          return r.json().then(function(b){
-            say("bad", (b && b.message) ? String(b.message).slice(0,200) : capped);
-          },function(){ say("bad",capped); });
-        }
-        if(r.status===503){
-          /* 503 covers two different things: email was never configured, and
-             the limiter is momentarily unreachable. Only the first is permanent. */
-          return r.json().then(function(b){
-            say("bad", (b && b.error==="not_configured")
-              ? "Email is not switched on yet. Copy the link above instead."
-              : "Email is briefly unavailable. Copy the link above, or try again in a few minutes.");
-          },function(){
-            say("bad","Email is not available right now. Copy the link above instead.");
-          });
-        }
-        if(r.status===404 || r.status===405){
-          say("bad","Email only works on justnotthering.com. Copy the link above instead.");
-        } else {
-          say("bad","That did not send. Try again in a moment, or copy the link above.");
-        }
-      }).catch(function(){
-        say("bad","Could not reach the server. Copy the link above instead.");
-      }).then(function(){
-        sendBtn.disabled=false; sendBtn.textContent="Send it";
-      });
-    });
-    $("restart").addEventListener("click",function(){
-      qi=0; answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill(""); restoredTally=null;
-      if((location.hash||"").indexOf("#plan=")===0) history.replaceState({}, "", location.pathname+"#quiz");
-      $("quizStage").className="quiz-body";
-      renderQ();
-      window.scrollTo({top:0,behavior:"smooth"});
-    });
+    wireResult();
     return;
   }
-  var q=Q[qi], keys=["A","B","C","D","E"], oIdx=q.o.length;
+  if(qi===Q.length){ renderSaidStep(); return; }
+
+  var q=Q[qi], oIdx=q.o.length;
   $("qcount").textContent="Question "+(qi+1)+" of "+Q.length;
-  $("qbar").style.width=((qi/Q.length)*100+11)+"%";
+  $("qbar").style.width=((qi/STEPS())*100+9)+"%";
   stage.className="quiz-body";
   stage.innerHTML=
     '<p class="q-prompt">'+esc(q.p)+'</p><p class="q-note">'+esc(q.n)+'</p>'+
     '<div class="opts">'+
       q.o.map(function(o,i){
         return '<button class="opt" type="button" aria-pressed="'+(answers[qi]===i)+'">'+
-          '<span class="key">'+keys[i]+'</span><span>'+esc(o[0])+'</span></button>';
+          '<span class="key">'+OPTKEYS[i]+'</span><span>'+esc(o[0])+'</span></button>';
       }).join("")+
       '<button class="opt opt-other" type="button" aria-pressed="'+(answers[qi]===oIdx)+'">'+
-        '<span class="key">'+keys[4]+'</span><span>None of these — '+esc(q.own)+'</span></button>'+
+        '<span class="key">'+OPTKEYS[oIdx]+'</span><span>None of these — '+esc(q.own)+'</span></button>'+
     '</div>'+
     '<div class="own-wrap" id="ownWrap"'+(answers[qi]===oIdx?"":" hidden")+'>'+
       '<label class="eyebrow" for="ownText" style="display:block;margin-bottom:9px">In your own words</label>'+
       '<textarea class="field" id="ownText" rows="3" placeholder="'+esc(q.ph)+'">'+esc(customs[qi])+'</textarea>'+
-      '<p class="tiny" style="margin-top:8px">Read by keyword against the same things the options above measure. Whatever you write is quoted back in the result.</p>'+
+      '<p class="tiny" style="margin-top:8px">Read by keyword against only the things this question measures, and it reads “not” and “hate” as reversals. Whatever you write is quoted back in the result and goes nowhere else.</p>'+
     '</div>'+
-    (qi===Q.length-1
-      ? '<div style="margin-top:24px"><label class="eyebrow" for="quizCity" style="display:block;margin-bottom:9px">Optional — where are you?</label>'+
-        '<input class="field" id="quizCity" type="text" placeholder="City or region" style="max-width:340px" value="'+esc(cityAnswer)+'"></div>' : '')+
     '<div class="quiz-foot">'+
       (qi>0?'<button class="linkbtn" id="backBtn" type="button">← Back</button>':'')+
       '<div class="spacer"></div>'+
-      '<button class="btn" id="nextBtn" type="button">'+
-        (qi===Q.length-1?"See the recommendation":"Next")+'</button></div>';
+      '<button class="btn" id="nextBtn" type="button">Next</button></div>';
 
   function canAdvance(){
     var a=answers[qi];
@@ -2988,44 +3628,61 @@ function renderQ(){
   $("nextBtn").addEventListener("click",function(){
     if(!canAdvance()) return;
     if(answers[qi]===oIdx) customs[qi]=($("ownText").value||"").trim();
-    var cf=$("quizCity");
-    if(cf){
-      cityAnswer=cf.value.trim();
-      if(cityAnswer) $("cityInput").value=cityAnswer;
-    }
     qi++;
     renderQ();
-    if(qi>=Q.length && cityAnswer) renderLens(cityAnswer, window.__topEnv);
   });
 }
 function applyPlanHash(){
   var t=readPlanFromUrl();
   if(!t) return false;
   restoredTally=t;
-  qi=Q.length;
+  qi=Q.length+1;
   renderQ();
-  if(cityAnswer){ $("cityInput").value=cityAnswer; renderLens(cityAnswer, window.__topEnv); }
+  /* A link that carries no city must clear the one already on screen, or the
+     previous person's city stays in the Locations input and in the lens, and
+     rides along in the next link built from this page. */
+  if($("cityInput")) $("cityInput").value=cityAnswer||"";
+  if(cityAnswer) renderLens(cityAnswer, window.__topEnv);
+  else if($("lensOut")) $("lensOut").innerHTML="";
   showView("quiz", false);
   return true;
 }
 /* A plan link pasted into an already-open tab, or reached with Back, must restore too --
    not only on a cold load. */
-window.addEventListener("hashchange", function(){ applyPlanHash(); });
+window.addEventListener("hashchange", function(){
+  if(applyPlanHash()) return;
+  /* Moving from a valid plan link to a broken one used to leave the previous
+     recommendation sitting there looking like the answer to the new link. */
+  if(isPlanHash()){ qi=0; answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill("");
+    said={}; saidStone=""; saidText=""; overrides={}; restoredTally=null; cityAnswer="";
+    $("quizStage").className="quiz-body"; renderQ(); showView("quiz", false); }
+});
 if(!applyPlanHash()) renderQ();
 
 /* starter question on the home page */
 (function(){
-  var wrap=$("starterOpts"), keys=["A","B","C","D"];
+  var wrap=$("starterOpts");
   Q[0].o.forEach(function(o,i){
-    var b=el('<button class="opt" type="button"><span class="key">'+keys[i]+'</span><span>'+esc(o[0])+'</span></button>');
+    var b=el('<button class="opt" type="button"><span class="key">'+OPTKEYS[i]+'</span><span>'+esc(o[0])+'</span></button>');
     b.addEventListener("click",function(){
+      /* This is somebody beginning the quiz, so it begins -- it used to drop a
+         returning visitor back at question two still carrying their last run. */
+      answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill("");
+      said={}; saidStone=""; saidText=""; overrides={}; restoredTally=null; cityAnswer="";
       answers[0]=i; qi=1; renderQ(); showView("quiz");
     });
     wrap.appendChild(b);
   });
-  var other=el('<button class="opt opt-other" type="button"><span class="key">E</span>'+
+  var other=el('<button class="opt opt-other" type="button"><span class="key">'+OPTKEYS[Q[0].o.length]+'</span>'+
     '<span>None of these — '+esc(Q[0].own)+'</span></button>');
-  other.addEventListener("click",function(){ qi=0; renderQ(); showView("quiz"); });
+  other.addEventListener("click",function(){
+    /* Land on question one with the box already open, rather than on an
+       unanswered question the visitor has to click a second time. */
+    answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill("");
+    said={}; saidStone=""; saidText=""; overrides={}; restoredTally=null; cityAnswer="";
+    answers[0]=Q[0].o.length; qi=0; renderQ(); showView("quiz");
+    var ta=$("ownText"); if(ta && ta.focus) ta.focus();
+  });
   wrap.appendChild(other);
 })();
 

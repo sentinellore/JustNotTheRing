@@ -246,7 +246,7 @@ async function sendMail(env, to, link) {
     <h1 style="margin:0 0 16px;font-size:26px;font-weight:500;line-height:1.24">Here is the plan you built</h1>
     <p style="margin:0 0 22px;font-size:16px;line-height:1.6;color:#46525F">Open this and you will land straight back on your recommendation — where to ask, how to do it, and the ring spec you can take to a jeweler.</p>
     <p style="margin:0 0 26px"><a href="${esc(link)}" style="display:inline-block;padding:14px 26px;background:#1E3A5F;color:#F7F6F1;border-radius:999px;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;text-decoration:none">Open my plan</a></p>
-    <p style="margin:0 0 6px;font-size:13px;line-height:1.6;color:#66717E">The link holds the scores from your answers and the city you named. It never held anything you wrote about your partner, and we have kept no copy of it.</p>
+    <p style="margin:0 0 6px;font-size:13px;line-height:1.6;color:#66717E">The link holds the scores from your answers, the boxes you ticked on the last step and the stone if you picked one, anything you changed by hand, and the city you typed. It never held anything you wrote about your partner, and we have kept no copy of it.</p>
     <p style="margin:0;font-size:13px;line-height:1.6;color:#66717E"><b>One thing:</b> if this inbox is shared, delete this message. A plan sitting in a shared inbox is how a surprise stops being one.</p>
     ${partnerBlock(env, false)}
   </div>
@@ -256,8 +256,10 @@ async function sendMail(env, to, link) {
 
 Open it: ${link}
 
-The link holds the scores from your answers and the city you named. It never
-held anything you wrote about your partner, and we have kept no copy of it.
+The link holds the scores from your answers, the boxes you ticked on the last
+step and the stone if you picked one, anything you changed by hand, and the city
+you typed. It never held anything you wrote about your partner, and we have kept
+no copy of it.
 
 One thing: if this inbox is shared, delete this message. A plan sitting in a
 shared inbox is how a surprise stops being one.${partnerBlock(env, true)}`;
