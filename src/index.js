@@ -145,8 +145,7 @@ async function takeSlot(env, name, rules) {
 }
 
 function tooMany(scope, retryAfter) {
-  const mins = Math.max(1, Math.ceil(retryAfter / 60));
-  const wait = mins >= 90 ? `about ${Math.round(mins / 60)} hours` : mins === 1 ? "a minute" : `about ${mins} minutes`;
+  const wait = waitPhrase(retryAfter);
   const message =
     scope === "site"
       ? "Email is paused for today — more plans have gone out than we allow in a day. Copy the link above instead; it is the same plan."
@@ -268,7 +267,8 @@ const DOMAIN = "justnotthering.com";
 /* Colour tokens: [light, dark], copied from :root in public/index.html. Change these in
    step with the site — and nothing below may use a colour literal. The masthead is the one
    exception to light/dark switching: like the site's blue-hour panel it is dusk in both
-   schemes, so it takes the dark-scheme gold (the site's gold for dark grounds). */
+   schemes, so its wordmark and rule take the dark-scheme gold (the site's gold for dark
+   grounds) and its caption takes skyInk. */
 const TOKENS = {
   ground:     ["#F5F4EF", "#101823"],
   surface:    ["#FCFCFA", "#18222F"],
@@ -282,6 +282,10 @@ const TOKENS = {
   accentSoft: ["#E5EBF3", "#1B2A3A"],
   gold:       ["#8A6C2C", "#DCC07C"],
   goldSoft:   ["#F3EEE1", "#2A2617"],
+  /* The caption colour of the site's blue-hour panel: `.skycap{color:#EEF3FA}` in
+     public/index.html. Not a :root token there; one value for both schemes because the
+     panel it sits on is dusk in both. */
+  skyInk:     ["#EEF3FA", "#EEF3FA"],
 };
 const L = Object.fromEntries(Object.entries(TOKENS).map(([k, v]) => [k, v[0]]));
 const D = Object.fromEntries(Object.entries(TOKENS).map(([k, v]) => [k, v[1]]));
@@ -378,7 +382,7 @@ const B = {
     }
     const href = unsubscribeUrl(subscription);
     const a = "You also asked to hear from us about proposal planning, so your address is on that list now. That is a separate thing from this email: ";
-    const b = "unsubscribe in one click";
+    const b = "unsubscribe";
     const c = " and this link still works.";
     return {
       zone: "footer",
@@ -422,14 +426,15 @@ const B = {
 };
 
 /* The masthead: the site's blue-hour panel, done typographically. A mono wordmark in
-   champagne gold, a 40px hairline of gold, the site's own caption. bgcolor cells and text
-   only, so it renders the same in Gmail, Apple Mail and Word-engine Outlook. */
+   champagne gold, a 40px hairline of gold, the site's own caption in the site's own caption
+   colour. bgcolor cells and text only, so it renders the same in Gmail, Apple Mail and
+   Word-engine Outlook. */
 function masthead() {
   return (
     `<td bgcolor="${L.accentDeep}" align="center" style="background-color:${L.accentDeep};padding:28px 24px;color:${D.gold}">` +
     `<p style="${p(F.mono, 11, 1.4, D.gold, "letter-spacing:.18em;text-transform:uppercase;padding-bottom:14px")}">Just Not The Ring</p>` +
     `<table ${TABLE} width="40" align="center" style="width:40px"><tr><td height="1" width="40" bgcolor="${D.gold}" style="background-color:${D.gold};height:1px;width:40px;font-size:0;line-height:0;mso-line-height-rule:exactly">&nbsp;</td></tr></table>` +
-    `<p style="${p(F.display, 15, 1.4, D.gold, "font-style:italic;padding-top:14px")}">the hour after sunset</p>` +
+    `<p style="${p(F.display, 15, 1.4, D.skyInk, "font-style:italic;padding-top:14px")}">the hour after sunset</p>` +
     `</td>`
   );
 }
@@ -631,11 +636,30 @@ async function unsubscribeContact(env, id) {
 }
 
 /* Generous, but not unlimited: this is an unauthenticated route that reaches a third party.
-   Its own limiter instances, so it never eats into anyone's plan-email allowance. */
+   Its own limiter instances, so it never eats into anyone's plan-email allowance.
+
+   Two buckets, because the two ways in arrive from different places. The page in the email
+   is opened by the person, so it is keyed by their network address like the send route. A
+   mail client's one-click POST (List-Unsubscribe-Post) is sent by the PROVIDER's servers —
+   Gmail's, Apple's — not the reader's, so an address-keyed bucket would pool every Gmail
+   user's unsubscribe into one counter and start refusing them once the site had any
+   traffic. That path gets one site-wide bucket instead, wide enough that only abuse
+   reaches it: what it bounds is the number of Resend calls a stranger can provoke by
+   posting that body with made-up ids. */
 const UNSUB_RULES = [
   { limit: 10, windowMs: HOUR },
   { limit: 40, windowMs: DAY },
 ];
+const ONE_CLICK_RULES = [
+  { limit: 300, windowMs: HOUR },
+  { limit: 2000, windowMs: DAY },
+];
+
+/* "a minute", "about 12 minutes", "about 3 hours" — shared with the send route's message. */
+function waitPhrase(retryAfter) {
+  const mins = Math.max(1, Math.ceil(retryAfter / 60));
+  return mins >= 90 ? `about ${Math.round(mins / 60)} hours` : mins === 1 ? "a minute" : `about ${mins} minutes`;
+}
 
 function htmlPage(html, status = 200, extra = {}) {
   return new Response(html, {
@@ -663,14 +687,24 @@ const PRIVACY_NOTE = () => B.note("Unsubscribing changes one thing on one list. 
 /* GET shows a page with a button and changes nothing — link scanners, Safe Links and
    antivirus prefetchers follow GETs in email, and a GET that unsubscribed would fire by
    accident. POST does the work. The token comes from the form body, or from the query for
-   a mail client's one-click POST (whose body is `List-Unsubscribe=One-Click`). */
+   a mail client's one-click POST (whose body is `List-Unsubscribe=One-Click`).
+
+   THIS ROUTE FAILS OPEN, and that is the opposite of the send route, on purpose. If the
+   limiter is missing or broken the send route sends nothing, because an unlimited send
+   button runs up a bill and burns the sender's reputation. Here the same outage would mean
+   a person cannot leave a mailing list — the one failure on this Worker with compliance
+   weight, and a broken promise on the privacy page. The harm in the other direction is
+   bounded: all the route can do is PATCH a contact id the caller already holds. So with no
+   limiter, or a limiter error, the unsubscribe still goes through. Do not "fix" this back. */
 async function handleUnsubscribe(request, env, url) {
   let c = (url.searchParams.get("c") || "").trim();
+  let oneClick = false;
   if (request.method === "POST") {
     try {
       const form = await request.formData();
       const v = form.get("c");
       if (typeof v === "string" && v.trim()) c = v.trim();
+      oneClick = form.get("List-Unsubscribe") === "One-Click";
     } catch {
       /* not a form body; the query may still carry it */
     }
@@ -701,18 +735,30 @@ async function handleUnsubscribe(request, env, url) {
     );
 
   if (!env.RESEND_API_KEY) return failed(503);
-  if (!env.LIMITER) return failed(503);
-  try {
-    const mine = await takeSlot(env, "unsub:" + clientKey(request), UNSUB_RULES);
-    if (!mine.ok) {
+
+  if (env.LIMITER) {
+    let slot = null;
+    try {
+      slot = oneClick
+        ? await takeSlot(env, "unsub:one-click", ONE_CLICK_RULES)
+        : await takeSlot(env, "unsub:" + clientKey(request), UNSUB_RULES);
+    } catch {
+      /* limiter broken: fail open, see above */
+    }
+    if (slot && !slot.ok) {
+      const wait = waitPhrase(slot.retryAfter);
       return htmlPage(
-        unsubPage("Try again", "Too many at once.", `That is the limit for this connection for now. Nothing changed — try again in a while, or write to hello@${DOMAIN} and we will take you off by hand.`),
+        unsubPage(
+          "Try again",
+          "Too many at once.",
+          oneClick
+            ? `More unsubscribes have arrived than we allow at once. Nothing changed — try again in ${wait}, or write to hello@${DOMAIN} and we will take you off by hand.`
+            : `That is the limit for this connection for now. Nothing changed — try again in ${wait}, or write to hello@${DOMAIN} and we will take you off by hand.`
+        ),
         429,
-        { "retry-after": String(mine.retryAfter) }
+        { "retry-after": String(slot.retryAfter) }
       );
     }
-  } catch {
-    return failed(503);
   }
 
   const ok = await unsubscribeContact(env, c);

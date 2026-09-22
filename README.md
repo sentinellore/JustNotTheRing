@@ -68,8 +68,11 @@ in `src/index.js`, so they cannot drift apart. Resend's open and click tracking 
 page and changes nothing (link scanners follow GETs); `POST` marks the contact unsubscribed
 with Resend and is idempotent. Mail clients' one-click unsubscribe POSTs here too. The id is
 the opaque UUID Resend assigned to the contact — the address never appears in the URL — and
-anything that is not a UUID is rejected before Resend is called. Rate-limited per network
-address, 10 an hour and 40 a day, on its own limiter instances.
+anything that is not a UUID is rejected before Resend is called. The page path is
+rate-limited per network address, 10 an hour and 40 a day; one-click POSTs come from the
+mail provider's servers, so they share one site-wide bucket, 300 an hour, instead. Unlike
+the send route this one fails open: with the limiter missing or broken the unsubscribe still
+goes through, because a person must always be able to leave the list.
 
 | Status | Body | Meaning |
 |---|---|---|
