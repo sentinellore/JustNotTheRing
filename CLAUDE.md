@@ -14,7 +14,7 @@ package.json and no dependencies.
 CLAUDE.md             this file
 README.md
 wrangler.jsonc        main, assets → ./public, the LIMITER Durable Object, vars
-src/index.js          the Worker: POST /api/plan-email and its rate limiter
+src/index.js          the Worker: POST /api/plan-email, /api/unsubscribe, the rate limiter
 public/index.html     the whole site
 ```
 
@@ -73,11 +73,20 @@ These are what make the site trustworthy. Preserve them.
 
 ## Privacy
 
-Everything runs in the browser EXCEPT `POST /api/plan-email`, which receives an email address
-and a validated plan code, hands them to Resend to deliver one message, and stores neither.
-The route is rate-limited: the limiter keeps send times per network address for up to 24
-hours — never an email address, never a plan. There are no analytics, no cookies and no
-database of users.
+Everything runs in the browser EXCEPT two routes. `POST /api/plan-email` receives an email
+address and a validated plan code, hands them to Resend to deliver one message, and stores
+neither. `/api/unsubscribe` receives an opaque Resend contact id — never an address — and on
+`POST` marks that contact unsubscribed; a `GET` only shows the confirmation page and changes
+nothing, because link scanners follow GETs. Both routes are rate-limited: the limiter keeps
+request times per network address for up to 24 hours — never an email address, never a plan.
+There are no analytics, no cookies and no database of users.
+
+The email itself carries the plan link and nothing decoded from it — the Worker never reads
+the plan, so it cannot put the city in a message that may sit in a shared inbox. It has no
+images and loads no fonts (an image in an email is an open-tracking pixel), and the link is
+the bare plan URL with no redirect. Resend's open and click tracking must stay off for the
+domain; either would contradict the privacy page. HTML and text bodies are rendered from one
+block list in `src/index.js`; edit the block, never one rendering.
 
 **QUIZ FREE-TEXT ANSWERS NEVER LEAVE THE BROWSER.** They are intimate by nature — people
 describing their partner. Not to this Worker, not to a third party, not in a URL, not in an

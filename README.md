@@ -26,12 +26,12 @@ panel. It says what leaves the browser and what does not.
 
 Two files do the work. `public/index.html` is the whole site — all markup, styles and
 JavaScript in one file. `src/index.js` is a small Cloudflare Worker that serves that file and
-answers one API route. There is no build step, no package manager and no dependencies to
+answers two API routes. There is no build step, no package manager and no dependencies to
 install.
 
 ```
 wrangler.jsonc        main, assets → ./public, the LIMITER Durable Object, vars
-src/index.js          the Worker: POST /api/plan-email and its rate limiter
+src/index.js          the Worker: POST /api/plan-email, /api/unsubscribe, the rate limiter
 public/index.html     the whole site
 ```
 
@@ -46,7 +46,7 @@ is checked against the page's own lists on read, and anything unrecognised is dr
 it sits after the `#`, browsers do not send it to any server; the page decodes it and rebuilds
 the same recommendation, on load and on `hashchange`.
 
-## The Worker route
+## The Worker routes
 
 `POST /api/plan-email` emails someone the link to the plan they just built.
 
@@ -55,8 +55,21 @@ Request body: `{ "email": "...", "plan": "<code>", "optIn": false }`.
 The email is a fixed template. The only variable that reaches it is the plan code, which must
 match `^[A-Za-z0-9_-]{8,2000}$`, so the route cannot be used to send arbitrary content. The
 address and the link go to [Resend](https://resend.com) for delivery; the Worker stores
-neither. If `optIn` is `true` and an audience is configured, the address is also added to
-that Resend audience.
+neither. If `optIn` is `true` and `RESEND_AUDIENCE_ID` is set, the address is first added as
+a Resend contact in that segment, and the email then says so and carries an unsubscribe link
+and `List-Unsubscribe` headers. If the add fails or no segment is configured, the email says
+the address is on no list — the footer states what happened, not what was ticked.
+
+The message has no images and loads no fonts, so opening it reports nothing to anyone; the
+link is the bare plan URL. The HTML and plain-text bodies are rendered from one list of blocks
+in `src/index.js`, so they cannot drift apart. Resend's open and click tracking must stay off.
+
+`/api/unsubscribe?c=<contact id>` takes an address off that list. `GET` shows a confirmation
+page and changes nothing (link scanners follow GETs); `POST` marks the contact unsubscribed
+with Resend and is idempotent. Mail clients' one-click unsubscribe POSTs here too. The id is
+the opaque UUID Resend assigned to the contact — the address never appears in the URL — and
+anything that is not a UUID is rejected before Resend is called. Rate-limited per network
+address, 10 an hour and 40 a day, on its own limiter instances.
 
 | Status | Body | Meaning |
 |---|---|---|
@@ -80,7 +93,7 @@ be retried for free.
 | `RESEND_API_KEY` | secret | yes | Resend API key. Until it is set the route returns 503 and the rest of the site is unaffected. |
 | `MAIL_FROM` | var | yes | The From header, e.g. `Just Not The Ring <hello@justnotthering.com>`. Set in `wrangler.jsonc`. |
 | `SEND_CEILING_PER_DAY` | var | no | Site-wide cap on sends per 24 hours. Default 80. |
-| `RESEND_AUDIENCE_ID` | var | no | Resend audience for people who tick the opt-in box. Unset, the box adds nobody to anything. |
+| `RESEND_AUDIENCE_ID` | var | no | Id of the Resend segment (formerly "audience") for people who tick the opt-in box. Unset, the box adds nobody to anything and every email says so. |
 | `PARTNER_LINE` | var | no | One line of text for the email footer. Unset, the block is omitted. |
 | `PARTNER_URL` | var | no | Link shown after `PARTNER_LINE`. |
 | `LIMITER` | binding | yes | The `SendLimiter` Durable Object. Declared in `wrangler.jsonc`; nothing to create by hand. |
@@ -149,7 +162,8 @@ The site lives in `public/index.html`:
 - **Hire** — `HIRE_TERMS` and `renderHire()` build the local searches.
 
 The Worker lives in `src/index.js`: the `fetch` handler, `handlePlanEmail()`, the rate limiter
-(`checkLimits()` and the `SendLimiter` class) and the email template in `sendMail()`.
+(`checkLimits()` and the `SendLimiter` class), the email — colour tokens `TOKENS`, block
+renderers `B`, the frame `shell()`, `planEmail()` and `sendMail()` — and `handleUnsubscribe()`.
 
 ## A note on the content
 
