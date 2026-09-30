@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--
+  STORY TEMPLATE. Copy to public/stories/SLUG.html and replace every CAPITALISED token.
+  Then: add the card block at the bottom of this file to public/stories/index.html (and
+  delete the empty state there if this is the first story), add the URL to
+  public/sitemap.xml, make the og image, and run `node tools/check-stories.mjs`.
+
+  Every story is real, told by the people it happened to, and published with written
+  agreement from both of them. Nothing composed, nothing merged, nothing to fill a slot.
+
+  SLUG        lowercase, hyphens, e.g. asheville-car-park. The URL is /stories/SLUG (no .html).
+  HOOK        one line, the thing that makes someone click. Also the <title> and og:title.
+  QUOTE       one pull-quote in their own words.
+  NAMES       however they chose to be identified.  PLACE  city, state.  DATE  month year.
+  LOC_ID / LOC_TEXT          an id and its h: string from LOC_LIB in public/index.html (16 of them)
+  CAPTURE_ID / CAPTURE_TEXT  an id and its h: string from CAPTURE_LIB (6 of them)
+                             The verifier fails if the text is not the library's, verbatim.
+  Photograph: img/SLUG.jpg at 1600x900, under 250KB. It is the hero, the index card (cover-
+  cropped to 3:2) and the og:image. No photograph: og/SLUG.png from tools/og-card.mjs, and
+  the blue-hour panel below with one of dusk / dawn / noon.
+-->
+<title>HOOK — Just Not The Ring</title>
+<meta name="description" content="HOOK NAMES, PLACE, DATE. A real proposal, told by the people who planned it.">
+<link rel="canonical" href="https://justnotthering.com/stories/SLUG">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Just Not The Ring">
+<meta property="og:title" content="HOOK">
+<meta property="og:description" content="NAMES, PLACE, DATE. A real proposal, told by the people who planned it.">
+<meta property="og:url" content="https://justnotthering.com/stories/SLUG">
+<!-- PHOTO: https://justnotthering.com/stories/img/SLUG.jpg, 1600x900.
+     NO PHOTO: https://justnotthering.com/stories/og/SLUG.png, 1200x630. Either way absolute. -->
+<meta property="og:image" content="https://justnotthering.com/stories/og/SLUG.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ALT TEXT DESCRIBING THE PICTURE, or: The pull-quote set over a blue-hour sky: QUOTE">
+<meta property="article:published_time" content="YYYY-MM-DD">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "HOOK",
+  "description": "NAMES, PLACE, DATE. A real proposal, told by the people who planned it.",
+  "image": "https://justnotthering.com/stories/og/SLUG.png",
+  "datePublished": "YYYY-MM-DD",
+  "author": {"@type": "Person", "name": "NAMES"},
+  "publisher": {"@type": "Organization", "name": "Just Not The Ring", "url": "https://justnotthering.com/"},
+  "mainEntityOfPage": "https://justnotthering.com/stories/SLUG",
+  "keywords": ["LOC_TEXT", "CAPTURE_TEXT"]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Karla:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/stories/stories.css">
+</head>
+<body>
+
+<header id="topbar">
+  <div class="bar-inner">
+    <a class="mark" href="/">Just <em>Not</em> The Ring</a>
+    <nav class="bar-nav" aria-label="Sections">
+      <a href="/#quiz">Quiz</a>
+      <a href="/#locations">Locations</a>
+      <a href="/#trip">Trip</a>
+      <a href="/#hire">Hire</a>
+      <a href="/#diamonds">Diamonds</a>
+      <a href="/#rings">Rings</a>
+      <a href="/#how">How</a>
+      <a href="/#words">Words</a>
+      <a href="/#when">When</a>
+      <a href="/stories/" aria-current="page">Stories</a>
+    </nav>
+    <details class="menu">
+      <summary aria-label="All sections">
+        <svg class="ico-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+        <svg class="ico-close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+        <span>Menu</span>
+      </summary>
+      <nav class="nav-panel" aria-label="All sections">
+        <a href="/#quiz"><span class="np-n">01</span>The quiz</a>
+        <a href="/#locations"><span class="np-n">02</span>Locations</a>
+        <a href="/#trip"><span class="np-n">03</span>The trip</a>
+        <a href="/#hire"><span class="np-n">04</span>Who to hire</a>
+        <a href="/#diamonds"><span class="np-n">05</span>Diamonds</a>
+        <a href="/#rings"><span class="np-n">06</span>The ring</a>
+        <a href="/#how"><span class="np-n">07</span>How</a>
+        <a href="/#words"><span class="np-n">08</span>What to say</a>
+        <a href="/#when"><span class="np-n">09</span>When</a>
+        <a href="/stories/" aria-current="page"><span class="np-n" aria-hidden="true"></span>Stories</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<main>
+<article class="view" data-loc="LOC_ID" data-capture="CAPTURE_ID">
+  <div class="wrap">
+    <a class="backlink" href="/stories/">← All stories</a>
+
+    <div class="view-head story-head">
+      <span class="eyebrow">LOC_TEXT</span>
+      <h1>HOOK</h1>
+      <p class="byline">NAMES &middot; PLACE &middot; DATE</p>
+    </div>
+
+    <!-- HERO, PHOTO: keep this one. width/height are the file's real pixels; no lazy-loading
+         above the fold; alt describes the picture, not the story. -->
+    <div class="hero">
+      <img src="/stories/img/SLUG.jpg" width="1600" height="900" alt="ALT TEXT DESCRIBING THE PICTURE">
+    </div>
+
+    <!-- HERO, NO PHOTO: keep this one instead. Choose dusk, dawn or noon. -->
+    <div class="hero">
+      <div class="hour dusk" role="img" aria-label="The pull-quote set over a blue-hour sky">
+        <svg viewBox="0 0 200 200" fill="none" aria-hidden="true"><circle cx="100" cy="100" r="78" stroke="#F0DCA8" stroke-width="1.7"/><circle cx="100" cy="100" r="54" stroke="#F0DCA8" stroke-width="1.5" stroke-opacity=".95"/><circle cx="100" cy="100" r="33" stroke="#EAF2FD" stroke-width="1.5" stroke-opacity=".95"/><path d="M100 22v55M155 59l-39 27M178 100h-55M155 141l-39-27M100 178v-55M45 141l39-27M22 100h55M45 59l39 27" stroke="#F0DCA8" stroke-width="1.4" stroke-opacity=".92" stroke-linecap="round"/><path d="M64 50l36 25 36-25M64 150l36-25 36 25" stroke="#EAF2FD" stroke-width="1.3" stroke-opacity=".78" stroke-linecap="round"/></svg>
+        <q>QUOTE</q>
+      </div>
+    </div>
+
+    <div class="story-grid">
+      <div class="prose">
+        <p class="first">PARAGRAPH ONE.</p>
+        <p>PARAGRAPH TWO.</p>
+        <p>PARAGRAPH THREE. Three to six in all.</p>
+        <blockquote>“QUOTE”<footer>NAMES</footer></blockquote>
+        <div class="diff">
+          <span class="eyebrow">What they would do differently</span>
+          <p>DIFF. Every story ends with this.</p>
+        </div>
+        <!-- CREDIT: photographer or contributor credit. Delete the line if there is none. -->
+        <p class="tiny credit">CREDIT</p>
+      </div>
+
+      <aside class="facts" aria-label="The shape of it">
+        <span class="eyebrow">The shape of it</span>
+        <dl>
+          <div class="row"><dt>Where</dt><dd>WHERE, in a few words</dd></div>
+          <div class="row"><dt>How it went</dt><dd>HOW IT WENT</dd></div>
+          <div class="row"><dt>Remembered by</dt><dd>CAPTURE_TEXT, or how they put it</dd></div>
+          <div class="row"><dt>The ring</dt><dd>THE RING</dd></div>
+          <div class="row"><dt>Planned for</dt><dd>HOW LONG</dd></div>
+        </dl>
+        <p class="tiny out">The place and the way it was remembered are two of the sixteen and six the quiz recommends from. <a href="/#quiz">Take the ten questions →</a></p>
+      </aside>
+    </div>
+
+    <p class="tiny provenance">Every story here is real, told by the people it happened to, and published with written agreement from both of them. Nothing is composed, merged from several couples, or written to fill a slot. Photographers tell their own stories, not their clients'.</p>
+
+    <div class="view-foot">
+      <a class="btn ghost" href="/stories/">← All stories</a>
+      <div class="spacer"></div>
+      <a class="btn" href="/#quiz">Plan yours →</a>
+    </div>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div style="max-width:54ch">
+        <span class="mark" style="font-size:1.2rem">Just <em>Not</em> The Ring</span>
+        <p class="small" style="margin-top:11px">A planning guide, not a jeweler and not an appraiser. Grading standards referenced are GIA's. Price figures are orientation ranges that move with the market — verify with vendors before committing.</p>
+        <p class="small" style="margin-top:11px"><a href="/#privacy">What happens to what you type here</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!--
+  INDEX CARD. Paste into the cards slot in public/stories/index.html, newest first. The <h3>
+  must read exactly as the <h1> above. Card images are below the fold: loading="lazy".
+
+    <a class="card" href="/stories/SLUG" data-loc="LOC_ID" data-capture="CAPTURE_ID">
+      <div class="frame">
+        PHOTO:    <img src="/stories/img/SLUG.jpg" width="1600" height="900" loading="lazy" alt="ALT TEXT DESCRIBING THE PICTURE">
+        NO PHOTO: <div class="hour dusk">(the same svg as the hero)<q>QUOTE</q></div>
+      </div>
+      <div class="card-body">
+        <div class="tagrow"><span class="chip gold">LOC_TEXT</span><span class="chip">CAPTURE_TEXT</span></div>
+        <h3>HOOK</h3>
+        <p class="who">NAMES &middot; PLACE &middot; DATE</p>
+        <span class="card-go">Read it →</span>
+      </div>
+    </a>
+-->
+</body>
+</html>

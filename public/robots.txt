@@ -1,0 +1,5 @@
+# Cloudflare's managed robots.txt (content signals) is merged above this file at the edge.
+User-agent: *
+Allow: /
+
+Sitemap: https://justnotthering.com/sitemap.xml

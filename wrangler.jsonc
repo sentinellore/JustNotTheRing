@@ -4,7 +4,13 @@
   "main": "src/index.js",
   "assets": {
     "directory": "./public",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    // Default, made explicit because the stories URLs depend on it: /stories/foo.html is
+    // served at /stories/foo and the .html form redirects, so every canonical, og:url and
+    // sitemap entry is written without the extension.
+    "html_handling": "auto-trailing-slash",
+    // A wrong or retired story link gets public/404.html instead of an empty 404.
+    "not_found_handling": "404-page"
   },
   "durable_objects": {
     "bindings": [

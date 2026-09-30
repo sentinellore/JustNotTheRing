@@ -22,17 +22,25 @@ Nine sections, numbered on the site:
 Plus an unnumbered **privacy page** at `#privacy`, linked from the footer and from the email
 panel. It says what leaves the browser and what does not.
 
+And an unnumbered **stories section** at `/stories/`: real proposals told by the people who
+planned them, one static page each, with a preview card for sharing. Unnumbered because the
+nine sections are decisions and a story is not one.
+
 ## What it is
 
-Two files do the work. `public/index.html` is the whole site — all markup, styles and
-JavaScript in one file. `src/index.js` is a small Cloudflare Worker that serves that file and
-answers two API routes. There is no build step, no package manager and no dependencies to
-install.
+Two files do the work. `public/index.html` is the whole tool — all markup, styles and
+JavaScript in one file. `src/index.js` is a small Cloudflare Worker that serves `public/` and
+answers two API routes. The stories section is plain static pages beside it. There is no
+build step, no package manager and no dependencies to install.
 
 ```
-wrangler.jsonc        main, assets → ./public, the LIMITER Durable Object, vars
-src/index.js          the Worker: POST /api/plan-email, /api/unsubscribe, the rate limiter
-public/index.html     the whole site
+wrangler.jsonc                main, assets → ./public, the LIMITER Durable Object, vars
+src/index.js                  the Worker: POST /api/plan-email, /api/unsubscribe, the rate limiter
+public/index.html             the whole tool
+public/404.html               the not-found page
+public/robots.txt, sitemap.xml
+public/stories/               index.html, stories.css, one <slug>.html per story, img/, og/
+tools/                        check-stories.mjs (verifier), og-card.mjs, story-template.html
 ```
 
 ## Plan links
@@ -126,7 +134,10 @@ assets, and everything else reaches the Worker. There is no build step.
 
 Pushes to `main` redeploy automatically. To deploy by hand: `npx wrangler deploy`.
 
-Only `index.html` belongs in `public/` — everything in that folder is served to the world.
+Everything in `public/` is served to the world; `node tools/check-stories.mjs` fails on any file
+there it does not expect. Story URLs are extensionless (`/stories/<slug>`): Cloudflare's asset
+serving redirects `/stories/<slug>.html` to the short form, and an unknown path gets
+`public/404.html`.
 
 The site itself is a single static file, so it will also run on any static host (Netlify,
 Vercel, GitHub Pages) by serving `public/` as the web root. The email button will report that
@@ -167,6 +178,20 @@ The site lives in `public/index.html`:
 The Worker lives in `src/index.js`: the `fetch` handler, `handlePlanEmail()`, the rate limiter
 (`checkLimits()` and the `SendLimiter` class), the email — colour tokens `TOKENS`, block
 renderers `B`, the frame `shell()`, `planEmail()` and `sendMail()` — and `handleUnsubscribe()`.
+
+## Stories
+
+`public/stories/` is hand-written HTML with one shared stylesheet and no JavaScript, so every
+story has its own URL and its own preview card when shared. Each page carries a title, meta
+description, Open Graph and Twitter tags, a canonical link and a JSON-LD Article. A story with
+a photograph uses it (1600x900) as hero, index card and preview; a story with none uses the
+site's blue-hour panel with the pull-quote over it, and a 1200x630 version of that panel made
+by `tools/og-card.mjs` with headless Chrome.
+
+Every story is real, told by the people it happened to, and published with written agreement
+from both of them. Nothing is composed, merged or written to fill a slot. With no stories yet
+the index shows a written empty state. To add one, copy `tools/story-template.html`, follow the
+comments in it, and run `node tools/check-stories.mjs` before committing.
 
 ## A note on the content
 

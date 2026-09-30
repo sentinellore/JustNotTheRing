@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Hand-written. One <url> per story page, canonical form (no .html), newest first
+     after the two fixed entries. tools/check-stories.mjs fails when a story is missing
+     here or listed here without a file. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://justnotthering.com/</loc></url>
+  <url><loc>https://justnotthering.com/stories/</loc></url>
+</urlset>
