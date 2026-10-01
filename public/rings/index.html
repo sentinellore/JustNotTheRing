@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>The ring · Just Not The Ring</title>
+<meta name="description" content="Setting, metal, size and budget: a ring you can turn over, how to get the size, and what a number really buys.">
+<link rel="canonical" href="https://justnotthering.com/rings/">
+<link rel="preload" href="/assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Page-to-page transitions. This opt-in is here rather than in the stylesheet because a
+   browser decides whether to animate as the new page starts, which can be before an
+   external stylesheet has arrived. Declared in styles.css, Chrome aborted roughly half the
+   transitions in testing; declared here, none. */
+@view-transition{navigation:auto}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
+</style>
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="/">Just not the ring</a>
+    <nav class="navl" aria-label="Sections"><a href="/quiz/">Quiz</a><a href="/locations/">Locations</a><a href="/trip/">Trip</a><a href="/hire/">Hire</a><a href="/diamonds/">Diamonds</a><a href="/rings/" aria-current="page">Rings</a><a href="/how/">How</a><a href="/words/">Words</a><a href="/when/">When</a><a href="/stories/">Stories</a></nav>
+    <a class="btn primary navcta" href="/quiz/">Take the quiz</a>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="lbl">Menu</span></button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <nav class="wrap" aria-label="All sections">
+    <ol><li><a href="/quiz/"><span class="n">01</span>The quiz</a></li><li><a href="/locations/"><span class="n">02</span>Locations</a></li><li><a href="/trip/"><span class="n">03</span>The trip</a></li><li><a href="/hire/"><span class="n">04</span>Who to hire</a></li><li><a href="/diamonds/"><span class="n">05</span>Diamonds</a></li><li><a href="/rings/" aria-current="page"><span class="n">06</span>The ring</a></li><li><a href="/how/"><span class="n">07</span>How</a></li><li><a href="/words/"><span class="n">08</span>What to say</a></li><li><a href="/when/"><span class="n">09</span>When</a></li><li><a href="/stories/"><span class="n" aria-hidden="true"></span>Stories</a></li></ol>
+    <div class="menu-foot"><a class="btn primary" href="/quiz/">Take the ten questions</a><a href="/privacy/">What happens to what you type here</a></div>
+  </nav>
+</div>
+<main id="main">
+  <div class="wrap pagehead">
+    <span class="stamp">06 — The ring</span>
+    <h1 data-words>Setting, metal, size, <em>budget</em></h1>
+    <p class="lede">The stone gets all the attention and the setting does all the work. This is where you match the ring to their actual hands and actual week. Pick a setting, a metal and a center stone, turn it over, and leave with one line to hand the jeweler.</p>
+  </div>
+  <div class="wrap" id="ring">
+    <div class="ringgrid" data-reveal>
+      <figure class="vitrine">
+        <div class="plinth" aria-hidden="true"></div>
+        <canvas id="ringGem" data-gem="1" data-cut="Excellent" data-color="G" data-clarity="VS2" data-env="studio" data-spin="12" data-tilt="16" data-exposure="1.05" role="img" aria-label="The ring as configured, turning slowly"></canvas>
+        <div class="specline"><span id="ringCaratOut"></span><span>Drag to turn it over</span></div>
+      </figure>
+      <div class="cfg">
+        <fieldset><legend>Setting</legend><div class="seg4" id="ringSettings"></div><p class="note"><b id="setName"></b>. <span id="setText"></span></p></fieldset>
+        <fieldset><legend>Metal · <span id="metName"></span></legend><div class="seg4" id="ringMetals"></div><p class="note"><span id="upkeep"></span> <b>Pick it if</b> <span id="pickIf"></span></p></fieldset>
+        <fieldset><legend>Center stone · <span id="shapeName"></span></legend><div class="chips" id="ringShapes"></div><p class="note" id="shapeTip"></p></fieldset>
+        <div><label for="ringRange" style="font-size:14px;font-weight:600;color:var(--ink2)">Carat</label><input id="ringRange" type="range" min="30" max="300" step="1" value="120"></div>
+        <div class="specbox"><span class="eyebrow">Take this to the jeweler</span><p id="spec"></p>
+          <div class="copy-row"><button type="button" class="btn ghost" id="copySpec">Copy the spec</button><span class="copy-msg" id="copyMsg" role="status" hidden></span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="blk wrap">
+    <span class="stamp" data-reveal>Setting</span>
+    <div class="cards5" data-reveal>
+      <div class="card tilt">
+        <h3>Solitaire</h3>
+        <p>One stone, four or six prongs. The default for a reason: it never looks dated and it puts every dollar into the center. Six prongs are more secure; four show more stone.</p>
+        <div class="tags"><span class="tag">Classic</span><span class="tag">Resizes easily</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>Bezel</h3>
+        <p>A metal rim around the whole stone. The most secure setting there is, and the one that doesn't snag on gloves, hair, climbing holds or patients. Slightly modern, slightly less sparkle.</p>
+        <div class="tags"><span class="tag on">Best for active hands</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>Halo</h3>
+        <p>A ring of small stones around the center, making it read half a carat larger. Maximum apparent size per dollar. A hidden halo — visible only from the side — gets the sparkle without the era stamp.</p>
+        <div class="tags"><span class="tag">Maximizes size</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>Three-stone</h3>
+        <p>A center with two side stones — often given the past/present/future reading. Adds width and presence, and lets a smaller center carry a bigger ring.</p>
+        <div class="tags"><span class="tag">Wide profile</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>Pavé &amp; micropavé</h3>
+        <p>Tiny stones set along the band. Enormous sparkle, and the small stones do occasionally come loose over the years. Full-coverage and eternity bands are very hard to resize later.</p>
+        <div class="tags"><span class="tag gold">Resizing limited</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>Vintage &amp; milgrain</h3>
+        <p>Beaded edges, engraving, filigree. Genuine antique rings often hold old mine or old European cuts, which sparkle differently — broader, warmer flashes made for candlelight rather than LEDs.</p>
+        <div class="tags"><span class="tag">Character</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk wrap">
+    <div class="prose-grid" data-reveal>
+      <div><h2>If none of those are the ring</h2></div>
+      <div class="prose"><p>Plenty of people don't want a solitaire, and a few don't want a diamond or a ring at all. These are the real alternatives, with the real trade-offs — the biggest of which is almost always resizing.</p></div>
+    </div>
+    <div class="cards5 below" data-reveal>
+      <div class="card tilt">
+        <h3>Toi et moi</h3>
+        <p>Two stones side by side — "you and me" — often two different shapes or two different stones entirely. Georgian in origin, thoroughly back. Reads as a story rather than a status object.</p>
+        <div class="tags"><span class="tag gold">Very hard to resize</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>East-west</h3>
+        <p>An elongated stone turned sideways across the finger instead of along it. One rotation, and a familiar shape stops looking familiar. Costs nothing extra and suits an oval, emerald, marquise or kite.</p>
+        <div class="tags"><span class="tag on">Free way to be different</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>Cluster or constellation</h3>
+        <p>Many small stones arranged as a shape — a flower, a scatter, a deliberate asymmetry. Antique in lineage, and it buys visual size for far less than one large stone.</p>
+        <div class="tags"><span class="tag">More presence per dollar</span><span class="tag">More to catch</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>No center stone</h3>
+        <p>A carved, engraved, hammered or wide band with nothing raised on it at all. For someone who genuinely doesn't want a stone, this is the answer — and it's the single most durable thing you can put on a hand.</p>
+        <div class="tags"><span class="tag on">Indestructible</span><span class="tag">Lowest cost</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>An heirloom reset</h3>
+        <p>Their grandmother's stone in a setting built for them. Costs a fraction of a new ring, carries meaning nothing else can buy, and the old cut will look different from anything modern — which is the point.</p>
+        <div class="tags"><span class="tag gold">Have it checked first</span></div>
+      </div>
+      <div class="card tilt">
+        <h3>Not a ring</h3>
+        <p>A necklace, a watch, a tattoo appointment booked for the following week, a tree planted in the yard. Right for someone whose work or hands make a ring impractical, or who simply doesn't wear rings.</p>
+        <div class="tags"><span class="tag">Nothing to resize</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk wrap">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">Stones that aren't diamonds</span><h2>What people actually choose</h2></div>
+      <div class="prose">
+        <p><b>Sapphire</b> is the serious answer — Mohs 9, and it comes in teal, peach, parti (two colors in one stone), grey, green and colorless, not only blue. Montana sapphires have traceable US origin, which solves the sourcing question at the same time.</p>
+        <p><b>Salt-and-pepper diamonds</b> are real diamonds full of visible black inclusions — the flaws are the design. Cheap, unrepeatable, and every one is different. <b>Spinel</b> (Mohs 8) is vivid, natural and almost never treated. <b>Moissanite</b> throws more rainbow fire than diamond, which people either love or immediately clock.</p>
+        <p><b>Be careful with</b> opal, moonstone, moss agate and raw or rough stones. They photograph beautifully and they are soft — expect visible wear within a couple of years on a ring worn daily. That can be an acceptable trade if you both know it going in.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk wrap">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">The three traps</span><h2>What goes wrong with unusual rings</h2></div>
+      <ol class="steps">
+        <li><span class="k">1</span><div><p><b>Resizing.</b> Toi et moi, east-west, clusters, eternity bands and anything with stones all the way around can often be moved half a size at most, sometimes not at all. Get the measurement right the first time or expect to remake the band.</p></div></li>
+        <li><span class="k">2</span><div><p><b>No grading language.</b> Colored stones aren't graded on the D–Z or VS scales, so there is no report to hide behind and no standard to compare against. You are buying with your eyes and on the seller's reputation. Ask who cut it and where it came from.</p></div></li>
+        <li><span class="k">3</span><div><p><b>Replacement.</b> A one-of-a-kind stone can't be replaced with an identical one if it's lost. Insure it with an appraisal that describes it specifically, and photograph it from several angles before it goes on a hand.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="blk wrap">
+    <div class="head" data-reveal><div><span class="stamp">Metal</span><h2>Metal, honestly compared</h2></div></div>
+    <div class="table-wrap" data-reveal>
+      <table>
+        <thead><tr><th scope="col">Metal</th><th scope="col">Upkeep</th><th scope="col">Wears like</th><th scope="col">Pick it if</th></tr></thead>
+        <tbody>
+          <tr><td>Platinum</td><td>None required; develops a soft grey patina that can be polished back</td><td>Doesn't lose metal when scratched — it displaces. Heavy and dense.</td><td>They have a nickel allergy, or you want prongs that hold for decades without re-tipping.</td></tr>
+          <tr><td>14k white gold</td><td>Rhodium replating every 1–3 years to stay bright white</td><td>Harder than 18k, more scratch-resistant</td><td>You want the platinum look for less, and don't mind the replating appointment.</td></tr>
+          <tr><td>18k yellow gold</td><td>Low; polish occasionally</td><td>Softer than 14k — scratches and softens over time</td><td>They wear warm tones, or the stone is I–K and you want the warmth hidden.</td></tr>
+          <tr><td>14k yellow gold</td><td>Low</td><td>The most durable everyday gold — 58.3% gold, alloyed harder</td><td>Practicality matters and the color difference from 18k doesn't.</td></tr>
+          <tr><td>Rose gold</td><td>Low; never needs plating</td><td>Very durable thanks to the copper alloy</td><td>They like it — but note copper can irritate sensitive skin.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="blk wrap">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">Getting the size</span><h2>If they don't know you're asking</h2></div>
+      <ol class="steps">
+        <li><span class="k">1</span><div><p>Borrow a ring they already wear on that finger — the ring finger or the one next to it — and take it to a jeweler. Don't guess from a different finger.</p></div></li>
+        <li><span class="k">2</span><div><p>Press that ring into a bar of soap or plasticine for a clean impression if you can't leave the house with it.</p></div></li>
+        <li><span class="k">3</span><div><p>Recruit their most discreet friend or sibling to go "ring shopping for themselves" and try things on together.</p></div></li>
+        <li><span class="k">4</span><div><p>Accept a near miss. The average US size is around 6 to 6.5, and resizing a plain band is routine.</p></div></li>
+      </ol>
+    </div>
+    <div class="prose-grid below" data-reveal style="margin-top:clamp(48px,6vw,80px)">
+      <div><h2>If you're doing this together</h2></div>
+      <div class="prose">
+        <p>Plenty of couples are — they picked the ring, or you're both getting one, or the whole thing was decided over dinner months ago and only the moment is still a secret. Then don't do any of the above. Go and get properly sized at a jeweler, on a normal weekday, in the afternoon.</p>
+        <p>It takes ten minutes, it is free, it removes the single most common reason a ring has to go back, and it is the one part of this that is genuinely better when nobody is being clever about it. If you're both wearing something, get both fingers measured in the same visit and order the pair together so the metals match.</p>
+        <p><b>Fingers change size.</b> They swell in heat, after salt, at the end of the day and on flights. Measure at normal room temperature, and remember a wide band fits tighter than a thin one — go up about a quarter size for anything over 4mm.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk wrap">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">Budget</span><h2>What a number actually buys</h2><p class="small" style="margin-top:16px;max-width:44ch">Three months' salary was a De Beers advertising line from the 1930s, revived in the 1980s. It is not a rule and never was. Set a number you can pay without financing, then spend it well.</p></div>
+      <div class="panel">
+        <div class="sliderrow">
+          <span class="big" id="budgetVal">$5,200</span>
+          <span class="small">total, ring complete</span>
+        </div>
+        <input id="budgetSlider" type="range" min="1000" max="25000" step="200" value="5200" aria-label="Total ring budget">
+        <div class="budget-out">
+          <div class="bcol">
+            <span class="eyebrow">Lab-grown</span>
+            <span class="big" id="labOut">~1.8–2.2 ct</span>
+            <p id="labNote">G color, VS2, excellent cut, in a simple solitaire.</p>
+          </div>
+          <div class="bcol">
+            <span class="eyebrow">Natural</span>
+            <span class="big" id="natOut">~0.9–1.1 ct</span>
+            <p id="natNote">G color, SI1 eye-clean, excellent cut, in a simple solitaire.</p>
+          </div>
+        </div>
+        <div class="alloc" aria-hidden="true">
+          <i style="width:65%;background:var(--accent)"></i>
+          <i style="width:23%;background:var(--gold)"></i>
+          <i style="width:12%;background:var(--ink3)"></i>
+        </div>
+        <div class="alloc-key">
+          <span><b style="background:var(--accent)"></b>Center stone 65%</span>
+          <span><b style="background:var(--gold)"></b>Setting 23%</span>
+          <span><b style="background:var(--ink3)"></b>Sizing &amp; insurance 12%</span>
+        </div>
+        <p class="tiny" style="margin-top:13px">Ballpark ranges for orientation, not quotes. Stone prices move constantly — price-check three vendors before committing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk wrap">
+    <div class="callout" data-reveal>
+      <span class="eyebrow">Insure it before you propose</span>
+      <p>The window where a ring is most likely to be lost is the week you're carrying it around in a coat pocket waiting for the right moment. Get a valuation from the jeweler and add a scheduled personal property rider to your renter's or homeowner's policy, or a standalone jewelry policy — typically 1–2% of the ring's value per year. Photograph the report number on the girdle while you have it.</p>
+    </div>
+  </section>
+  <nav class="wrap pager" aria-label="Next and previous">
+    <a href="/diamonds/"><span>Previous</span>← Diamonds</a>
+    <a href="/how/"><span>Next</span>How →</a>
+  </nav>
+</main>
+
+<div class="night">
+  <footer>
+    <div class="wrap">
+      <div class="foot-about">
+        <a class="brand" href="/">Just not the ring</a>
+        <p>A planning guide, not a jeweler and not an appraiser. Grading standards referenced are GIA's. Price figures are orientation ranges that move with the market — verify with vendors before committing.</p>
+        <p>No vendor paid to be recommended here.</p>
+        <p class="foot-links"><a href="/privacy/">What happens to what you type here</a><a href="/stories/">Stories</a></p>
+      </div>
+      <div class="foot-src">
+        <span class="eyebrow">Sources</span>
+        <a href="https://www.theknot.com/content/how-much-to-spend-on-engagement-ring">The Knot — engagement ring cost</a>
+        <a href="https://rapaport.com/news/lab-grown-taking-over-engagement-ring-spending-the-knot/">Rapaport — The Knot 2026 study</a>
+        <a href="https://www.gia.edu/diamond-quality-factor">GIA — the 4Cs</a>
+        <a href="https://caratyes.com/proposals/proposal-photographer-guide">Proposal photography pricing</a>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/assets/data.js"></script>
+<script src="/assets/gem.js"></script>
+<script src="/assets/budget.js"></script>
+<script src="/assets/app.js"></script>
+</body>
+</html>

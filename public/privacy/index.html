@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Privacy · Just Not The Ring</title>
+<meta name="description" content="What stays in your browser, what leaves it, and who receives it.">
+<link rel="canonical" href="https://justnotthering.com/privacy/">
+<link rel="preload" href="/assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Page-to-page transitions. This opt-in is here rather than in the stylesheet because a
+   browser decides whether to animate as the new page starts, which can be before an
+   external stylesheet has arrived. Declared in styles.css, Chrome aborted roughly half the
+   transitions in testing; declared here, none. */
+@view-transition{navigation:auto}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
+</style>
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="/">Just not the ring</a>
+    <nav class="navl" aria-label="Sections"><a href="/quiz/">Quiz</a><a href="/locations/">Locations</a><a href="/trip/">Trip</a><a href="/hire/">Hire</a><a href="/diamonds/">Diamonds</a><a href="/rings/">Rings</a><a href="/how/">How</a><a href="/words/">Words</a><a href="/when/">When</a><a href="/stories/">Stories</a></nav>
+    <a class="btn primary navcta" href="/quiz/">Take the quiz</a>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="lbl">Menu</span></button>
+  </div>
+</header>
+<div class="menu" id="menu" hidden>
+  <nav class="wrap" aria-label="All sections">
+    <ol><li><a href="/quiz/"><span class="n">01</span>The quiz</a></li><li><a href="/locations/"><span class="n">02</span>Locations</a></li><li><a href="/trip/"><span class="n">03</span>The trip</a></li><li><a href="/hire/"><span class="n">04</span>Who to hire</a></li><li><a href="/diamonds/"><span class="n">05</span>Diamonds</a></li><li><a href="/rings/"><span class="n">06</span>The ring</a></li><li><a href="/how/"><span class="n">07</span>How</a></li><li><a href="/words/"><span class="n">08</span>What to say</a></li><li><a href="/when/"><span class="n">09</span>When</a></li><li><a href="/stories/"><span class="n" aria-hidden="true"></span>Stories</a></li></ol>
+    <div class="menu-foot"><a class="btn primary" href="/quiz/">Take the ten questions</a><a href="/privacy/" aria-current="page">What happens to what you type here</a></div>
+  </nav>
+</div>
+<main id="main">
+  <div class="wrap pagehead">
+    <span class="stamp">Privacy</span>
+    <h1 data-words class="long">What happens to what you <em>type</em> here</h1>
+    <p class="lede">You are describing someone you love, and planning a surprise. Both are reasons to know exactly where the words go. The short version: what you type stays in your browser unless you press a button that sends it, and there are exactly two such buttons — <b>Send it</b> on the plan email, and <b>Build the trip</b> when it asks for destination ideas. Nothing you write about your partner goes through either one.</p>
+  </div>
+  <section class="blk tight wrap" id="quiz">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">The quiz</span><h2>Stays on your device</h2></div>
+      <div class="prose">
+        <p>Every answer you give — the multiple choice, the boxes you tick about what your partner has actually said, and the free text where you describe them in your own words — is read by code running inside your own browser. It is matched against a keyword list that is part of this site. None of it is sent to us. Close the tab and it is gone.</p>
+        <p><b>One thing is written to your device, briefly.</b> If you answer the first question on the home page, the quiz opens on its own page with that answer already selected. To carry it across, your browser keeps the number of the option you tapped — a figure from 0 to 4 and nothing else — in this tab's session storage, and the quiz page deletes it as it reads it. It is never sent anywhere. If the option was “None of these”, only that number travels: what you then write is typed on the quiz page, and is not stored at all.</p>
+        <p>Changing the recommendation afterwards — swapping the place, the method or the ring — also happens entirely in your browser. We do not learn that you changed it, or what you changed it to. That is a real cost to us: it is the single most useful thing we could know about whether any of this works, and we would rather have the promise than the data.</p>
+        <p>The same is true of the diamond bench, the ring builder, the date timeline, the budget figures and the outreach notes. The stones you can turn over are drawn by your own device, from code that is part of this site; drawing them asks nothing of anyone. This site has no database. There is no account to make, and nothing to log in to.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tight wrap" id="plan-link">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">The plan link</span><h2>Carries scores and ticks, not sentences</h2></div>
+      <div class="prose">
+        <p>The link you can copy at the end of the quiz holds four things: the numeric scores your answers added up to, the boxes you ticked on the last step, anything you changed by hand afterwards, and the city you typed, if you typed one.</p>
+        <p>The ticks and the changes travel as short fixed labels from a list built into this site — <code>nopublic</code>, <code>sizeknown</code>, <code>stone.sapphire</code> — the same kind of thing as a multiple-choice answer. Some of them — a stone they named, that they do not want a ring, that a particular person should be there — say something the scores alone do not, which is the point of asking. <b>What the link never holds is a sentence you wrote.</b> Neither the free text on any question nor the box at the end of the last step goes into the link, which is why the quotes you see in the result do not come back when you reopen it. That is deliberate, and it is the reason it is safe to send this link to yourself.</p>
+        <p>That data sits after the <code>#</code> in the address. Browsers do not send the part after a <code>#</code> to the server, so when you copy the link or paste it somewhere, we do not see it and neither does anyone hosting it. The link decodes in whichever browser opens it, and anything in it that this page does not recognise is thrown away rather than shown to you.</p>
+        <p>Two other links work the same way. The one from your result to Locations carries the kind of place the quiz picked, and your city if you typed one, after a <code>#</code>. And a plan link made when this site was a single page, which began <code>justnotthering.com/#plan=</code>, still opens: the home page hands it to the quiz page inside your browser, and the part after the <code>#</code> is never sent on the way.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tight wrap" id="email">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">The first thing that leaves</span><h2>Emailing yourself the plan</h2></div>
+      <div class="prose">
+        <p>If you use the email button, two things travel to our server and on to Resend, the service that delivers the message: <b>the address you typed</b> and <b>the plan link</b> — plus, if you ticked it, the fact that you ticked the box. Nothing else, and no part of the quiz beyond what the link already holds. We do not keep a copy of any of it.</p>
+        <p>Resend keeps delivery records — that a message to that address was sent, and whether it arrived — the way every email service does. Their privacy terms are at <a href="https://resend.com/legal/privacy-policy">resend.com/legal/privacy-policy</a>.</p>
+        <p>If you tick the box asking to hear from us, your address is added to a mailing list and stays there until you unsubscribe. Every message carries a link that removes you, and the header that puts an Unsubscribe button in your mail app. The button is one press. The link opens a page with a button on it, because a link that acted on its own would fire the first time a spam filter followed it. Leave it unticked and your address is used once, to send you that one email, and then not again.</p>
+        <p><b>Opening the email tells us nothing.</b> It contains no images and loads no fonts, so there is no tracking pixel and nothing is fetched from anyone when you read it. The link inside is the plain plan link, not a redirect that counts clicks.</p>
+        <p><b>Leaving the list.</b> The unsubscribe link only exists in emails to people who ticked the box, and the email itself says which of the two you got. The link carries one thing: an opaque id our email provider assigned to your entry, never your address. Opening it shows a page with a button and changes nothing until you press it, so a link scanner following it cannot take you off by accident. Pressing it marks your entry unsubscribed with Resend, and nothing about your plan is touched, because nothing about your plan was ever stored. Like the send button, this page counts requests per connection to stop abuse, holding times only.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tight wrap" id="destination-ideas">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">The second thing that leaves</span><h2>Asking for destination ideas</h2></div>
+      <div class="prose">
+        <p>The Trip section can ask a language model — <b>Claude</b>, run by <b>Anthropic</b> — for three destinations that fit what you described. Where that is switched on, pressing <b>Build the trip</b> sends the brief you typed: the thing you want to do, the destination if you named one, where you are leaving from, your dates and your budget. <b>Nothing from the quiz goes with it</b>, and neither does anything you wrote about your partner.</p>
+        <p>Where it is not switched on, the button builds the flight, hotel and timing searches and sends nothing anywhere. <b>The line under the button tells you which of those two you are looking at, every time</b> — including while it is still working out which, in the second or so after the page loads. This page does not ask you to take its word for it here, because the answer depends on where you are reading this copy of the site.</p>
+        <p>The flight, hotel and map searches themselves are a different thing: they are ordinary links, and nothing reaches Google, Booking.com or Airbnb until you click one.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tight wrap" id="leaving">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">Leaving this site</span><h2>Where the links take you</h2></div>
+      <div class="prose">
+        <p>Several links here are built out of what you typed, and clicking one hands that much to wherever it lands. Typed text reaches exactly three companies this way: <b>Google</b>, <b>Booking.com</b> and <b>Airbnb</b>. A fourth, <b>Anthropic</b>, receives the trip brief where destination ideas are switched on — see the section above, which also tells you whether they are switched on for you. Under Trip, the flight, hotel and stay links carry your city and your dates, and the sunset and weather searches carry the place and the date as well. Under Locations and Who to hire, the map searches carry the place you named. Nothing goes anywhere until you click, and you can always run the same search yourself.</p>
+        <p>Once you follow any link out — to those sites, to a jeweler, to a photographer — you are on their site and their terms apply, not ours. We have no relationship with any of them and are paid nothing for sending you.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk tight wrap" id="everything-else">
+    <div class="prose-grid" data-reveal>
+      <div><span class="stamp">Everything else</span><h2>The unavoidable bits</h2></div>
+      <div class="prose">
+        <p><b>No cookies, no analytics.</b> This site sets no cookies and runs no analytics or advertising scripts. We cannot tell how many people take the quiz or what they answer, which is a real cost to us and the right trade. The only thing this site ever puts in your browser's storage is the single number described under <i>The quiz</i>.</p>
+        <p><b>Server logs.</b> The site is hosted on Cloudflare, which records ordinary request information — IP address, time, which page, which browser — to deliver pages and block attacks. That happens for every website you visit and we do not add anything to it. Each section here is its own page, so those records show which sections a connection opened — never what was typed or chosen on them.</p>
+        <p><b>Typefaces.</b> The three typefaces are files on this site, delivered by the same host as the pages. Loading a page here asks no other company for anything.</p>
+        <p><b>Stopping abuse of the email button.</b> An open send button on a public site gets used to send mail nobody asked for, so we count how many plan emails each internet connection has asked for in the past day. The count holds times only — no email addresses, no plans — and nothing older than twenty-four hours is kept.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk wrap">
+    <div class="callout" data-reveal>
+      <span class="eyebrow">The practical warning</span>
+      <p>None of the above protects a surprise from a shared inbox. If you email yourself the plan, or leave the link in a browser you both use, the person it is about can find it. Use an address only you open, and delete the message once you have what you need. That is the likeliest way this goes wrong — not us.</p>
+    </div>
+    <p class="small" style="margin-top:22px">Questions, or you want a mailing-list address removed: <a href="mailto:hello@justnotthering.com">hello@justnotthering.com</a>. If this page ever changes in a way that matters, the change will be described here rather than quietly made.</p>
+  </section>
+  <nav class="wrap pager" aria-label="Next and previous">
+    <a href="/"><span>Previous</span>← Back to the start</a>
+    <a href="/quiz/"><span>Next</span>Take the quiz →</a>
+  </nav>
+</main>
+
+<div class="night">
+  <footer>
+    <div class="wrap">
+      <div class="foot-about">
+        <a class="brand" href="/">Just not the ring</a>
+        <p>A planning guide, not a jeweler and not an appraiser. Grading standards referenced are GIA's. Price figures are orientation ranges that move with the market — verify with vendors before committing.</p>
+        <p>No vendor paid to be recommended here.</p>
+        <p class="foot-links"><a href="/privacy/">What happens to what you type here</a><a href="/stories/">Stories</a></p>
+      </div>
+      <div class="foot-src">
+        <span class="eyebrow">Sources</span>
+        <a href="https://www.theknot.com/content/how-much-to-spend-on-engagement-ring">The Knot — engagement ring cost</a>
+        <a href="https://rapaport.com/news/lab-grown-taking-over-engagement-ring-spending-the-knot/">Rapaport — The Knot 2026 study</a>
+        <a href="https://www.gia.edu/diamond-quality-factor">GIA — the 4Cs</a>
+        <a href="https://caratyes.com/proposals/proposal-photographer-guide">Proposal photography pricing</a>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/assets/app.js"></script>
+</body>
+</html>

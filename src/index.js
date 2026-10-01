@@ -108,7 +108,10 @@ async function handlePlanEmail(request, env) {
     }
   }
 
-  const link = `${SITE}/#plan=${plan}`;
+  /* The quiz has its own page. The plan stays in the fragment, which browsers never send in
+     a request, and the path is the one the asset server answers with a 200, so the link in
+     the email is the plan URL itself with no redirect on the way. */
+  const link = `${SITE}/quiz/#plan=${plan}`;
   const sent = await sendMail(env, email, link, subscription);
   if (!sent.ok) return json({ error: "send_failed" }, 502);
 
@@ -260,15 +263,16 @@ export class SendLimiter {
        them unconditionally. Decide that before writing that template, not after.
    The natural moment to split this section into src/email.js is that second template. */
 
-const PRIVACY_URL = `${SITE}/#privacy`;
+const PRIVACY_URL = `${SITE}/privacy/`;
 const UNSUB_URL = `${SITE}/api/unsubscribe`;
 const DOMAIN = "justnotthering.com";
 
-/* Colour tokens: [light, dark], copied from :root in public/index.html. Change these in
-   step with the site — and nothing below may use a colour literal. The masthead is the one
-   exception to light/dark switching: like the site's blue-hour panel it is dusk in both
-   schemes, so its wordmark and rule take the dark-scheme gold (the site's gold for dark
-   grounds) and its caption takes skyInk. */
+/* Colour tokens: [light, dark]. These are the email's own palette. They were copied from the
+   site while it had a light and a dark scheme; the site has since moved to one light look
+   (public/assets/styles.css), and the email was deliberately left as it is, because a mail
+   client's dark mode still needs the second column. Nothing below may use a colour literal.
+   The masthead is the one exception to light/dark switching: it is dusk in both schemes, so
+   its wordmark and rule take the dark-scheme gold and its caption takes skyInk. */
 const TOKENS = {
   ground:     ["#F5F4EF", "#101823"],
   surface:    ["#FCFCFA", "#18222F"],
@@ -282,16 +286,15 @@ const TOKENS = {
   accentSoft: ["#E5EBF3", "#1B2A3A"],
   gold:       ["#8A6C2C", "#DCC07C"],
   goldSoft:   ["#F3EEE1", "#2A2617"],
-  /* The caption colour of the site's blue-hour panel: `.skycap{color:#EEF3FA}` in
-     public/index.html. Not a :root token there; one value for both schemes because the
-     panel it sits on is dusk in both. */
+  /* The caption colour of the blue-hour panel. One value for both schemes because the panel
+     it sits on is dusk in both. */
   skyInk:     ["#EEF3FA", "#EEF3FA"],
 };
 const L = Object.fromEntries(Object.entries(TOKENS).map(([k, v]) => [k, v[0]]));
 const D = Object.fromEntries(Object.entries(TOKENS).map(([k, v]) => [k, v[1]]));
 
-/* The site's stacks. The web font is named first and resolves only if installed locally;
-   the fallback does the real work. Display is for headings only, mono for the eyebrow and
+/* The email's stacks. The first name in each resolves only if installed locally; the
+   fallback does the real work, and no font is ever fetched. Display is for headings only, mono for the eyebrow and
    the footer wordmark, body for everything else — body copy is not a serif. */
 /* Single quotes: these land inside double-quoted style attributes. */
 const F = {

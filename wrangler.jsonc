@@ -5,11 +5,14 @@
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    // Default, made explicit because the stories URLs depend on it: /stories/foo.html is
-    // served at /stories/foo and the .html form redirects, so every canonical, og:url and
-    // sitemap entry is written without the extension.
+    // Default, made explicit because every URL on the site depends on it. A folder's
+    // index.html is served with the trailing slash: /diamonds/ answers 200 and /diamonds
+    // redirects to it (307), so both load, on a first visit and on a refresh. A single file
+    // is served without its extension: /stories/foo.html is at /stories/foo and the .html
+    // form redirects. Every canonical, nav link, og:url and sitemap entry is written in the
+    // form that is served, so nothing costs a redirect.
     "html_handling": "auto-trailing-slash",
-    // A wrong or retired story link gets public/404.html instead of an empty 404.
+    // A wrong or retired link gets public/404.html instead of an empty 404.
     "not_found_handling": "404-page"
   },
   "durable_objects": {

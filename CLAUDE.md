@@ -4,11 +4,11 @@ Guidance for AI agents working in this repo.
 
 ## What this is
 
-A single-file website plus one small Worker, plus a static stories section. `public/index.html`
-contains the entire tool — markup, CSS and JavaScript in one file, roughly 3,000 lines.
+A small static website plus one small Worker. Each of the nine sections is its own page under
+`public/`, with one shared stylesheet and a handful of plain scripts under `public/assets/`.
 `src/index.js` is the Worker: it serves `public/` and answers two API routes. `public/stories/`
-is the stories section: hand-written static pages, one stylesheet, no JavaScript. There is
-no build step, no bundler, no package.json and no dependencies.
+is the stories section: hand-written pages on the same stylesheet. There is no build step, no
+bundler, no package.json and no dependencies.
 
 ```
 .gitignore
@@ -16,12 +16,21 @@ CLAUDE.md                     this file
 README.md
 wrangler.jsonc                main, assets → ./public, the LIMITER Durable Object, vars
 src/index.js                  the Worker: POST /api/plan-email, /api/unsubscribe, the rate limiter
-public/index.html             the whole tool: quiz, bench, trip, rings, privacy
+public/index.html             home: the hero, the nine tiles, question one, old-link redirects
+public/quiz/index.html        the quiz, its result, the plan link, the email panel
+public/locations/ trip/ hire/ diamonds/ rings/ how/ words/ when/ privacy/   one index.html each
 public/404.html               served for any unknown path (wrangler not_found_handling)
+public/assets/styles.css      the one stylesheet: tokens, type, every component
+public/assets/app.js          motion, menu, travelling stone, diamond bench, ring builder
+public/assets/gem.js          the 3D stone renderer (WebGL2); copied unchanged from the design reference
+public/assets/data.js         SHAPES, CUTS, COLORS, CLARITY, Q, SAID, STONES, LEXICON, the libraries
+public/assets/quiz.js         the quiz engine: scoring, composeResult(), plan links, the email panel
+public/assets/trip.js lens.js hire.js timeline.js budget.js   one feature each
+public/assets/fonts/          Newsreader, Geist, Geist Mono (woff2) and their licence
 public/robots.txt             Cloudflare merges its managed content-signals block above it
-public/sitemap.xml            hand-written; one entry per story
+public/sitemap.xml            hand-written; one entry per page and per story
 public/stories/index.html     the story cards, or the written empty state
-public/stories/stories.css    the section's one stylesheet; tokens copied from index.html
+public/stories/stories.css    what only a story needs; loaded after styles.css, defines no tokens
 public/stories/<slug>.html    one file per story
 public/stories/img/<slug>.jpg the photograph, where there is one (1600x900, under ~250KB)
 public/stories/og/<slug>.png  the 1200x630 preview card for a story with no photograph
@@ -31,49 +40,64 @@ tools/story-template.html     copy this to start a story
 ```
 
 Everything in `public/` is served to the world. The verifier fails on any file there that is
-not on its list, including a stray `.DS_Store`. Templates and tools live in `tools/`.
+not on its list, including a stray `.DS_Store`. Templates and tools live in `tools/`. A design
+handoff (`design/`) is reference material: never copy it into `public/`.
+
+Each page loads only the scripts it needs, in order: `data.js` before whatever reads it,
+`app.js` last. The verifier knows the list per page.
 
 ## Hard constraints
 
-**Do not reformat, prettify or minify `public/index.html`.** It is deliberately one file and
-deliberately hand-formatted. Make targeted edits; never run a formatter over it.
+**Do not reformat, prettify or minify the pages, the stylesheet or the scripts.** They are
+deliberately hand-formatted. Make targeted edits; never run a formatter over them.
 
 **Do not add a build system**, package.json, bundler, framework or CI workflow. If a change
 seems to require one, stop and ask first — that is an architecture decision, not a detail.
 
 **Never remove the document wrapper.** Every HTML file in `public/` must keep, in this order
 at the top: `<!doctype html>`, `<html lang="en">`, `<head>`, `<meta charset="utf-8">`, and
-the viewport meta. Without the charset, every em dash and arrow on the deployed site renders as mojibake
-(`â€"`), because Cloudflare does not send a charset header. This has broken once already.
+the viewport meta (with `viewport-fit=cover`). Without the charset, every em dash and arrow on
+the deployed site renders as mojibake (`â€"`), because Cloudflare does not send a charset
+header. This has broken once already. Each page also carries `<meta name="color-scheme"
+content="light">`, its own `<title>`, meta description and canonical URL.
 
-**A parallel copy exists as a Claude artifact**, and it must NOT have that wrapper — the
-Claude viewer supplies its own `<head>`. The two files are otherwise identical. The artifact
-copy is generated from this file by stripping the wrapper, and is maintained by Claude in the
-project chat. An agent working in this repo does not need to update it and should not flag it
-as out of date.
+**The header, the menu and the footer are the same block on every page, copied by hand.**
+That is the cost of no build step, and it is accepted. Change the navigation on one page and
+you change it on all of them, the 404 page, the stories index and `tools/story-template.html`
+included. The verifier compares them with `aria-current` taken out and fails when one differs.
+Mark the current page with `aria-current="page"` in both the bar and the menu.
 
-**The two-copies rule, recorded (September 2026).** The artifact is `index.html` minus the
-wrapper; the website is everything in `public/`. The stories section lives only on the
-website, and `index.html` reaches it through one absolute link,
-`https://justnotthering.com/stories/`, so the artifact and the site file stay identical but
-for the wrapper. Do not refactor `index.html` into html + css + js to share code with the
-stories: the artifact copy is generated by stripping the wrapper from one self-contained
-file, so a split breaks that generation, not just the page's stability. The cost accepted is
-that the design tokens live in two places, `index.html` and `stories.css`; the verifier
-fails when they differ.
+**URLs are the form that is served.** `html_handling` is `auto-trailing-slash`, so a folder
+page lives at `/diamonds/` and `/diamonds` redirects to it; both load. Canonicals, nav links
+and the sitemap all use the trailing slash, so a click never costs a redirect. Stories are
+single files and are served without `.html`.
+
+**Old links must keep working.** The site used to be one page that routed on the `#`. The home
+page moves `/#diamonds`-style addresses to the new pages and `/#plan=…` to `/quiz/#plan=…`
+with `location.replace`. Do not remove that script.
+
+**The single-file rule is retired, recorded (30 September 2026).** Until the Dusk Gallery
+redesign the whole tool was `public/index.html`, kept identical to a Claude artifact copy but
+for its wrapper, and this file forbade splitting it. The redesign made it one page per section
+so each has its own URL, title and description. The Claude artifact is now a separate
+multi-file prototype and is **not** kept in lockstep: an agent working in this repo does not
+update it and should not flag it as out of date. Nothing in `public/` is generated from
+anything else.
 
 **Commit as `swetharozario@alexandriteevents.com`.**
 
 **Run `node tools/check-stories.mjs` before committing anything under `public/`.** It has no
-dependencies. It checks the wrapper and og tags on every page, that every og:image exists and
-is at least 1200x630, that the sitemap and the index agree with the story files, that the
-tags read exactly as the quiz's libraries do, and that `stories.css` carries `index.html`'s
-tokens verbatim. A failed line here is what a skipped manual step looks like.
+dependencies. It kept its name from when it checked only the stories; it now checks the whole
+site: the wrapper on every page, that the header and footer match everywhere, that every link
+and script resolves, that nothing is loaded from another site, that every design token used
+is defined, that the home page's question-one tile reads as `data.js` does, the sitemap, the
+Worker's plan link, and for stories the og tags, images and the two tags against the quiz's
+libraries. A failed line here is what a skipped manual step looks like.
 
 ## Deploying
 
-Cloudflare Workers: static assets from `public/`, plus a `main` at `src/index.js` serving one
-route, `POST /api/plan-email`. Any push to `main` redeploys automatically. Manual deploy:
+Cloudflare Workers: static assets from `public/`, plus a `main` at `src/index.js` serving two
+routes, `POST /api/plan-email` and `/api/unsubscribe`. Any push to `main` redeploys automatically. Manual deploy:
 `npx wrangler deploy`. Secrets (`RESEND_API_KEY`) are set with `wrangler secret put` and never
 committed; the README lists the full environment.
 
@@ -96,7 +120,7 @@ These are what make the site trustworthy. Preserve them.
   Photographers contribute their own stories, not their clients'. The provenance line on
   every stories page states this rule; keep it.
 - **A story's two tags are the quiz's own wording.** `data-loc` and `data-capture` carry ids
-  from `LOC_LIB` and `CAPTURE_LIB` in `index.html`; the visible text is the library's `h`
+  from `LOC_LIB` and `CAPTURE_LIB` in `assets/data.js`; the visible text is the library's `h`
   string, verbatim. The ids are what the quiz result will join on when stories appear beside
   the archetype they demonstrate. Not built yet; do not make it expensive.
 - **Stories have no contact address yet.** `hello@justnotthering.com` has no MX records.
@@ -117,7 +141,9 @@ These are what make the site trustworthy. Preserve them.
 
 ## Privacy
 
-Everything runs in the browser EXCEPT two routes. `POST /api/plan-email` receives an email
+Everything runs in the browser EXCEPT two routes, and nothing is loaded from any other site:
+the fonts are files under `public/assets/fonts/`, and the verifier fails on a font service, a
+CDN script or an analytics tag anywhere in `public/`. `POST /api/plan-email` receives an email
 address and a validated plan code, hands them to Resend to deliver one message, and stores
 neither. `/api/unsubscribe` receives an opaque Resend contact id — never an address — and on
 `POST` marks that contact unsubscribed; a `GET` only shows the confirmation page and changes
@@ -138,23 +164,42 @@ email, not in a log. Nothing that transmits or stores them is acceptable, for an
 no feature is worth an exception. The plan code carries scores and a city, never the text. If
 a change seems to need them server-side, stop and ask.
 
-The site has a privacy page at `#privacy` — an unnumbered view, in `VIEWS` but deliberately not
-in the nav. **Any change to what the code transmits, or to whom, requires a matching edit to
-that page in the same commit.**
+**Not in storage either.** The one thing the site stores is on the way from the home page's
+question-one tile to the quiz page: the index of the option tapped (0 to 4), in
+`sessionStorage` under `jntr-q1`, removed as the quiz reads it. Never carry typed text between
+pages. Anything else that must cross pages goes in a URL fragment, the way the plan link and
+the result's link to Locations (`/locations/#lens=…&city=…`) do, because a fragment is never
+sent in a request. Never a query string.
+
+The site has a privacy page at `/privacy/` — unnumbered, linked from the menu's foot, the
+footer and the email panel, and deliberately not one of the nine in the nav. **Any change to
+what the code transmits or stores, or to whom, requires a matching edit to that page in the
+same commit.**
 
 ## Making changes
 
-- Colours are CSS custom properties on `:root`, redefined under both
-  `@media (prefers-color-scheme: dark)` and `:root[data-theme="dark"]`. The palette is
-  blue-hour: warm off-white ground, sapphire accent (`#2F5480`), deep navy (`#1E3A5F`) and
-  champagne gold for section numbers — those are the light-mode values; dark mode redefines
-  each token. Change tokens, not individual rules. Every new colour needs a definition in all
-  three places.
-- Fonts: Fraunces (display), Karla (body), IBM Plex Mono (data and labels).
-- Check any visual change at 390px width as well as desktop, and in both light and dark.
-- Key structures: `showView()` for routing; `SHAPES`/`CUTS`/`COLORS`/`CLARITY` drive the
-  diamond bench; `Q` and `LEXICON` drive the quiz; `composeResult()` builds the
-  recommendation; `buildNote()` holds the venue outreach templates.
+- **One light look.** Colours are CSS custom properties on `:root` in `assets/styles.css`, and
+  that is the only place a token is defined: porcelain ground, sapphire (`#1E3A5F`, `#2F5480`),
+  champagne gold for numbers and stamps, peach on the night band. There is no dark scheme, by
+  choice: `:root` declares `color-scheme:light`, so a dark-mode device still draws light form
+  controls. Change tokens, not individual rules.
+- Fonts: Newsreader (display), Geist (body), Geist Mono (labels and grades), self-hosted.
+- Build new sections from the existing components: `.pagehead`, `.prose-grid`, `.steps`,
+  `.callout`, `.cards5`, `.card`, `.panel`, `.table-wrap`, `.quotes`, `.pager`, `.tags`.
+- **Motion is cinematic for everyone, calm for reduced motion.** `app.js` sets `data-motion`
+  on `<html>`; there is no switch. Headings use `data-words`. Sections with `data-reveal` rise
+  in; nothing may be left invisible at rest. The page-transition opt-in
+  (`@view-transition{navigation:auto}`) is inline in every page's `<head>`, not in the
+  stylesheet: declared in the stylesheet, Chrome dropped about half the transitions in
+  testing. Only one element per page may hold `view-transition-name: stone`.
+- Check any visual change at 390px width as well as desktop, with reduced motion on, and on a
+  dark-mode device. On the diamonds page the stone must stay in view on a phone while the
+  controls are used (the sticky strip in `styles.css`).
+- Key structures: `Q` and `LEXICON` (in `data.js`) drive the quiz; `composeResult()` in
+  `quiz.js` builds the recommendation; `planLink()` and `readPlanFromUrl()` write and read
+  `#plan=`; `renderBench()` and `renderRing()` in `app.js` write state onto the `gem.js`
+  canvases through `data-*` attributes; `buildNote()` in `trip.js` holds the venue outreach
+  templates.
 - **When a result has several parts and the UI says changing one moves the rest, test that
   claim directly.** Three times the same bug has shipped in the quiz result: dimensions that
   compose in real life (place, occasion, how it is remembered) were ranked as if independent,
@@ -175,11 +220,11 @@ that page in the same commit.**
    first-class state, not a fallback: "nothing at all" is one of the six capture options.
 3. Add the card to `public/stories/index.html` (delete the empty state if it is the first),
    add the URL to `public/sitemap.xml`, run the verifier, look at the page at 390px and on
-   desktop in both schemes.
+   desktop.
 
 ## Known gap
 
-The trip planner's AI destination suggestions call `window.claude.use("sample")`, which only
-exists inside the Claude artifact viewer. On the live site the page detects its absence and
+The trip planner's AI destination suggestions (`assets/trip.js`) call
+`window.claude.use("sample")`, which only exists inside the Claude artifact viewer. On the live site the page detects its absence and
 degrades gracefully. Making it work here means adding a Worker endpoint — see the project
 notes, which live outside this repo.
