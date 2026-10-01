@@ -5,8 +5,9 @@
    QUIZ FREE-TEXT ANSWERS NEVER LEAVE THE BROWSER. They are scored here, quoted back in the
    result, and held in memory only. Not in the link, not in storage, not in a request.
 
-   What is stored, for this tab only: the plan a result came to -- the same scores, fixed ids
-   and city its link carries, never an answer and never a sentence -- so the result is still
+   What is stored, for this tab only: the plan a result came to -- exactly what its link
+   carries: the scores, the fixed ids of what was ticked or changed, and the city. Never which
+   option was chosen on a question, and never a sentence. It is there so the result is still
    here after a look at another page. See rememberPlan() near the end. */
 (function(){
 "use strict";
@@ -31,6 +32,25 @@ function stageClass(stage, base){
   if(slide){ void stage.offsetWidth; stage.classList.add(slide); slide=""; }
 }
 function isPlanHash(){ return (location.hash||"").indexOf("#plan=")===0; }
+/* Every axis the quiz can score on, gathered from the data itself. A plan read from a link or
+   from the tab's memory keeps a score only if its name is one of these, so a made-up key --
+   which could be a whole sentence -- is dropped rather than carried into the next link. */
+var AXES=Object.create(null);
+(function(){
+  function take(o){ for(var k in o){ if(Object.prototype.hasOwnProperty.call(o,k)) AXES[k]=1; } }
+  Q.forEach(function(q){ (q.ax||[]).forEach(function(a){ AXES[a]=1; }); q.o.forEach(function(o){ take(o[1]); }); if(q.implies) take(q.implies); });
+  take(LEXICON); take(OPP);
+  [LOC_LIB,METHOD_LIB,CAPTURE_LIB].forEach(function(lib){ lib.forEach(function(x){ take(x.m); }); });
+})();
+/* Back to a quiz nobody has started. */
+function clearRun(){
+  qi=0;
+  answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill("");
+  said={}; saidStone=""; saidText=""; overrides={}; restoredTally=null; cityAnswer="";
+}
+/* The one place this page touches the address: taking a plan's fragment OUT of it. Nothing
+   here ever puts one in. */
+function stripPlanFragment(){ if(isPlanHash()) history.replaceState({}, "", location.pathname); }
 function prio0(t){ return top(t,["size","quality","ethics","thrift"],"quality"); }
 function saidOn(id){ return !!said[id]; }
 /* "A lab-grown diamond" reads correctly in a checkbox list and wrongly as the
@@ -217,7 +237,7 @@ function readPlanCode(code){
     var obj=JSON.parse(b64d(code));
     if(!obj || typeof obj.t!=="object" || obj.t===null || Array.isArray(obj.t)) return null;
     var clean={};
-    for(var key in obj.t){ if(typeof obj.t[key]==="number" && isFinite(obj.t[key])) clean[key]=obj.t[key]; }
+    for(var key in obj.t){ if(AXES[key]===1 && typeof obj.t[key]==="number" && isFinite(obj.t[key])) clean[key]=obj.t[key]; }
     /* Everything below is matched against the fixed lists above rather than trusted.
        A link is a thing a stranger can hand you, so nothing in it reaches the page
        unless the page already knew the word. */
@@ -560,7 +580,7 @@ function composeResult(forced){
       '<ul class="moves">'+moves.map(function(m,i){return '<li data-n="'+(i+1)+'">'+esc(m)+'</li>';}).join("")+'</ul>'+
       '<div class="share">'+
         '<span class="eyebrow">Keep this</span>'+
-        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation, including anything you changed — no account, and nothing to sign up for. This tab also remembers the plan until you close it or start over, so you can look round the site and come back to it; from anywhere else, the link is the way back.</p>'+
+        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation, including anything you changed — no account, and nothing to sign up for.<span id="keepNote"></span></p>'+
         '<div class="share-row">'+
           '<input class="field" id="shareUrl" readonly value="'+esc(planLink(t))+'" aria-label="Link to this plan">'+
           '<button class="btn ghost" id="shareCopy" type="button">Copy link</button>'+
@@ -687,7 +707,7 @@ function wireResult(){
        pre-filled the next run and rode along in their link. */
     cityAnswer="";
     forgetPlan();
-    if(isPlanHash()) history.replaceState({}, "", location.pathname);
+    stripPlanFragment();
     slide="in-l";
     renderQ();
     window.scrollTo({top:0,behavior:"smooth"});
@@ -699,7 +719,11 @@ function rerenderResult(refocusId){
   stage.className="";
   stage.innerHTML=composeResult(restoredTally);
   wireResult();
-  rememberPlan();
+  /* A plan opened from a link and then changed is no longer the plan in the address. Left
+     there, the old fragment would win on a reload and undo the change, so it comes out; the
+     tab's memory holds the changed plan, and the link in the panel is the one to keep. */
+  if(isPlanHash() && location.hash.slice(6)!==currentPlanCode()) stripPlanFragment();
+  showKept(rememberPlan());
   if(refocusId){
     var box=$("adjustBox");
     if(box && box.scrollIntoView) box.scrollIntoView({block:"center",behavior:"auto"});
@@ -746,7 +770,7 @@ function renderSaidStep(){
       '<p class="fine">Quoted back to you at the top of the plan and nowhere else. Unlike the boxes above, this one deliberately does not travel in the shareable link — the same rule the rest of your own words follow.</p>'+
     '</div>'+
     '<div style="margin-top:24px"><label class="label" for="quizCity">Optional — where are you?</label>'+
-      '<input class="field" id="quizCity" type="text" placeholder="City or region" style="max-width:340px" value="'+esc(cityAnswer)+'"></div>'+
+      '<input class="field" id="quizCity" type="text" maxlength="80" placeholder="City or region" style="max-width:340px" value="'+esc(cityAnswer)+'"></div>'+
     '<div class="q-foot">'+
       '<button class="linkbtn" id="backBtn" type="button">← Back</button>'+
       '<span class="spacer"></span>'+
@@ -772,13 +796,18 @@ function renderSaidStep(){
   if(st) st.addEventListener("input",function(){ saidText=this.value; });
   /* Read on the way past as well as on Next, or pressing Back throws it away. */
   var cf0=$("quizCity");
-  if(cf0) cf0.addEventListener("input",function(){ cityAnswer=this.value.trim(); });
+  if(cf0) cf0.addEventListener("input",function(){ cityAnswer=this.value.trim().slice(0,80); });
 
   $("backBtn").addEventListener("click",function(){ qi--; slide="in-l"; renderQ(); focusStage(); });
   $("nextBtn").addEventListener("click",function(){
     var cf=$("quizCity");
-    if(cf) cityAnswer=cf.value.trim();
+    if(cf) cityAnswer=cf.value.trim().slice(0,80);
     if(st) saidText=(st.value||"").trim();
+    /* "They have named a stone", ticked with no stone chosen, is not a named stone, and the
+       plan link has never carried it. It used to lean the result on screen all the same, so
+       the plan that came back from a link, or from the tab's memory, could differ from the
+       one that was left. Unticked here, the two agree. */
+    if(said.stone && !saidStone) delete said.stone;
     qi++;
     slide="in-r";
     renderQ();
@@ -804,7 +833,7 @@ function renderQ(){
     stageClass(stage,"");
     stage.innerHTML=composeResult(restoredTally);
     wireResult();
-    rememberPlan();
+    showKept(rememberPlan());
     return;
   }
   if(qi===Q.length){ renderSaidStep(); return; }
@@ -881,9 +910,7 @@ window.addEventListener("hashchange", function(){
   if(applyPlanHash()) return;
   /* Moving from a valid plan link to a broken one used to leave the previous
      recommendation sitting there looking like the answer to the new link. */
-  if(isPlanHash()){ qi=0; answers=new Array(Q.length).fill(null); customs=new Array(Q.length).fill("");
-    said={}; saidStone=""; saidText=""; overrides={}; restoredTally=null; cityAnswer="";
-    renderQ(); }
+  if(isPlanHash()){ clearRun(); dropBrokenLink(); renderQ(); }
 });
 
 /* The home page's question-one tile hands over which option was tapped: its index, 0 to 4,
@@ -909,12 +936,28 @@ function takeHandoff(){
    browser's history, and a history entry on a shared laptop is exactly how a surprise is
    found. */
 var PLAN_KEY="jntr-plan";
-function forgetPlan(){ try{ sessionStorage.removeItem(PLAN_KEY); }catch(err){} }
+/* Whether this copy of the page has the plan on screen safely stored. A browser can refuse
+   storage outright, and then the page must not say the tab remembers anything. */
+var kept=false;
+function forgetPlan(){ kept=false; try{ sessionStorage.removeItem(PLAN_KEY); }catch(err){} }
 function rememberPlan(){
   var code=currentPlanCode();
-  if(!/^[A-Za-z0-9_-]{8,2000}$/.test(code)){ forgetPlan(); return; }
-  try{ sessionStorage.setItem(PLAN_KEY, code); }catch(err){}
+  if(!/^[A-Za-z0-9_-]{8,2000}$/.test(code)){ forgetPlan(); return false; }
+  try{ sessionStorage.setItem(PLAN_KEY, code); kept=(sessionStorage.getItem(PLAN_KEY)===code); }catch(err){ kept=false; }
+  return kept;
 }
+/* The sentence in the Keep this panel about the tab, written once it is known to be true. */
+function showKept(ok){
+  var el=$("keepNote");
+  if(el) el.textContent = ok
+    ? " This tab also remembers the plan, so you can look round the site and come back to it. Start over clears it; closing the tab does too, unless the browser reopens that tab."
+    : " This browser is not letting the page keep the plan for this tab, so once you leave this page the link is the only way back to it.";
+}
+/* A plan link that cannot be read. The visitor gets question one; the fragment comes out of
+   the address, or it would block the tab's memory on every later load; and whatever the tab
+   was remembering goes, or the plan from before would come back on a reload looking like
+   the answer to the link that failed. */
+function dropBrokenLink(){ forgetPlan(); stripPlanFragment(); }
 function restoreRemembered(){
   var code=null;
   try{ code=sessionStorage.getItem(PLAN_KEY); }catch(err){}
@@ -927,15 +970,29 @@ function restoreRemembered(){
   return true;
 }
 
+/* Back and Forward can bring this page back whole, as it was left, without loading it again.
+   If the tab's memory has moved on since -- Start over on a later visit, or a different plan
+   -- that old copy would show a result the tab no longer holds, typed words and all. So when
+   a kept result comes back and the store no longer matches it, the page follows the store. */
+window.addEventListener("pageshow", function(e){
+  if(!e.persisted || qi<=Q.length || !kept) return;
+  var now=null;
+  try{ now=sessionStorage.getItem(PLAN_KEY); }catch(err){ return; }
+  if(now===currentPlanCode()) return;
+  clearRun();
+  if(!restoreRemembered()) renderQ();
+});
+
 /* What the page opens on, in order: a plan link, which wins and becomes what the tab
    remembers; an answer handed over from the home page, which is somebody beginning again, so
    the remembered plan goes; the remembered plan; and otherwise question one. A broken plan
-   link gets question one, not the remembered plan: the address asked for something else. */
+   link gets question one and clears what was remembered: see dropBrokenLink(). */
 (function(){
   var handed=takeHandoff();
   if(applyPlanHash()) return;
+  if(isPlanHash()) dropBrokenLink();
   if(handed) forgetPlan();
-  else if(!isPlanHash() && restoreRemembered()) return;
+  else if(restoreRemembered()) return;
   renderQ();
   if(handed && answers[0]===Q[0].o.length){ var ta0=$("ownText"); if(ta0 && ta0.focus) ta0.focus({preventScroll:true}); }
 })();

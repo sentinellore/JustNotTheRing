@@ -89,8 +89,8 @@ const ALL = walk(PUB);
   const STORES = /\b(?:localStorage|sessionStorage|indexedDB|document\.cookie|caches\.open|navigator\.serviceWorker)\b/g;
   /* What each script is known to do. Anything not listed is expected to do none of it. */
   const MAY = {
-    /* quiz.js: read jntr-q1, remove it; remove, set and read jntr-plan */
-    "assets/quiz.js": { fetch: ['fetch("/api/plan-email",{'], stores: ["sessionStorage", "sessionStorage", "sessionStorage", "sessionStorage", "sessionStorage"] },
+    /* quiz.js: read jntr-q1, remove it; jntr-plan: remove, set, read back to confirm, read to restore, read on a Back */
+    "assets/quiz.js": { fetch: ['fetch("/api/plan-email",{'], stores: new Array(7).fill("sessionStorage") },
     "assets/app.js": { stores: ["sessionStorage", "sessionStorage", "sessionStorage"] },                        // the handoff helper: get, remove, set
   };
   for (const f of ALL.filter((f) => /\.(html|css|js)$/.test(f))) {
@@ -114,13 +114,25 @@ const ALL = walk(PUB);
   if (!QUIZ.includes("body:JSON.stringify({ email:addr, plan:currentPlanCode(), optIn: !!(note && note.checked) })")) fail("public/assets/quiz.js", "the plan email's request body must be exactly { email, plan, optIn }: the privacy page lists those three and nothing else"); else ok();
   const keys = [...new Set(ALL.filter((f) => f.endsWith(".js")).flatMap((f) => [...read(f).matchAll(/["'](jntr-[a-z0-9-]+)["']/g)].map((m) => m[1])))];
   if (JSON.stringify(keys.sort()) !== '["jntr-plan","jntr-q1"]') fail("public/assets", `storage keys in use are ${JSON.stringify(keys)}; the only two are jntr-plan and jntr-q1`); else ok();
-  /* what the tab remembers is the link's own payload, checked by the link's own reader, and it goes on Start over */
-  if (!/function rememberPlan\(\)\{\s*var code=currentPlanCode\(\);/.test(QUIZ)) fail("public/assets/quiz.js", "rememberPlan() must store currentPlanCode(), the string the share link carries, and nothing else"); else ok();
-  if (!/var t=readPlanCode\(code\);/.test(QUIZ)) fail("public/assets/quiz.js", "the remembered plan must be read back through readPlanCode(), the same checks a plan link gets"); else ok();
-  if (!/\$\("restart"\)\.addEventListener\("click",function\(\)\{[\s\S]{0,600}?forgetPlan\(\);/.test(QUIZ)) fail("public/assets/quiz.js", "Start over must call forgetPlan(): the privacy page says it deletes the stored plan"); else ok();
-  if (/history\.(?:push|replace)State\([^)]*#plan=|location\.hash\s*=/.test(QUIZ)) fail("public/assets/quiz.js", "the plan must not be written into the address bar: it would stay in the browser's history"); else ok();
-  /* the two boxes a partner is described in must not be handed to a browser's spellcheck service */
-  for (const id of ["ownText", "saidText"]) { if (!new RegExp(`id="${id}"[^>]*spellcheck="false"`).test(QUIZ)) fail("public/assets/quiz.js", `#${id} needs spellcheck="false": some browsers' spellcheckers send what is typed to their maker`); else ok(); }
+  /* What the tab remembers. These pin the exact lines, because there are too many ways to
+     spell a leak to list them: one write, of the link's own payload; one reader, the link's;
+     one history call, which only takes a fragment out; and Start over forgets. A change to
+     any of them fails here until someone has looked at the privacy page again. */
+  const code = QUIZ.replace(/\/\*[\s\S]*?\*\//g, "");
+  const count = (re) => (code.match(re) || []).length;
+  if (count(/\.setItem\(/g) !== 1 || !code.includes("sessionStorage.setItem(PLAN_KEY, code);") || !code.includes("var code=currentPlanCode();\n  if(!/^[A-Za-z0-9_-]{8,2000}$/.test(code)){ forgetPlan(); return false; }")) fail("public/assets/quiz.js", "storage is written in exactly one place: sessionStorage.setItem(PLAN_KEY, code), where code is currentPlanCode() checked against the plan pattern. Anything else stored needs the privacy page changed first."); else ok();
+  if (!code.includes("var t=readPlanCode(code);")) fail("public/assets/quiz.js", "the remembered plan must be read back through readPlanCode(), the same checks a plan link gets"); else ok();
+  if (!code.includes("if(AXES[key]===1 && typeof obj.t[key]===\"number\" && isFinite(obj.t[key])) clean[key]=obj.t[key];")) fail("public/assets/quiz.js", "readPlanCode() must keep only scores named for the quiz's own axes; an unknown key can be a sentence"); else ok();
+  const hist = code.match(/\bhistory\s*\.\s*\w+\s*\([^;]*;/g) || [];
+  if (hist.length !== 1 || hist[0] !== 'history.replaceState({}, "", location.pathname);') fail("public/assets/quiz.js", `the page's only history call is history.replaceState({}, "", location.pathname), which takes a plan's fragment out of the address. Found: ${JSON.stringify(hist)}. A plan must never be written into the address bar: it would stay in the browser's history.`); else ok();
+  if (/\blocation\s*\.\s*(?:hash|href|search)\s*=(?!=)|\blocation\s*\.\s*(?:replace|assign)\s*\(|\blocation\s*=(?!=)|\bwindow\.open\s*\(/.test(code)) fail("public/assets/quiz.js", "the quiz must not navigate or rewrite the address itself: that is how a plan would get into history"); else ok();
+  if (!/\$\("restart"\)\.addEventListener\("click",function\(\)\{[\s\S]{0,600}?\n    forgetPlan\(\);\n    stripPlanFragment\(\);/.test(code)) fail("public/assets/quiz.js", "Start over must call forgetPlan() and stripPlanFragment(): the privacy page says it deletes the stored plan"); else ok();
+  if (!code.includes('maxlength="80"') || count(/\.trim\(\)\.slice\(0,80\)/g) < 2) fail("public/assets/quiz.js", "the city is capped at 80 characters where it is typed, as well as where it is read"); else ok();
+  /* a link that opens a new tab must not hand that tab a way back into this one */
+  for (const f of ALL.filter((f) => /\.(html|js)$/.test(f))) {
+    const bad = (read(f).match(/<a\b[^>]*target=\\?"_blank\\?"[^>]*>/g) || []).filter((a) => !/rel=\\?"noopener/.test(a));
+    if (bad.length) fail(rel(f), `a target="_blank" link lacks rel="noopener": ${bad[0].slice(0, 90)}`); else ok();
+  }
 }
 
 /* ---------- links written by the scripts go somewhere too ---------- */

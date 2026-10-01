@@ -3,5 +3,5 @@
 .dev.vars
 .wrangler/
 # design handoffs: reference material, kept out of the repo
-design/
-dusk-gallery-handoff.zip
+/design/
+/dusk-gallery-handoff.zip

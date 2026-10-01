@@ -108,7 +108,9 @@ committed; the README lists the full environment.
 
 **To put a branch in front of real phones before it merges**, deploy the preview Worker, never
 production: `npx wrangler deploy --config preview/wrangler.jsonc`, and remove it afterwards
-with `npx wrangler delete --config preview/wrangler.jsonc`. It is a separate Worker with its
+with `npx wrangler delete --config preview/wrangler.jsonc`. **The `--config` flag is the whole
+difference.** Without it, the same two commands deploy the working tree to production, and
+delete production. It is a separate Worker with its
 own name and limiter and no secrets, so its email route answers 503 and it can send nothing;
 every response carries `X-Robots-Tag: noindex`. `wrangler versions upload` gives no preview
 URL here, because Cloudflare makes none for a Worker that implements a Durable Object.
@@ -180,22 +182,31 @@ email, not in a log. Nothing that transmits or stores them is acceptable, for an
 no feature is worth an exception. The plan code carries scores and a city, never the text. If
 a change seems to need them server-side, stop and ask.
 
-**Not in storage either.** Answers and typed text live in the page's memory and nowhere
-else. The site stores exactly two things, both in `sessionStorage`, so both are one tab's and
-go when it closes:
+**Not in storage either.** Which option was chosen on each question, and every sentence
+typed, live in the page's memory and nowhere else. The site stores exactly two things, both
+in `sessionStorage`, so both belong to one tab. A browser empties that store when the tab
+closes, but brings it back if the tab is reopened or the session restored, so "Start over" is
+the only sure way to clear it and the copy on the site says so:
 
 - `jntr-plan` — the plan a result came to: the same string the share link carries after
-  `#plan=` (scores, closed-vocabulary ids, the city), never an answer and never free text.
-  Written whenever a result is shown or adjusted, read when `/quiz/` loads with no `#plan=`
-  fragment, removed by "Start over" and by starting again from the home page's tile. It is
-  read back through `readPlanCode()`, the same checks a link gets. Decided 1 October 2026,
-  so a result survives a look at another page.
+  `#plan=`: the scores, the closed-vocabulary ids of what was ticked or changed, and the city
+  (which is typed, capped at 80 characters, and has always been in the link). Never the
+  answers to the ten questions and never the free-text sentences. Written whenever a result
+  is shown or adjusted; read when `/quiz/` loads with no `#plan=` fragment; removed by "Start
+  over", by starting again from the home page's tile, and by a plan link that cannot be
+  read. It is read back through `readPlanCode()`, the same checks a link gets, which also
+  drop any score whose name is not one of the quiz's own axes. If storage is refused, the
+  result says the tab is not remembering it. Decided 1 October 2026, so a result survives a
+  look at another page.
 - `jntr-q1` — the index (0 to 4) of the option tapped on the home page's question-one tile,
   removed as the quiz reads it.
 
 **Never write the plan into the address bar.** A `#plan=` put there by the page would sit in
 browser history, and history on a shared laptop is how a surprise gets found. A plan reaches
-the address only when a person opens a link. Never carry typed text between pages. Anything
+the address only when a person opens a link. The page's one history call,
+`stripPlanFragment()`, only ever takes a fragment out: after "Start over", when a link's plan
+has been changed on screen (or the stale fragment would undo the change on reload), and when
+a link cannot be read. Never carry typed text between pages. Anything
 else that must cross pages goes in a URL fragment, the way the plan link and the result's
 link to Locations (`/locations/#lens=…&city=…`) do, because a fragment is never sent in a
 request. Never a query string. A third stored thing, or a longer-lived one (`localStorage`,
@@ -231,8 +242,9 @@ same commit.**
   is a fixed drawing, and the pages say so (`data-nogl`); without script the bar shows its
   links (`<noscript>` in every head).
 - Key structures: `Q` and `LEXICON` (in `data.js`) drive the quiz; `composeResult()` in
-  `quiz.js` builds the recommendation; `planLink()` and `readPlanFromUrl()` write and read
-  `#plan=`; `renderBench()` and `renderRing()` in `app.js` write state onto the `gem.js`
+  `quiz.js` builds the recommendation; `planLink()` and `readPlanCode()` write and read a
+  plan, from a `#plan=` link or from the tab's memory (`rememberPlan()`,
+  `restoreRemembered()`); `renderBench()` and `renderRing()` in `app.js` write state onto the `gem.js`
   canvases through `data-*` attributes; `buildNote()` in `trip.js` holds the venue outreach
   templates.
 - **When a result has several parts and the UI says changing one moves the rest, test that

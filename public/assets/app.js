@@ -184,7 +184,14 @@
      is the option's index, 0 to 4, and the quiz page removes it as it reads it. "None of
      these" carries its index like any other; the words are typed on the quiz page and are
      never stored. */
-  $$("[data-q1]").forEach(function (a) { a.addEventListener("click", function () { session("jntr-q1", a.dataset.q1); }); });
+  $$("[data-q1]").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      // Only a plain tap that takes this tab to the quiz. Opened in a new tab instead, the number
+      // would stay behind in this one and start a quiz nobody asked for on its next visit.
+      if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      session("jntr-q1", a.dataset.q1);
+    });
+  });
 
   /* ---------- when the device cannot draw the stone ---------- */
   /* gem.js needs WebGL2 and, without it, draws one fixed gold-line stone that does not change.

@@ -155,7 +155,8 @@ To test a branch on real devices without touching production, `preview/` holds a
 throwaway Worker: `npx wrangler deploy --config preview/wrangler.jsonc` puts the working tree
 at `justnotthering-preview.<account>.workers.dev`, with `X-Robots-Tag: noindex` on every
 response, its own empty rate limiter and no secrets (so the email route answers 503 and sends
-nothing). Remove it with `npx wrangler delete --config preview/wrangler.jsonc`.
+nothing). Remove it with `npx wrangler delete --config preview/wrangler.jsonc`. Keep the
+`--config` flag on both: without it the same commands act on the production Worker.
 
 Everything in `public/` is served to the world; `node tools/check-stories.mjs` fails on any file
 there it does not expect. `html_handling` is `auto-trailing-slash`: a section is served at

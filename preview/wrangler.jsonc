@@ -7,6 +7,9 @@
   //   deploy:  npx wrangler deploy --config preview/wrangler.jsonc
   //   remove:  npx wrangler delete --config preview/wrangler.jsonc
   //
+  // Both from the repo root, and both WITH --config. Without the flag wrangler reads
+  // ../wrangler.jsonc instead, and the same two commands deploy to, or delete, production.
+  //
   // Why a separate Worker rather than `wrangler versions upload`: Cloudflare makes no
   // preview URL for a Worker that implements a Durable Object, and this one does.
   "name": "justnotthering-preview",
