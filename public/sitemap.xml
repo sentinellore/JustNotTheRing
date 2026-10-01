@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Hand-written. One <url> per story page, canonical form (no .html), newest first
-     after the two fixed entries. tools/check-stories.mjs fails when a story is missing
-     here or listed here without a file. -->
+<!-- Hand-written. The home page, one <url> per section in menu order, the privacy page,
+     the stories index, then one <url> per story, newest first. Every address is the form
+     that is served with a 200: folder pages end in a slash, stories have no .html.
+     tools/check-stories.mjs fails when a page or a story is missing here, or listed here
+     without a file. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://justnotthering.com/</loc></url>
+  <url><loc>https://justnotthering.com/quiz/</loc></url>
+  <url><loc>https://justnotthering.com/locations/</loc></url>
+  <url><loc>https://justnotthering.com/trip/</loc></url>
+  <url><loc>https://justnotthering.com/hire/</loc></url>
+  <url><loc>https://justnotthering.com/diamonds/</loc></url>
+  <url><loc>https://justnotthering.com/rings/</loc></url>
+  <url><loc>https://justnotthering.com/how/</loc></url>
+  <url><loc>https://justnotthering.com/words/</loc></url>
+  <url><loc>https://justnotthering.com/when/</loc></url>
+  <url><loc>https://justnotthering.com/privacy/</loc></url>
   <url><loc>https://justnotthering.com/stories/</loc></url>
 </urlset>

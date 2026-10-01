@@ -1,0 +1,40 @@
+{
+  // A throwaway copy of the site for testing a branch on real phones and browsers before it
+  // merges. It is a separate Worker with its own name, on workers.dev, so nothing here can
+  // touch production: `justnotthering` (../wrangler.jsonc) keeps its own config, its own
+  // domain, its own secrets and its own limiter.
+  //
+  //   deploy:  npx wrangler deploy --config preview/wrangler.jsonc
+  //   remove:  npx wrangler delete --config preview/wrangler.jsonc
+  //
+  // Both from the repo root, and both WITH --config. Without the flag wrangler reads
+  // ../wrangler.jsonc instead, and the same two commands deploy to, or delete, production.
+  //
+  // Why a separate Worker rather than `wrangler versions upload`: Cloudflare makes no
+  // preview URL for a Worker that implements a Durable Object, and this one does.
+  "name": "justnotthering-preview",
+  "compatibility_date": "2026-09-21",
+  "main": "./worker.js",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "../public",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Production serves files without running the Worker. Here every request goes through
+    // worker.js first, so that it can add the noindex header to pages as well as to the API.
+    "run_worker_first": true
+  },
+  "durable_objects": {
+    "bindings": [
+      { "name": "LIMITER", "class_name": "SendLimiter" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["SendLimiter"] }
+  ]
+  // No vars and no secrets, on purpose. With no RESEND_API_KEY and no MAIL_FROM the email
+  // route answers 503 not_configured, the page says email is not switched on, and nothing
+  // can be sent from a preview.
+}

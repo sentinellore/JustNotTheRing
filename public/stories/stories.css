@@ -1,288 +1,73 @@
 /* Just Not The Ring — the stories section.
-   One stylesheet for /stories/ and every story page under it. index.html carries its own
-   copy of everything above the SECTION line; the token blocks below are copied from it
-   verbatim, and tools/check-stories.mjs fails when the two drift. Change a colour there
-   first, then here. Nothing under SECTION exists in index.html. */
+   Loaded after /assets/styles.css, which carries the tokens, the type, the header, the page
+   head and the night band. This file holds only what a story needs and nothing else has: the
+   index cards, the blue-hour panel, the story's own layout. No tokens are defined here. */
 
-/* ---- document reset (supplied by the host when embedded; explicit when self-hosted) ---- */
-:root{
-  color-scheme: light dark;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-img{max-width:100%}
-
-/* ============ TOKENS ============ */
-:root{
-  --bg:#F5F4EF;
-  --surface:#FCFCFA;
-  --surface-2:#F8F7F2;
-  --surface-3:#E7E9E4;
-  --ink:#1B2430;
-  --ink-2:#46525F;
-  --ink-3:#66717E;
-  --line:#DBDBD4;
-  --line-2:#C1C5BE;
-  --accent:#2F5480;
-  --accent-ink:#1E3A5F;
-  --accent-deep:#1E3A5F;
-  --accent-soft:#E5EBF3;
-  --gold:#8A6C2C;
-  --gold-soft:#F3EEE1;
-  --good:#2F6B47;
-  --warn:#7D5210;
-  --crit:#8A2F2A;
-  --shadow:0 1px 2px rgba(30,58,95,.05), 0 14px 30px -18px rgba(30,58,95,.30);
-  --shadow-lift:0 2px 5px rgba(30,58,95,.07), 0 22px 46px -22px rgba(30,58,95,.38);
-  --display:"Fraunces", Georgia, "Times New Roman", serif;
-  --body:"Karla", "Helvetica Neue", Arial, sans-serif;
-  --mono:"IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#101823;
-    --surface:#18222F;
-    --surface-2:#1E2937;
-    --surface-3:#283545;
-    --ink:#EDF2F8;
-    --ink-2:#BAC7D6;
-    --ink-3:#93A1B1;
-    --line:#2C3949;
-    --line-2:#3C4C5F;
-    --accent:#8FB3DF;
-    --accent-ink:#C6D8EF;
-    --accent-deep:#A6C4E8;
-    --accent-soft:#1B2A3A;
-    --gold:#DCC07C;
-    --gold-soft:#2A2617;
-    --good:#7CC69C;
-    --warn:#DCAE5F;
-    --crit:#E68880;
-    --shadow:0 1px 2px rgba(0,0,0,.45), 0 12px 30px -16px rgba(0,0,0,.75);
-    --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 22px 50px -22px rgba(0,0,0,.85);
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#101823;
-  --surface:#18222F;
-  --surface-2:#1E2937;
-  --surface-3:#283545;
-  --ink:#EDF2F8;
-  --ink-2:#BAC7D6;
-  --ink-3:#93A1B1;
-  --line:#2C3949;
-  --line-2:#3C4C5F;
-  --accent:#8FB3DF;
-  --accent-ink:#C6D8EF;
-  --accent-deep:#A6C4E8;
-  --accent-soft:#1B2A3A;
-  --gold:#DCC07C;
-  --gold-soft:#2A2617;
-  --good:#7CC69C;
-  --warn:#DCAE5F;
-  --crit:#E68880;
-  --shadow:0 1px 2px rgba(0,0,0,.45), 0 12px 30px -16px rgba(0,0,0,.75);
-  --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 22px 50px -22px rgba(0,0,0,.85);
-}
-
-/* ============ BASE (mirrors index.html; kept minimal) ============ */
-*{box-sizing:border-box}
-[hidden]{display:none!important}
-body{
-  background:var(--bg);color:var(--ink);
-  font-family:var(--body);font-size:17px;line-height:1.65;margin:0;
-  -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:1060px;margin-inline:auto;padding-inline:22px}
-
-h1,h2,h3,h4{margin:0;text-wrap:balance;font-family:var(--display);font-weight:500;color:var(--ink)}
-h1{font-size:clamp(2.3rem,5.6vw,3.7rem);line-height:1.08;letter-spacing:-.012em}
-h2{font-size:clamp(1.8rem,3.8vw,2.5rem);line-height:1.14;letter-spacing:-.008em}
-h3{font-size:clamp(1.2rem,2.2vw,1.42rem);line-height:1.28}
-p{margin:0}
-a{color:var(--accent);text-underline-offset:3px}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
-b,strong{font-weight:600;color:var(--ink)}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-
-.eyebrow{
-  font-family:var(--mono);font-size:.74rem;text-transform:uppercase;
-  letter-spacing:.12em;color:var(--ink-3);font-weight:500;
-}
-.lede{font-size:1.16rem;color:var(--ink-2);line-height:1.62}
-.small{font-size:.97rem;color:var(--ink-2);line-height:1.62}
-.tiny{font-family:var(--mono);font-size:.75rem;color:var(--ink-3);letter-spacing:.02em;line-height:1.5}
-
-/* ============ TOP BAR ============ */
-/* Same bar as index.html, but every item is a real link, and the small-screen menu is a
-   <details> element: these pages run no JavaScript, and the panel has to open without it. */
-#topbar{
-  position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
-  background:color-mix(in srgb, var(--bg) 92%, transparent);
-  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
-}
-.bar-inner{max-width:1060px;margin-inline:auto;padding:11px 22px;display:flex;align-items:center;gap:20px}
-.mark{
-  font-family:var(--display);font-size:1.12rem;font-weight:500;letter-spacing:-.005em;
-  white-space:nowrap;text-decoration:none;color:var(--ink);background:none;border:0;
-  cursor:pointer;padding:4px 0;flex:none;
-}
-.mark em{font-style:italic;color:var(--accent)}
-.bar-nav{display:flex;gap:2px;margin-left:auto;min-width:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.bar-nav::-webkit-scrollbar{display:none}
-.bar-nav a{
-  font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--ink-2);background:none;border:0;cursor:pointer;padding:8px 11px;border-radius:4px;
-  white-space:nowrap;text-decoration:none;
-}
-.bar-nav a:hover{color:var(--ink);background:var(--surface-3)}
-.bar-nav a[aria-current="page"]{color:var(--accent);background:var(--accent-soft);font-weight:500}
-.menu{display:none;margin-left:auto}
-.menu summary{
-  list-style:none;display:inline-flex;align-items:center;gap:9px;font:inherit;font-size:.9rem;font-weight:600;
-  color:var(--ink);background:var(--surface);border:1px solid var(--line-2);border-radius:999px;
-  padding:9px 16px;cursor:pointer;min-height:44px;
-}
-.menu summary::-webkit-details-marker{display:none}
-.menu summary:hover{border-color:var(--accent);color:var(--accent-ink)}
-.menu[open] .ico-open,.menu:not([open]) .ico-close{display:none}
-.nav-panel{
-  position:absolute;left:0;right:0;top:100%;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  background:var(--bg);padding:8px 14px 16px;box-shadow:var(--shadow-lift);
-}
-.nav-panel a{
-  display:flex;align-items:center;gap:14px;width:100%;min-height:50px;text-align:left;
-  font:inherit;font-size:1.02rem;font-weight:500;color:var(--ink);text-decoration:none;
-  border-bottom:1px solid var(--line);padding:6px 4px;cursor:pointer;
-}
-.nav-panel > :last-child{border-bottom:0}
-.nav-panel a:hover{color:var(--accent-ink)}
-.nav-panel a[aria-current="page"]{color:var(--accent)}
-.nav-panel .np-n{font-family:var(--mono);font-size:.76rem;color:var(--gold);width:24px;flex:none}
-@media (max-width:900px){
-  .bar-nav{display:none}
-  .menu{display:block}
-}
-
-/* ============ VIEW, BUTTONS, CHIPS (as index.html) ============ */
-.view{padding-block:clamp(38px,6vw,68px) clamp(46px,7vw,80px);animation:fade .26s ease-out}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.view-head{max-width:64ch;margin-bottom:34px}
-.view-head h1{margin-top:12px}
-.view-head .lede{margin-top:16px}
-.view-foot{
-  margin-top:clamp(40px,6vw,64px);padding-top:26px;border-top:1px solid var(--line);
-  display:flex;flex-wrap:wrap;gap:12px;align-items:center;
-}
-.view-foot .spacer{flex:1}
-.btn{
-  font-family:var(--body);font-size:.95rem;font-weight:600;
-  padding:13px 26px;border-radius:999px;border:1px solid var(--accent);
-  background:var(--accent);color:#fff;cursor:pointer;text-decoration:none;
-  display:inline-flex;align-items:center;gap:9px;transition:background .15s,border-color .15s;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn:not(.ghost){color:#0E141B}}
-:root[data-theme="dark"] .btn:not(.ghost){color:#0E141B}
-.btn:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
-.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
-.btn.ghost:hover{background:var(--surface);border-color:var(--ink-3)}
-.chip{
-  font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;
-  border:1px solid var(--line-2);color:var(--ink-3);border-radius:99px;padding:4px 10px;
-}
-.chip.gold{border-color:var(--gold);color:var(--gold);background:var(--gold-soft)}
-
-footer{border-top:1px solid var(--line);padding-block:38px 52px;background:var(--surface-2)}
-.foot-grid{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;justify-content:space-between}
-
-/* ============ SECTION: stories ============ */
-/* An index of cards (photograph or blue-hour panel, plus one line), each opening a story:
-   prose in a narrow column with the who/what/when/how in a fact panel beside it, the way
-   the diamond bench puts a spec sheet next to an argument. */
-
-/* ---- index grid ---- */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
-  gap:22px;margin-top:clamp(30px,4vw,44px)}
-.card{display:flex;flex-direction:column;text-align:left;background:var(--surface);
-  border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);
-  color:var(--ink);text-decoration:none;min-width:0;
-  transition:box-shadow .16s,border-color .16s}
-.card:hover{box-shadow:var(--shadow-lift);border-color:var(--line-2)}
-.card:hover .card-go{color:var(--accent-deep)}
-.frame{aspect-ratio:3/2;width:100%;position:relative;overflow:hidden;background:var(--surface-3)}
+/* ---- index cards ---- */
+.story-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:16px}
+.story-card{padding:0;gap:0;overflow:hidden;color:var(--ink);text-decoration:none;min-width:0}
+.frame{aspect-ratio:3/2;width:100%;position:relative;overflow:hidden;background:var(--seg-bg)}
 .frame img{width:100%;height:100%;object-fit:cover;display:block}
-/* the blue-hour panel, for a story with no photograph */
+.card-body{padding:20px 24px 24px;display:flex;flex-direction:column;gap:9px;flex:1}
+.card-body .tags{margin-top:0;padding-top:0}
+.card-body h3{font-size:24px;line-height:1.2}
+.card-body .who{font-family:var(--mono);font-size:12.5px;color:var(--ink3)}
+.card-go{margin-top:auto;padding-top:10px;font-weight:600;color:var(--sapphire-2)}
+.story-card:hover .card-go{text-decoration:underline;text-underline-offset:4px}
+
+/* ---- the blue-hour panel, for a story with no photograph ---- */
+/* A first-class state, not a fallback: "nothing at all" is one of the six ways a proposal is
+   remembered. The same panel is the preview card tools/og-card.mjs renders. */
 .hour{position:absolute;inset:0;display:grid;place-items:center;padding:24px}
 .hour.dusk{background:linear-gradient(170deg,#93AFD1 0%,#456A97 40%,#16304F 100%)}
 .hour.dawn{background:linear-gradient(170deg,#E8C9A8 0%,#B5859A 45%,#3D4A72 100%)}
 .hour.noon{background:linear-gradient(170deg,#BBD3E6 0%,#7C9FC4 45%,#3A5A80 100%)}
 .hour svg{position:absolute;width:150px;height:150px;opacity:.5}
-.hour q{position:relative;font-family:var(--display);font-style:italic;font-size:1.1rem;
-  line-height:1.4;color:#F2F6FC;text-align:center;quotes:none;text-shadow:0 1px 14px rgba(11,20,34,.55)}
-.card-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:9px;flex:1}
-.tagrow{display:flex;flex-wrap:wrap;gap:7px}
-.card-body h3{margin-top:2px;font-size:1.16rem;line-height:1.3}
-.card-body .who{font-family:var(--mono);font-size:.76rem;color:var(--ink-3);letter-spacing:.02em}
-.card-go{margin-top:auto;padding-top:10px;font-family:var(--mono);font-size:.72rem;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--accent);transition:color .16s}
+.hour q{position:relative;font-family:var(--display);font-style:italic;font-size:21px;
+  line-height:1.35;color:#F2F6FC;text-align:center;quotes:none;text-shadow:0 1px 14px rgba(11,20,34,.55)}
 
 /* ---- the empty index ---- */
-.empty{margin-top:clamp(30px,4vw,44px);border:1px dashed var(--line-2);border-radius:18px;
-  padding:clamp(26px,4vw,40px);max-width:64ch}
-.empty p + p{margin-top:12px}
+.empty{border:1px dashed var(--line-strong);border-radius:28px;padding:clamp(26px,4vw,40px);max-width:64ch;display:grid;gap:12px}
 
 /* ---- story ---- */
-.backlink{display:inline-block;font-size:.92rem;color:var(--ink-3);text-decoration:none;padding:6px 2px}
+.backlink{display:inline-block;font-size:15px;color:var(--ink3);text-decoration:none;padding:10px 2px;margin-bottom:8px}
 .backlink:hover{color:var(--ink)}
-/* The hook line runs the full measure, same width as the image under it. Two things held
-   it back: a max-width in ch, which resolves against this element's font (body, 17px)
-   rather than the display face the headline is set in; and text-wrap:balance on every
-   heading, whose job is to shorten lines so they even out. A headline meant to fill its
-   width has to opt out of both. */
-.story-head{max-width:none;margin-bottom:0}
-.story-head h1{text-wrap:normal;margin-top:12px;font-size:clamp(1.9rem,4.4vw,2.7rem)}
-.byline{margin-top:16px;font-family:var(--mono);font-size:.78rem;color:var(--ink-3);letter-spacing:.03em}
-.hero{margin-top:26px;border-radius:18px;overflow:hidden;border:1px solid var(--line);
-  position:relative;aspect-ratio:16/9;background:var(--surface-3)}
-.hero img{width:100%;height:100%;object-fit:cover;display:block}
-.hero .hour q{font-size:clamp(1.2rem,2.6vw,1.7rem);max-width:30ch}
-.hero .hour svg{width:min(46%,260px);height:auto}
-.story-grid{display:grid;grid-template-columns:minmax(0,1fr) 274px;gap:clamp(26px,4vw,46px);
-  align-items:start;margin-top:clamp(28px,4vw,40px)}
-.prose{min-width:0;max-width:64ch}
-.prose p{font-size:1.06rem;line-height:1.75;color:var(--ink-2)}
-.prose p + p{margin-top:19px}
-.prose p.first::first-letter{font-family:var(--display);font-size:3.1rem;line-height:.84;
-  float:left;padding:4px 10px 0 0;color:var(--accent-deep)}
-blockquote{margin:28px 0;padding-left:22px;border-left:3px solid var(--gold);
-  font-family:var(--display);font-size:1.34rem;line-height:1.42;color:var(--ink)}
-blockquote footer{margin-top:10px;font-family:var(--mono);font-size:.74rem;
-  letter-spacing:.04em;color:var(--ink-3);font-style:normal;border:0;padding:0;background:none}
-.facts{position:sticky;top:calc(74px + env(safe-area-inset-top,0px));
-  background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
-.facts dl{margin:12px 0 0;display:grid;gap:1px;background:var(--line);
-  border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.facts .row{background:var(--surface);padding:11px 13px}
-.facts dt{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;
-  letter-spacing:.07em;color:var(--ink-3)}
-.facts dd{margin:4px 0 0;font-size:.94rem;color:var(--ink);line-height:1.45}
-.facts .out{margin-top:14px;font-size:.88rem}
-.diff{margin-top:34px;border:1px solid var(--line-2);border-left:3px solid var(--accent);
-  border-radius:0 14px 14px 0;background:var(--surface-2);padding:24px 26px}
-.diff .eyebrow{display:block;margin-bottom:10px;color:var(--accent-ink)}
-.diff p{font-size:1.04rem;line-height:1.7;color:var(--ink-2)}
+/* The hook line runs the full measure, the same width as the picture under it, so it opts
+   out of the page head's narrow column and of the balancing every other heading gets. */
+.story-head h1{max-width:none;text-wrap:normal}
+.byline{margin-top:18px;font-family:var(--mono);font-size:12.5px;letter-spacing:.03em;color:var(--ink3)}
+.story-hero{position:relative;aspect-ratio:16/9;border-radius:32px;overflow:hidden;background:var(--seg-bg);
+  box-shadow:0 30px 60px -44px rgba(23,32,43,.45)}
+.story-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.story-hero .hour q{font-size:clamp(21px,2.8vw,34px);max-width:30ch}
+.story-hero .hour svg{width:min(46%,260px);height:auto}
+.story-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:clamp(26px,4vw,56px);
+  align-items:start;margin-top:clamp(28px,4vw,48px)}
+.story .prose{min-width:0}
+.story .prose p.first::first-letter{font-family:var(--display);font-size:58px;line-height:.84;
+  float:left;padding:6px 10px 0 0;color:var(--sapphire-2)}
+.story blockquote{margin:10px 0;padding-left:22px;border-left:3px solid var(--gold);
+  font-family:var(--display);font-size:26px;line-height:1.32;color:var(--ink)}
+.story blockquote footer{margin-top:10px;font-family:var(--mono);font-size:12.5px;
+  letter-spacing:.04em;color:var(--ink3)}
+.facts{position:sticky;top:calc(96px + env(safe-area-inset-top,0px));border-radius:24px;
+  background:var(--paper);padding:22px 24px;box-shadow:inset 0 1px 0 #FFFFFF,0 24px 48px -40px rgba(23,32,43,.4)}
+.facts dl{margin:12px 0 0;display:grid;gap:10px}
+.facts .row{border-top:1px solid var(--line);padding-top:10px}
+.facts dt{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.facts dd{margin:4px 0 0;font-size:15.5px;line-height:1.45;color:var(--ink)}
+.facts .out{margin-top:14px}
+.diff{margin-top:10px;border-radius:24px;background:var(--sapphire);padding:24px 26px}
+.diff .eyebrow{display:block;margin-bottom:10px;color:#D9C08A}
+.story .prose .diff p{color:#D5DCE8}
 /* .prose p outranks .tiny, so the credit line restates it */
-.prose p.credit{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);
-  font-family:var(--mono);font-size:.75rem;color:var(--ink-3);letter-spacing:.02em;line-height:1.5}
+.story .prose p.credit{margin-top:8px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--ink3)}
 
 /* ---- the provenance line ---- */
-.provenance{margin-top:clamp(40px,6vw,64px);padding-top:22px;border-top:1px solid var(--line)}
+.provenance{margin-top:clamp(40px,6vw,64px);padding-top:22px;border-top:1px solid var(--line);max-width:90ch}
 
 @media (max-width:860px){
-  .story-grid{grid-template-columns:1fr}
+  .story-grid{grid-template-columns:minmax(0,1fr)}
   .facts{position:static;order:-1}
-}
-@media (max-width:520px){
-  body{font-size:16.5px}
-  .grid{grid-template-columns:1fr}
 }
