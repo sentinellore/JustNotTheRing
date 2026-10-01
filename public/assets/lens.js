@@ -14,12 +14,23 @@ var LENS={
   destination:["proposal photographer","private boat charter","sunrise viewpoint","hotel with a terrace suite"],
   unconv:["record store","climbing gym","pottery studio","arcade","bowling alley","planetarium","drive-in theater","animal shelter","dive bar","late night diner","independent bookstore"]
 };
-var lensMode="auto";
+/* "Match my quiz" is only offered when there is a quiz answer to match, which is when the
+   visitor arrived by the link on their result. Otherwise the chip stays hidden and the lens
+   opens on Outdoors: a pressed button that said it matched a quiz it had never seen would
+   be the page describing something it was not doing. */
+var lensMode="nature";
+function setMode(mode){
+  lensMode=mode;
+  [].slice.call(document.querySelectorAll("#lensModes .chip")).forEach(function(o){
+    o.setAttribute("aria-pressed", o.getAttribute("data-mode")===mode);
+  });
+}
 /* What "Match my quiz" matches. The quiz is on another page, so its result reaches this one
    through the link it offers: /locations/#lens=urban&city=Austin. Both sit after the #, which
    a browser never sends to a server, and the lens is checked against the five keys above.
    Arriving any other way there is nothing to match, and the lens opens on the outdoors, as
-   it always has for someone who has not taken the quiz. */
+   it always has for someone who has not taken the quiz. The fragment is parameters, not an
+   anchor, so the page is scrolled to the lens by hand. */
 var quizLens="";
 function readHash(){
   var h=(location.hash||"").slice(1), out={};
@@ -30,8 +41,13 @@ function readHash(){
   });
   quizLens = LENS[out.lens] && Object.prototype.hasOwnProperty.call(LENS,out.lens) ? out.lens : "";
   var city=typeof out.city==="string" ? out.city.slice(0,80).trim() : "";
+  var match=document.querySelector('#lensModes [data-mode="auto"]');
+  if(match) match.hidden=!quizLens;
+  setMode(quizLens ? "auto" : "nature");
   $("cityInput").value=city;
   renderLens(city, quizLens);
+  var sec=$("lens");
+  if(sec && sec.scrollIntoView) sec.scrollIntoView({block:"start"});
   return true;
 }
 function renderLens(city, archetype){
@@ -56,10 +72,7 @@ function renderLens(city, archetype){
 $("lensBtn").addEventListener("click",function(){ renderLens($("cityInput").value.trim(), quizLens); });
 [].slice.call(document.querySelectorAll("#lensModes .chip")).forEach(function(b){
   b.addEventListener("click",function(){
-    lensMode=b.getAttribute("data-mode");
-    [].slice.call(document.querySelectorAll("#lensModes .chip")).forEach(function(o){
-      o.setAttribute("aria-pressed", o===b);
-    });
+    setMode(b.getAttribute("data-mode"));
     renderLens($("cityInput").value.trim(), quizLens);
   });
 });

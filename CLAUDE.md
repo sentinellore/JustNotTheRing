@@ -22,7 +22,7 @@ public/locations/ trip/ hire/ diamonds/ rings/ how/ words/ when/ privacy/   one 
 public/404.html               served for any unknown path (wrangler not_found_handling)
 public/assets/styles.css      the one stylesheet: tokens, type, every component
 public/assets/app.js          motion, menu, travelling stone, diamond bench, ring builder
-public/assets/gem.js          the 3D stone renderer (WebGL2); copied unchanged from the design reference
+public/assets/gem.js          the 3D stone renderer (WebGL2); the designer's file, unchanged, pinned by hash in the verifier
 public/assets/data.js         SHAPES, CUTS, COLORS, CLARITY, Q, SAID, STONES, LEXICON, the libraries
 public/assets/quiz.js         the quiz engine: scoring, composeResult(), plan links, the email panel
 public/assets/trip.js lens.js hire.js timeline.js budget.js   one feature each
@@ -89,10 +89,13 @@ anything else.
 **Run `node tools/check-stories.mjs` before committing anything under `public/`.** It has no
 dependencies. It kept its name from when it checked only the stories; it now checks the whole
 site: the wrapper on every page, that the header and footer match everywhere, that every link
-and script resolves, that nothing is loaded from another site, that every design token used
-is defined, that the home page's question-one tile reads as `data.js` does, the sitemap, the
+and script resolves (links written by the scripts included), that every design token used is
+defined, that the home page's question-one tile reads as `data.js` does, the sitemap, the
 Worker's plan link, and for stories the og tags, images and the two tags against the quiz's
-libraries. A failed line here is what a skipped manual step looks like.
+libraries. It also keeps three short lists and fails on anything outside them: the outside
+hosts the site may name, the one `fetch`, and the one storage key. Those are tripwires that
+read source text, not proofs; they catch the ordinary ways a tracker or a new request gets
+added, not a determined one. A failed line here is what a skipped manual step looks like.
 
 ## Deploying
 
@@ -142,8 +145,11 @@ These are what make the site trustworthy. Preserve them.
 ## Privacy
 
 Everything runs in the browser EXCEPT two routes, and nothing is loaded from any other site:
-the fonts are files under `public/assets/fonts/`, and the verifier fails on a font service, a
-CDN script or an analytics tag anywhere in `public/`. `POST /api/plan-email` receives an email
+the fonts are files under `public/assets/fonts/`. Adding an outside host, a second `fetch`, a
+beacon or a storage key fails the verifier until its list is changed, and its list changes
+only in the commit that changes the privacy page. (Analytics switched on in the Cloudflare
+dashboard would inject a script the repo never sees; that would make the privacy page false
+just the same.) `POST /api/plan-email` receives an email
 address and a validated plan code, hands them to Resend to deliver one message, and stores
 neither. `/api/unsubscribe` receives an opaque Resend contact id — never an address — and on
 `POST` marks that contact unsubscribed; a `GET` only shows the confirmation page and changes
@@ -171,6 +177,15 @@ pages. Anything else that must cross pages goes in a URL fragment, the way the p
 the result's link to Locations (`/locations/#lens=…&city=…`) do, because a fragment is never
 sent in a request. Never a query string.
 
+**The quiz result lives in memory and nowhere else**, which is the price of the two rules
+above now that the quiz is its own page: leave the page by a link and the answers are gone
+(Back usually restores them, from the browser's own page cache). So every link inside the
+result opens in a new tab, the result says the plan link is the way back, and the two boxes
+people describe their partner in carry `spellcheck="false"`, because some browsers'
+spellcheckers send what is typed to their maker. Keeping the result across pages would mean
+storing the plan or writing it into the address bar; either is a privacy-page decision, so
+stop and ask rather than add it.
+
 The site has a privacy page at `/privacy/` — unnumbered, linked from the menu's foot, the
 footer and the email panel, and deliberately not one of the nine in the nav. **Any change to
 what the code transmits or stores, or to whom, requires a matching edit to that page in the
@@ -193,8 +208,10 @@ same commit.**
   stylesheet: declared in the stylesheet, Chrome dropped about half the transitions in
   testing. Only one element per page may hold `view-transition-name: stone`.
 - Check any visual change at 390px width as well as desktop, with reduced motion on, and on a
-  dark-mode device. On the diamonds page the stone must stay in view on a phone while the
-  controls are used (the sticky strip in `styles.css`).
+  dark-mode device. On the diamonds and rings pages the stone must stay in view on a phone
+  while the controls are used (the sticky strips in `styles.css`). Without WebGL2 the stone
+  is a fixed drawing, and the pages say so (`data-nogl`); without script the bar shows its
+  links (`<noscript>` in every head).
 - Key structures: `Q` and `LEXICON` (in `data.js`) drive the quiz; `composeResult()` in
   `quiz.js` builds the recommendation; `planLink()` and `readPlanFromUrl()` write and read
   `#plan=`; `renderBench()` and `renderRing()` in `app.js` write state onto the `gem.js`

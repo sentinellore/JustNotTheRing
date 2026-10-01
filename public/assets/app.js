@@ -116,7 +116,15 @@
         else if (!e.shiftKey && i === f.length - 1) { f[0].focus(); e.preventDefault(); }
       }
     });
-    matchMedia("(min-width:1101px)").addEventListener("change", function (m) { if (m.matches && menuBtn.getAttribute("aria-expanded") === "true") setMenu(false); });
+    var wide = matchMedia("(min-width:1101px)"), onWide = function (m) { if (m.matches && menuBtn.getAttribute("aria-expanded") === "true") setMenu(false); };
+    if (wide.addEventListener) wide.addEventListener("change", onWide); else if (wide.addListener) wide.addListener(onWide); // older Safari
+    // Coming Back to a page kept whole in the browser's back/forward cache would show it as it
+    // was left: menu open, page behind it locked. Shut it without the animation.
+    addEventListener("pageshow", function (e) {
+      if (!e.persisted || menuBtn.getAttribute("aria-expanded") !== "true") return;
+      menuBtn.setAttribute("aria-expanded", "false"); menuBtn.querySelector(".lbl").textContent = "Menu";
+      document.body.classList.remove("menu-open"); menu.classList.remove("open"); menu.hidden = true;
+    });
   }
 
   /* ---------- home: the travelling stone and the sky ---------- */
@@ -172,6 +180,16 @@
      these" carries its index like any other; the words are typed on the quiz page and are
      never stored. */
   $$("[data-q1]").forEach(function (a) { a.addEventListener("click", function () { session("jntr-q1", a.dataset.q1); }); });
+
+  /* ---------- when the device cannot draw the stone ---------- */
+  /* gem.js needs WebGL2 and, without it, draws one fixed gold-line stone that does not change.
+     The pages say the stone follows the controls, so where it cannot, they say that instead. */
+  var noGl = $$("[data-nogl]");
+  if (noGl.length) {
+    var hasGl = false;
+    try { var probe = document.createElement("canvas").getContext("webgl2"); hasGl = !!probe; var lose = probe && probe.getExtension("WEBGL_lose_context"); if (lose) lose.loseContext(); } catch (e) { }
+    if (!hasGl) noGl.forEach(function (el) { el.hidden = false; });
+  }
 
   /* ---------- diamond bench ---------- */
   /* The bench's state, and everything said about a grade, come from the site as it was; what
@@ -327,7 +345,9 @@
     $("#metName").textContent = met.name; $("#upkeep").textContent = met.upkeep; $("#pickIf").textContent = met.pick;
     $("#shapeName").textContent = sh.name; $("#shapeTip").textContent = sh.tip;
     $("#ringCaratOut").textContent = s.carat.toFixed(2) + " ct · " + mm.toFixed(1) + " mm";
-    $("#spec").textContent = s.carat.toFixed(2) + " ct " + sh.name.toLowerCase() + " · " + set.word + " · " + met.name.toLowerCase() + " · G VS2, Excellent cut";
+    // GIA issues a cut grade for round brilliants only; for every other shape the line asks for
+    // the two finish grades a report does carry, as the cut tab on the diamonds page says.
+    $("#spec").textContent = s.carat.toFixed(2) + " ct " + sh.name.toLowerCase() + " · " + set.word + " · " + met.name.toLowerCase() + " · G VS2, " + (s.shape === "round" ? "Excellent cut" : "Excellent polish and symmetry");
     var g = $("#ringGem"); g.dataset.shape = s.shape; g.dataset.setting = s.setting; g.dataset.metal = s.metal; g.dataset.carat = String(s.carat);
     if (changed && cinematic && g.__gem) g.__gem.vyaw = 6.5;
   }

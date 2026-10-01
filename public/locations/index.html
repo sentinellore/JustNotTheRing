@@ -17,6 +17,10 @@
 @view-transition{navigation:auto}
 @media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
 </style>
+<noscript><style>
+/* Without script the menu button cannot open anything, so the bar shows its links instead. */
+.navl{display:flex!important}.menu-btn{display:none!important}.bar{flex-wrap:wrap}
+</style></noscript>
 <link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
@@ -44,42 +48,42 @@
   <section class="wrap">
     <div class="cards5" data-reveal>
       <article class="card tilt">
-        <h3>The overlook you have to earn</h3>
+        <h2>The overlook you have to earn</h2>
         <p>A summit, a bluff, a fire tower. The walk up does the work — by the time you're at the top you've been alone together for an hour and nobody is watching.</p>
         <div class="tags"><span class="tag">Private</span><span class="tag">Golden hour</span><span class="tag">Weather risk</span></div>
       </article>
       <article class="card tilt">
-        <h3>The conservatory</h3>
+        <h2>The conservatory</h2>
         <p>Botanical gardens and glasshouses are the reliable choice: beautiful in any month, warm in February, and staff who have seen a hundred proposals and will help.</p>
         <div class="tags"><span class="tag">All-weather</span><span class="tag gold">Permit likely</span><span class="tag">Photo-friendly</span></div>
       </article>
       <article class="card tilt">
-        <h3>Water's edge</h3>
+        <h2>Water's edge</h2>
         <p>Lake, coast, river walk, a harbor at dusk. Open sightlines make a hidden photographer easy and give you somewhere to walk afterwards while it sinks in.</p>
         <div class="tags"><span class="tag">Sunset-dependent</span><span class="tag">Wind</span></div>
       </article>
       <article class="card tilt">
-        <h3>Rooftop or observation deck</h3>
+        <h2>Rooftop or observation deck</h2>
         <p>City skyline, elevation, a drink in hand. Book a table or a private corner rather than trusting availability — most decks are loud and full at sunset.</p>
         <div class="tags"><span class="tag">Urban</span><span class="tag">Reservation</span><span class="tag">Loud</span></div>
       </article>
       <article class="card tilt">
-        <h3>Where it started</h3>
+        <h2>Where it started</h2>
         <p>The bar, the bench, the block you lived on. The place carries the meaning, so it doesn't have to be beautiful. This is the archetype people cry at.</p>
         <div class="tags"><span class="tag on">High meaning</span><span class="tag">Low cost</span></div>
       </article>
       <article class="card tilt">
-        <h3>Home</h3>
+        <h2>Home</h2>
         <p>Your kitchen, your living room, whoever else lives there underfoot. Deeply underrated for a private person: no audience, no travel, no outfit anxiety, and they can cry in peace.</p>
         <div class="tags"><span class="tag on">Most private</span><span class="tag">Hard to photograph</span></div>
       </article>
       <article class="card tilt">
-        <h3>A trip they think is just a trip</h3>
+        <h2>A trip they think is just a trip</h2>
         <p>Propose on day one or two, not the last night. Spend the rest of the trip engaged instead of spending the whole trip waiting, and let them tell people in their own time.</p>
         <div class="tags"><span class="tag">Destination</span><span class="tag gold">Carry-on only</span></div>
       </article>
       <article class="card tilt">
-        <h3>The gathering</h3>
+        <h2>The gathering</h2>
         <p>A holiday table, a birthday, a reunion where their people are already in one room. Only do this if being watched is genuinely fun for them. It cannot be undone.</p>
         <div class="tags"><span class="tag">Public</span><span class="tag">Family</span><span class="tag">Irreversible</span></div>
       </article>
@@ -94,7 +98,7 @@
     </div>
   </section>
 
-  <section class="blk wrap">
+  <section class="blk wrap" id="unconventional">
     <div class="prose-grid" data-reveal>
       <div><h2>When none of those are right</h2></div>
       <div class="prose"><p>The eight above cover most proposals, which is exactly why some people want none of them. The test for an unconventional location is not whether it's unusual — it's whether it's <em>specific to you two</em>. A laundromat is a great proposal spot if that's where you talked for three hours the night you met, and a bad one if you picked it to be different.</p></div>
@@ -154,8 +158,8 @@
             <button class="btn primary" id="lensBtn" type="button">Show me</button>
           </div>
           <div class="chiprow" id="lensModes" role="group" aria-label="What kind of place">
-            <button class="chip wide" type="button" data-mode="auto" aria-pressed="true">Match my quiz</button>
-            <button class="chip wide" type="button" data-mode="nature">Outdoors</button>
+            <button class="chip wide" type="button" data-mode="auto" aria-pressed="false" hidden>Match my quiz</button>
+            <button class="chip wide" type="button" data-mode="nature" aria-pressed="true">Outdoors</button>
             <button class="chip wide" type="button" data-mode="urban">City</button>
             <button class="chip wide" type="button" data-mode="home">At home</button>
             <button class="chip wide" type="button" data-mode="destination">Travel</button>

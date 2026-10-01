@@ -27,6 +27,10 @@
 @view-transition{navigation:auto}
 @media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
 </style>
+<noscript><style>
+/* Without script the menu button cannot open anything, so the bar shows its links instead. */
+.navl{display:flex!important}.menu-btn{display:none!important}.bar{flex-wrap:wrap}
+</style></noscript>
 <link rel="stylesheet" href="/assets/styles.css">
 <link rel="stylesheet" href="/stories/stories.css">
 </head>

@@ -17,6 +17,10 @@
 @view-transition{navigation:auto}
 @media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
 </style>
+<noscript><style>
+/* Without script the menu button cannot open anything, so the bar shows its links instead. */
+.navl{display:flex!important}.menu-btn{display:none!important}.bar{flex-wrap:wrap}
+</style></noscript>
 <link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
@@ -49,6 +53,7 @@
         <div class="specline"><span id="ringCaratOut"></span><span>Drag to turn it over</span></div>
       </figure>
       <div class="cfg">
+        <p class="tiny nogl" data-nogl hidden>This browser cannot draw the 3D ring, so the picture is a fixed drawing and will not change. The notes and the line for the jeweler still do.</p>
         <fieldset><legend>Setting</legend><div class="seg4" id="ringSettings"></div><p class="note"><b id="setName"></b>. <span id="setText"></span></p></fieldset>
         <fieldset><legend>Metal · <span id="metName"></span></legend><div class="seg4" id="ringMetals"></div><p class="note"><span id="upkeep"></span> <b>Pick it if</b> <span id="pickIf"></span></p></fieldset>
         <fieldset><legend>Center stone · <span id="shapeName"></span></legend><div class="chips" id="ringShapes"></div><p class="note" id="shapeTip"></p></fieldset>
@@ -63,32 +68,32 @@
     <span class="stamp" data-reveal>Setting</span>
     <div class="cards5" data-reveal>
       <div class="card tilt">
-        <h3>Solitaire</h3>
+        <h2>Solitaire</h2>
         <p>One stone, four or six prongs. The default for a reason: it never looks dated and it puts every dollar into the center. Six prongs are more secure; four show more stone.</p>
         <div class="tags"><span class="tag">Classic</span><span class="tag">Resizes easily</span></div>
       </div>
       <div class="card tilt">
-        <h3>Bezel</h3>
+        <h2>Bezel</h2>
         <p>A metal rim around the whole stone. The most secure setting there is, and the one that doesn't snag on gloves, hair, climbing holds or patients. Slightly modern, slightly less sparkle.</p>
         <div class="tags"><span class="tag on">Best for active hands</span></div>
       </div>
       <div class="card tilt">
-        <h3>Halo</h3>
+        <h2>Halo</h2>
         <p>A ring of small stones around the center, making it read half a carat larger. Maximum apparent size per dollar. A hidden halo — visible only from the side — gets the sparkle without the era stamp.</p>
         <div class="tags"><span class="tag">Maximizes size</span></div>
       </div>
       <div class="card tilt">
-        <h3>Three-stone</h3>
+        <h2>Three-stone</h2>
         <p>A center with two side stones — often given the past/present/future reading. Adds width and presence, and lets a smaller center carry a bigger ring.</p>
         <div class="tags"><span class="tag">Wide profile</span></div>
       </div>
       <div class="card tilt">
-        <h3>Pavé &amp; micropavé</h3>
+        <h2>Pavé &amp; micropavé</h2>
         <p>Tiny stones set along the band. Enormous sparkle, and the small stones do occasionally come loose over the years. Full-coverage and eternity bands are very hard to resize later.</p>
         <div class="tags"><span class="tag gold">Resizing limited</span></div>
       </div>
       <div class="card tilt">
-        <h3>Vintage &amp; milgrain</h3>
+        <h2>Vintage &amp; milgrain</h2>
         <p>Beaded edges, engraving, filigree. Genuine antique rings often hold old mine or old European cuts, which sparkle differently — broader, warmer flashes made for candlelight rather than LEDs.</p>
         <div class="tags"><span class="tag">Character</span></div>
       </div>

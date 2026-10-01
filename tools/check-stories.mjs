@@ -9,6 +9,7 @@
    that every link and script resolves, and that nothing is loaded from another site. */
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const PUB = path.join(ROOT, "public");
@@ -66,20 +67,75 @@ const ALL = walk(PUB);
   }
 }
 
-/* ---------- nothing is loaded from anywhere else ---------- */
-/* The privacy page says loading a page asks no other company for anything. A font service, a
-   CDN script or an analytics tag would make that sentence false, so none may appear. Ordinary
-   links out (<a href>) are a different thing and are not what this looks for. */
+/* ---------- nothing is loaded from, sent to, or stored anywhere it should not be ---------- */
+/* The privacy page says loading a page asks no other company for anything, that two buttons
+   are the only things that send, and that one number is the only thing stored. Code can make
+   any of those false in a dozen spellings, so rather than hunt for each spelling this counts
+   what is allowed and fails on anything else. It is a tripwire, not a proof: it reads source
+   text, and something assembled at run time from pieces would get past it. */
 {
-  const LOADS = [/<link\b[^>]*\bhref="(?:https?:)?\/\/[^"]*"/gi, /<script\b[^>]*\bsrc="(?:https?:)?\/\/[^"]*"/gi, /<(?:img|iframe|source|video|audio)\b[^>]*\bsrc="(?:https?:)?\/\/[^"]*"/gi,
-    /url\(\s*["']?(?:https?:)?\/\/[^)]*\)/gi, /@import\b[^;]*/gi, /fonts\.(?:googleapis|gstatic)\.com/gi];
+  /* Every outside host that may be written anywhere in public/. They are all places a reader
+     is sent by a link they click, or names inside markup (an SVG namespace). A new host here
+     means a new company on the privacy page: add it to both, or it does not ship. */
+  const HOSTS = new Set(["justnotthering.com", "www.w3.org", "schema.org",
+    "www.google.com", "www.booking.com", "www.airbnb.com",          // the search hand-offs (lens, hire, trip)
+    "resend.com",                                                    // the privacy page's link to Resend's terms
+    "www.theknot.com", "rapaport.com", "www.gia.edu", "caratyes.com"]); // the footer's sources
+  /* How a browser is made to fetch or send something, however the tag is quoted. */
+  const LOADERS = [/<(?:script|img|iframe|source|video|audio|embed|object|track)\b[^>]*\b(?:src|data)\s*=\s*["']?\s*(?:https?:)?\/\//gi,
+    /<link\b(?![^>]*rel=["']?canonical)[^>]*\bhref\s*=\s*["']?\s*(?:https?:)?\/\//gi, /\bsrcset\s*=/gi,
+    /url\(\s*["']?\s*(?:https?:)?\/\//gi, /@import\b/gi];
+  const SENDERS = /\b(?:sendBeacon|XMLHttpRequest|WebSocket|EventSource|importScripts)\b|\bnew\s+Image\b|\bimport\s*\(|\.src\s*=[^=]|createElement\(\s*["'](?:script|img|iframe|link)["']/g;
+  const STORES = /\b(?:localStorage|sessionStorage|indexedDB|document\.cookie|caches\.open|navigator\.serviceWorker)\b/g;
+  /* What each script is known to do. Anything not listed is expected to do none of it. */
+  const MAY = {
+    "assets/quiz.js": { fetch: ['fetch("/api/plan-email",{'], stores: ["sessionStorage", "sessionStorage"] },  // read jntr-q1, remove it
+    "assets/app.js": { stores: ["sessionStorage", "sessionStorage", "sessionStorage"] },                        // the handoff helper: get, remove, set
+  };
   for (const f of ALL.filter((f) => /\.(html|css|js)$/.test(f))) {
-    let src = read(f);
-    /* canonical and og:image are addresses of this site, written out in full; they load nothing */
-    src = src.replace(/<link rel="canonical" href="[^"]*">/g, "");
-    const hits = LOADS.flatMap((re) => src.match(re) || []);
-    if (hits.length) fail(rel(f), `loads something from another site: ${hits[0].slice(0, 90)} (the privacy page says no page here does)`); else ok();
+    const r = path.relative(PUB, f), src = read(f), may = MAY[r] || {};
+    const hosts = [...src.matchAll(/(?:https?:)?\/\/([a-z0-9-]+(?:\.[a-z0-9-]+)+)/gi)].map((m) => m[1].toLowerCase()).filter((h) => !HOSTS.has(h));
+    if (hosts.length) fail(rel(f), `names ${[...new Set(hosts)].join(", ")}, which is not a host this site is known to link to. A link a reader clicks: add the host to the list in the verifier and say so on the privacy page. Anything the page loads: it does not ship.`); else ok();
+    const loads = LOADERS.flatMap((re) => src.match(re) || []);
+    if (loads.length) fail(rel(f), `loads something from another site: ${loads[0].slice(0, 90)} (the privacy page says no page here does)`); else ok();
+    if (r.endsWith(".css")) continue;
+    /* code only: a comment that mentions sessionStorage is not a use of it */
+    const scripts = (r.endsWith(".js") ? src : (src.match(/<script\b(?![^>]*\bsrc=)(?![^>]*ld\+json)[^>]*>[\s\S]*?<\/script>/gi) || []).join("\n"))
+      .replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[\s;{}(,])\/\/[^\n]*/g, "$1");
+    const fetches = [...scripts.matchAll(/\bfetch\s*\([^)]{0,40}/g)].map((m) => m[0]);
+    if (fetches.length !== (may.fetch || []).length || fetches.some((x, i) => !x.replace(/\s/g, "").startsWith(may.fetch[i].replace(/\s/g, "")))) fail(rel(f), `calls fetch ${fetches.length} time(s): ${JSON.stringify(fetches)}. The only request this site's pages make is the plan email; a new one needs the privacy page changed in the same commit, then this list.`); else ok();
+    const sends = scripts.match(SENDERS) || [];
+    if (sends.length) fail(rel(f), `uses ${[...new Set(sends)].join(", ")}: a way of sending or loading that nothing here is meant to use`); else ok();
+    const stores = scripts.match(STORES) || [];
+    if (JSON.stringify(stores) !== JSON.stringify(may.stores || [])) fail(rel(f), `touches storage ${stores.length} time(s) (${[...new Set(stores)].join(", ") || "none"}), expected ${(may.stores || []).length}. The one thing stored is the question-one option index, jntr-q1; anything more needs the privacy page changed first.`); else ok();
   }
+  const QUIZ = exists(path.join(PUB, "assets/quiz.js")) ? read(path.join(PUB, "assets/quiz.js")) : "";
+  if (!QUIZ.includes("body:JSON.stringify({ email:addr, plan:currentPlanCode(), optIn: !!(note && note.checked) })")) fail("public/assets/quiz.js", "the plan email's request body must be exactly { email, plan, optIn }: the privacy page lists those three and nothing else"); else ok();
+  const keys = [...new Set(ALL.filter((f) => f.endsWith(".js")).flatMap((f) => [...read(f).matchAll(/["'](jntr-[a-z0-9-]+)["']/g)].map((m) => m[1])))];
+  if (JSON.stringify(keys) !== '["jntr-q1"]') fail("public/assets", `storage keys in use are ${JSON.stringify(keys)}; the only one is jntr-q1`); else ok();
+  /* the two boxes a partner is described in must not be handed to a browser's spellcheck service */
+  for (const id of ["ownText", "saidText"]) { if (!new RegExp(`id="${id}"[^>]*spellcheck="false"`).test(QUIZ)) fail("public/assets/quiz.js", `#${id} needs spellcheck="false": some browsers' spellcheckers send what is typed to their maker`); else ok(); }
+  /* the result lives in memory, so a link out of it must not take this tab away */
+  const inResult = [...QUIZ.matchAll(/<a\b[^>]*href="[^"]*"[^>]*>/g)].map((m) => m[0]);
+  const stay = inResult.filter((a) => !/target="_blank" rel="noopener"/.test(a));
+  if (!inResult.length || stay.length) fail("public/assets/quiz.js", `a link in the result navigates the tab away and throws the result out: ${(stay[0] || "none found").slice(0, 80)}. Give it target="_blank" rel="noopener".`); else ok();
+}
+
+/* ---------- links written by the scripts go somewhere too ---------- */
+{
+  for (const f of ALL.filter((f) => f.endsWith(".js"))) {
+    const src = read(f);
+    for (const m of src.matchAll(/href=\\?"(\/[^"'\\+]*)/g)) { if (!resolvesPath(m[1])) fail(rel(f), `writes a link to ${m[1]}, which does not resolve to a file under public/`); else ok(); }
+    for (const m of src.matchAll(/["'](\/(?:quiz|locations|trip|hire|diamonds|rings|how|words|when|privacy|stories)\/[^"']*)["']/g)) { if (!resolvesPath(m[1])) fail(rel(f), `names ${m[1]}, which does not resolve`); else ok(); }
+    if (/data-go=|href=\\?"#(?:privacy|quiz|locations|trip|hire|diamonds|rings|how|words|when)\b/.test(src)) fail(rel(f), "still writes an old single-page route (data-go or a #section link)"); else ok();
+  }
+}
+function resolvesPath(href) {
+  const p = href.split("#")[0].split("?")[0];
+  if (p === "/") return exists(path.join(PUB, "index.html"));
+  if (p.endsWith("/")) return exists(path.join(PUB, p, "index.html"));
+  if (/\.[a-z0-9]+$/i.test(p)) return exists(path.join(PUB, p));
+  return exists(path.join(PUB, p + ".html"));
 }
 
 /* ---------- design tokens: defined once, in styles.css ---------- */
@@ -123,13 +179,7 @@ function imageDims(p) {
 function siteFile(url) { return url.startsWith(SITE + "/") ? path.join(PUB, url.slice(SITE.length + 1)) : null; }
 /* Where a site-absolute path is served from. Folder indexes are served with the trailing
    slash (html_handling "auto-trailing-slash"), single files without their extension. */
-function resolves(href) {
-  const p = href.split("#")[0].split("?")[0];
-  if (p === "/") return exists(path.join(PUB, "index.html"));
-  if (p.endsWith("/")) return exists(path.join(PUB, p, "index.html"));
-  if (/\.[a-z0-9]+$/i.test(p)) return exists(path.join(PUB, p));
-  return exists(path.join(PUB, p + ".html"));
-}
+const resolves = resolvesPath;
 
 /* The blocks every page carries. A page is hand-written, so its copy of the header can drift
    from the others; this is compared across all of them with aria-current taken out. */
@@ -160,6 +210,8 @@ function checkWrapper(f, html, { canonical, noindex = false, story = false } = {
   /* the page-transition opt-in is inline in the head on purpose: see the note beside it */
   const style = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || "";
   if (!/@view-transition\{navigation:auto\}/.test(style) || !/@media \(prefers-reduced-motion:reduce\)\{@view-transition\{navigation:none\}\}/.test(style)) fail(f, "the <head> should declare @view-transition{navigation:auto} and its reduced-motion navigation:none inline"); else ok();
+  /* without script the menu button opens nothing, so the bar must show its links */
+  if (!/<noscript><style>[\s\S]*?\.navl\{display:flex!important\}[\s\S]*?<\/style><\/noscript>/.test(html)) fail(f, "the <head> should carry the <noscript> rule that shows the nav links when the menu button cannot work"); else ok();
   if ((html.match(/view-transition-name:\s*stone|class="[^"]*\bvt-stone\b|id="traveler"/g) || []).length > 1) fail(f, "more than one element holds view-transition-name: stone; only one per page may"); else ok();
   if (!/<h1\b[^>]*data-words/.test(html)) fail(f, "the page heading should be an <h1 data-words>"); else ok();
   if ((html.match(/<h1\b/g) || []).length !== 1) fail(f, `has ${(html.match(/<h1\b/g) || []).length} <h1> elements; a page has one`); else ok();
@@ -384,11 +436,14 @@ if (!/"html_handling":\s*"auto-trailing-slash"/.test(WR)) fail("wrangler.jsonc",
   if (!W.includes("const PLAN_RE = /^[A-Za-z0-9_-]{8,2000}$/;")) fail("src/index.js", "PLAN_RE changed; it is the only thing between a request and the content of an email"); else ok();
   if (!W.includes("`${SITE}/privacy/`")) fail("src/index.js", "PRIVACY_URL should be `${SITE}/privacy/`"); else ok();
 }
-/* gem.js is the reference's renderer, copied unchanged; when the reference is on disk, compare */
+/* gem.js is the design reference's renderer, copied in unchanged. The reference itself is not
+   in the repo, so the copy is pinned by its hash: a new drop from the designer means updating
+   this line on purpose, and an edit by hand means a failed check. */
 {
-  const refGem = path.join(ROOT, "design/dusk-gallery/reference/assets/gem.js"), gem = path.join(PUB, "assets/gem.js");
-  if (exists(refGem) && exists(gem)) { if (read(refGem) !== read(gem)) fail("public/assets/gem.js", "differs from design/dusk-gallery/reference/assets/gem.js; it is meant to be that file, unchanged"); else ok(); }
-  if (exists(gem) && /\bfetch\(|XMLHttpRequest|WebSocket|sendBeacon|importScripts/.test(read(gem))) fail("public/assets/gem.js", "the renderer must make no network requests"); else ok();
+  const GEM_SHA256 = "55f8146aaf41b52772ae6be22878b41078970d2657b68f0579a3a5eff6f021ff";
+  const gem = path.join(PUB, "assets/gem.js");
+  if (!exists(gem)) fail("public/assets/gem.js", "missing");
+  else if (crypto.createHash("sha256").update(fs.readFileSync(gem)).digest("hex") !== GEM_SHA256) fail("public/assets/gem.js", "has changed since it was copied from the design reference. If that is a new version from the designer, update GEM_SHA256 in the verifier; if it was edited here, put the change in app.js instead."); else ok();
 }
 
 console.log(`\n${1 + PAGE_DIRS.length} pages, ${storyFiles.length} stor${storyFiles.length === 1 ? "y" : "ies"}, ${checks} checks passed, ${fails} failed, ${warns} warning${warns === 1 ? "" : "s"}`);

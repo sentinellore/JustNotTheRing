@@ -166,7 +166,8 @@ it only works on justnotthering.com; everything else is unaffected.
 are woff2 files under `public/assets/fonts/`, with their Open Font License beside them, and
 the 3D stones are drawn in the browser by `gem.js`, which needs WebGL2 and falls back to a
 drawn gold-line stone without it. A page load makes no request to anyone but this site, the
-privacy page says so, and the verifier fails if a font service, CDN or analytics tag appears.
+privacy page says so, and the verifier fails on any outside host, request or storage key that
+is not on its short lists.
 
 **The trip planner's destination suggestions only work inside the Claude artifact viewer.**
 That feature calls `window.claude.use("sample")`, which exists only when the page is served by
@@ -194,7 +195,8 @@ calls an LLM API with your own key, and have `assets/trip.js` call that route in
   `composeResult()` assembles the recommendation; `planLink()` and `applyPlanHash()` write and
   read `#plan=` links. The home page's question-one tile hands the tapped option's index to
   the quiz page through `sessionStorage` (`jntr-q1`), read once and removed; nothing typed is
-  ever stored.
+  ever stored. The result itself lives in memory only, so links inside it open in a new tab
+  and the plan link is the way back to it.
 - **Trip** — `assets/trip.js`: link builders for the booking hand-offs; `buildNote()` holds the
   outreach templates.
 - **Locations, hire, when, budget** — `lens.js`, `hire.js`, `timeline.js`, `budget.js`, one

@@ -19,6 +19,9 @@ var said={}, saidStone="", saidText="", overrides={}, naturalPick={};
 /* "in-r" or "in-l" for the next render of the panel, so a question arrives from the side it
    was asked for. Styling only. */
 var slide="";
+/* The two boxes people describe their partner in carry spellcheck="false". Some browsers'
+   spellcheckers are a service: with theirs switched on, whatever is typed in a checked field
+   is sent to the browser's maker. The rule on this site is that this text goes nowhere. */
 function stageClass(stage, base){
   stage.className=base;
   if(slide){ void stage.offsetWidth; stage.classList.add(slide); slide=""; }
@@ -437,9 +440,12 @@ function composeResult(forced){
   if(!saidOn("noring")) moves.push("Insure the ring the day you collect it, before you start carrying it around waiting for the right moment.");
 
   /* --- the blocks -------------------------------------------------------- */
+  /* These links open in their own tab, like the privacy link in the email panel, because this
+     page is the only copy of the result: the answers live in memory, and a link that
+     navigated away would throw them out. */
   var cityBlock = cityAnswer
-    ? '<p class="small" style="margin-top:18px">The city lens in Locations will open on <b>'+esc(cityAnswer)+'</b>, tuned to '+esc(loc.lens==="unconv"?"unconventional":loc.lens)+' spots. <a class="textlink" href="'+esc(lensHref)+'">Go see the map searches →</a></p>'
-    : '';
+    ? '<p class="small" style="margin-top:18px">The city lens in Locations will open on <b>'+esc(cityAnswer)+'</b>, tuned to '+esc(loc.lens==="unconv"?"unconventional":loc.lens)+' spots. <a class="textlink" href="'+esc(lensHref)+'" target="_blank" rel="noopener">Go see the map searches →</a></p>'
+    : '<p class="small" style="margin-top:18px">The city lens in Locations will open tuned to '+esc(loc.lens==="unconv"?"unconventional":loc.lens)+' spots; type your city there. <a class="textlink" href="'+esc(lensHref)+'" target="_blank" rel="noopener">Go to the city lens →</a></p>';
 
   var owns=customAnswers();
   if(saidText) owns.push({q:"What they have said, in their words", a:saidText});
@@ -512,7 +518,7 @@ function composeResult(forced){
     ? '<div class="callout"><span class="eyebrow">Because this one is not a plain solitaire</span>'+
       '<p>Two things trip people up here. First, an unusual ring is harder to replace and harder to resize — a toi et moi, an east-west setting or an odd-shaped stone often cannot be sized more than half a step, so the measurement has to be right the first time. Second, unconventional does not mean unprotected: the hardness number decides how much setting the stone needs, and anything under Mohs 8 will show daily wear within a couple of years whatever it is set in.</p>'+
       '<p>And for the location — the rule is that it should be specific to the two of you, not merely odd. A record shop means something if that is where you spent every Saturday. It means nothing if you picked it because it photographs interestingly. '+
-      '<a class="textlink" href="'+esc(lensHref)+'">See the unconventional locations →</a></p></div>'
+      '<a class="textlink" href="/locations/#unconventional" target="_blank" rel="noopener">See the unconventional locations →</a></p></div>'
     : '';
 
   return '<div class="result-head">'+
@@ -545,7 +551,7 @@ function composeResult(forced){
       '<ul class="moves">'+moves.map(function(m,i){return '<li data-n="'+(i+1)+'">'+esc(m)+'</li>';}).join("")+'</ul>'+
       '<div class="share">'+
         '<span class="eyebrow">Keep this</span>'+
-        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation, including anything you changed — no account, and nothing to sign up for.</p>'+
+        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation, including anything you changed — no account, and nothing to sign up for. Nothing is saved for you here, so once you leave this page the link is the only reliable way back to this plan.</p>'+
         '<div class="share-row">'+
           '<input class="field" id="shareUrl" readonly value="'+esc(planLink(t))+'" aria-label="Link to this plan">'+
           '<button class="btn ghost" id="shareCopy" type="button">Copy link</button>'+
@@ -563,7 +569,7 @@ function composeResult(forced){
         '</div>'+
       '</div>'+
       '<div class="q-foot">'+
-        '<a class="btn primary" href="/diamonds/">Now learn the 4Cs</a>'+
+        '<a class="btn primary" href="/diamonds/" target="_blank" rel="noopener">Now learn the 4Cs</a>'+
         '<button class="linkbtn" id="restart" type="button">Start over</button>'+
       '</div>'+
       '<p class="tiny" style="margin-top:20px">A starting point, not an instruction. You know them; this is a structured second opinion, and the controls above are there because it will sometimes be wrong.</p>'+
@@ -725,7 +731,7 @@ function renderSaidStep(){
     '<div class="said-wrap">'+body+'</div>'+
     '<div class="own" style="margin-top:20px">'+
       '<label class="eyebrow" for="saidText">Anything else they have said, in their words</label>'+
-      '<textarea class="field" id="saidText" rows="2" placeholder="e.g. They keep saying they want their brother to be the first person who knows.">'+esc(saidText||"")+'</textarea>'+
+      '<textarea class="field" id="saidText" rows="2" spellcheck="false" autocomplete="off" placeholder="e.g. They keep saying they want their brother to be the first person who knows.">'+esc(saidText||"")+'</textarea>'+
       '<p class="fine">Quoted back to you at the top of the plan and nowhere else. Unlike the boxes above, this one deliberately does not travel in the shareable link — the same rule the rest of your own words follow.</p>'+
     '</div>'+
     '<div style="margin-top:24px"><label class="label" for="quizCity">Optional — where are you?</label>'+
@@ -807,7 +813,7 @@ function renderQ(){
     '</div>'+
     '<div class="own" id="ownWrap"'+(answers[qi]===oIdx?"":" hidden")+'>'+
       '<label class="eyebrow" for="ownText">In your own words</label>'+
-      '<textarea class="field" id="ownText" rows="3" placeholder="'+esc(q.ph)+'">'+esc(customs[qi])+'</textarea>'+
+      '<textarea class="field" id="ownText" rows="3" spellcheck="false" autocomplete="off" placeholder="'+esc(q.ph)+'">'+esc(customs[qi])+'</textarea>'+
       '<p class="fine">Read by keyword against only the things this question measures, and it reads “not” and “hate” as reversals. Whatever you write is quoted back in the result and goes nowhere else.</p>'+
     '</div>'+
     '<div class="q-foot">'+

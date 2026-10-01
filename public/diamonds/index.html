@@ -17,6 +17,10 @@
 @view-transition{navigation:auto}
 @media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}
 </style>
+<noscript><style>
+/* Without script the menu button cannot open anything, so the bar shows its links instead. */
+.navl{display:flex!important}.menu-btn{display:none!important}.bar{flex-wrap:wrap}
+</style></noscript>
 <link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
@@ -56,6 +60,7 @@
       </figure>
       <p class="specline"><span data-spec="shape"></span><span data-spec="carat"></span><span data-spec="mm"></span><span data-spec="color"></span><span data-spec="clarity"></span><span data-spec="cut"></span></p>
     </div>
+    <p class="tiny nogl" data-nogl hidden>This browser cannot draw the 3D stone, so the two pictures above are a fixed drawing and will not change. The grades, the verdicts and the spec line still do.</p>
     <div class="rail">
       <div class="ctl">
         <div class="tabs" role="tablist" aria-label="The four Cs" id="benchTabs"><button type="button" role="tab" class="tab" id="tab-cut" data-tab="cut" aria-selected="true" aria-controls="panel-cut">Cut</button><button type="button" role="tab" class="tab" id="tab-color" data-tab="color" aria-selected="false" aria-controls="panel-color" tabindex="-1">Color</button><button type="button" role="tab" class="tab" id="tab-clarity" data-tab="clarity" aria-selected="false" aria-controls="panel-clarity" tabindex="-1">Clarity</button><button type="button" role="tab" class="tab" id="tab-carat" data-tab="carat" aria-selected="false" aria-controls="panel-carat" tabindex="-1">Carat</button><button type="button" role="tab" class="tab" id="tab-shape" data-tab="shape" aria-selected="false" aria-controls="panel-shape" tabindex="-1">Shape</button></div>
