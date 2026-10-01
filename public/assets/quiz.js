@@ -3,7 +3,11 @@
    scoring is unchanged. Needs data.js before it. Everything here runs in the browser.
 
    QUIZ FREE-TEXT ANSWERS NEVER LEAVE THE BROWSER. They are scored here, quoted back in the
-   result, and held in memory only. Not in the link, not in storage, not in a request. */
+   result, and held in memory only. Not in the link, not in storage, not in a request.
+
+   What is stored, for this tab only: the plan a result came to -- the same scores, fixed ids
+   and city its link carries, never an answer and never a sentence -- so the result is still
+   here after a look at another page. See rememberPlan() near the end. */
 (function(){
 "use strict";
 var D=window.SITE;
@@ -200,10 +204,15 @@ function currentPlanCode(){
   return i<0 ? "" : v.slice(i+6);
 }
 function readPlanFromUrl(){
+  var h=location.hash||"";
+  if(h.indexOf("#plan=")!==0) return null;
+  return readPlanCode(h.slice(6));
+}
+/* One reader for a plan, wherever it came from: a link's fragment or this tab's memory. Both
+   are checked against the page's own lists the same way, so neither can say more than a link
+   can. */
+function readPlanCode(code){
   try{
-    var h=location.hash||"";
-    if(h.indexOf("#plan=")!==0) return null;
-    var code=h.slice(6);
     if(!code) return null;
     var obj=JSON.parse(b64d(code));
     if(!obj || typeof obj.t!=="object" || obj.t===null || Array.isArray(obj.t)) return null;
@@ -440,12 +449,12 @@ function composeResult(forced){
   if(!saidOn("noring")) moves.push("Insure the ring the day you collect it, before you start carrying it around waiting for the right moment.");
 
   /* --- the blocks -------------------------------------------------------- */
-  /* These links open in their own tab, like the privacy link in the email panel, because this
-     page is the only copy of the result: the answers live in memory, and a link that
-     navigated away would throw them out. */
+  /* Ordinary links. Following one leaves this page, and the tab brings the plan back when the
+     visitor returns to the quiz: see rememberPlan(). What does not come back is anything they
+     typed, which was never stored. */
   var cityBlock = cityAnswer
-    ? '<p class="small" style="margin-top:18px">The city lens in Locations will open on <b>'+esc(cityAnswer)+'</b>, tuned to '+esc(loc.lens==="unconv"?"unconventional":loc.lens)+' spots. <a class="textlink" href="'+esc(lensHref)+'" target="_blank" rel="noopener">Go see the map searches →</a></p>'
-    : '<p class="small" style="margin-top:18px">The city lens in Locations will open tuned to '+esc(loc.lens==="unconv"?"unconventional":loc.lens)+' spots; type your city there. <a class="textlink" href="'+esc(lensHref)+'" target="_blank" rel="noopener">Go to the city lens →</a></p>';
+    ? '<p class="small" style="margin-top:18px">The city lens in Locations will open on <b>'+esc(cityAnswer)+'</b>, tuned to '+esc(loc.lens==="unconv"?"unconventional":loc.lens)+' spots. <a class="textlink" href="'+esc(lensHref)+'">Go see the map searches →</a></p>'
+    : '<p class="small" style="margin-top:18px">The city lens in Locations will open tuned to '+esc(loc.lens==="unconv"?"unconventional":loc.lens)+' spots; type your city there. <a class="textlink" href="'+esc(lensHref)+'">Go to the city lens →</a></p>';
 
   var owns=customAnswers();
   if(saidText) owns.push({q:"What they have said, in their words", a:saidText});
@@ -518,7 +527,7 @@ function composeResult(forced){
     ? '<div class="callout"><span class="eyebrow">Because this one is not a plain solitaire</span>'+
       '<p>Two things trip people up here. First, an unusual ring is harder to replace and harder to resize — a toi et moi, an east-west setting or an odd-shaped stone often cannot be sized more than half a step, so the measurement has to be right the first time. Second, unconventional does not mean unprotected: the hardness number decides how much setting the stone needs, and anything under Mohs 8 will show daily wear within a couple of years whatever it is set in.</p>'+
       '<p>And for the location — the rule is that it should be specific to the two of you, not merely odd. A record shop means something if that is where you spent every Saturday. It means nothing if you picked it because it photographs interestingly. '+
-      '<a class="textlink" href="/locations/#unconventional" target="_blank" rel="noopener">See the unconventional locations →</a></p></div>'
+      '<a class="textlink" href="/locations/#unconventional">See the unconventional locations →</a></p></div>'
     : '';
 
   return '<div class="result-head">'+
@@ -551,7 +560,7 @@ function composeResult(forced){
       '<ul class="moves">'+moves.map(function(m,i){return '<li data-n="'+(i+1)+'">'+esc(m)+'</li>';}).join("")+'</ul>'+
       '<div class="share">'+
         '<span class="eyebrow">Keep this</span>'+
-        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation, including anything you changed — no account, and nothing to sign up for. Nothing is saved for you here, so once you leave this page the link is the only reliable way back to this plan.</p>'+
+        '<p class="small" style="margin-top:9px">Bookmark this link or send it to yourself. It reopens straight to this recommendation, including anything you changed — no account, and nothing to sign up for. This tab also remembers the plan until you close it or start over, so you can look round the site and come back to it; from anywhere else, the link is the way back.</p>'+
         '<div class="share-row">'+
           '<input class="field" id="shareUrl" readonly value="'+esc(planLink(t))+'" aria-label="Link to this plan">'+
           '<button class="btn ghost" id="shareCopy" type="button">Copy link</button>'+
@@ -569,7 +578,7 @@ function composeResult(forced){
         '</div>'+
       '</div>'+
       '<div class="q-foot">'+
-        '<a class="btn primary" href="/diamonds/" target="_blank" rel="noopener">Now learn the 4Cs</a>'+
+        '<a class="btn primary" href="/diamonds/">Now learn the 4Cs</a>'+
         '<button class="linkbtn" id="restart" type="button">Start over</button>'+
       '</div>'+
       '<p class="tiny" style="margin-top:20px">A starting point, not an instruction. You know them; this is a structured second opinion, and the controls above are there because it will sometimes be wrong.</p>'+
@@ -677,6 +686,7 @@ function wireResult(){
     /* The city is part of the previous person's answers too. Left behind, it
        pre-filled the next run and rode along in their link. */
     cityAnswer="";
+    forgetPlan();
     if(isPlanHash()) history.replaceState({}, "", location.pathname);
     slide="in-l";
     renderQ();
@@ -689,6 +699,7 @@ function rerenderResult(refocusId){
   stage.className="";
   stage.innerHTML=composeResult(restoredTally);
   wireResult();
+  rememberPlan();
   if(refocusId){
     var box=$("adjustBox");
     if(box && box.scrollIntoView) box.scrollIntoView({block:"center",behavior:"auto"});
@@ -793,6 +804,7 @@ function renderQ(){
     stageClass(stage,"");
     stage.innerHTML=composeResult(restoredTally);
     wireResult();
+    rememberPlan();
     return;
   }
   if(qi===Q.length){ renderSaidStep(); return; }
@@ -885,9 +897,45 @@ function takeHandoff(){
   answers[0]=+v;
   return true;
 }
+
+/* ---- The tab remembers its result ----
+   The quiz has its own page, so a result held only in memory was gone the moment someone
+   went to read about diamonds and came back. While a result is on screen, the plan it came
+   to is kept in sessionStorage: the same string the share link carries after #plan= --
+   scores, fixed ids, the city -- and never an answer or a word that was typed. It is this
+   tab's alone, the browser drops it when the tab is closed, and Start over removes it.
+
+   It is deliberately not written into the address bar. A #plan= there would sit in the
+   browser's history, and a history entry on a shared laptop is exactly how a surprise is
+   found. */
+var PLAN_KEY="jntr-plan";
+function forgetPlan(){ try{ sessionStorage.removeItem(PLAN_KEY); }catch(err){} }
+function rememberPlan(){
+  var code=currentPlanCode();
+  if(!/^[A-Za-z0-9_-]{8,2000}$/.test(code)){ forgetPlan(); return; }
+  try{ sessionStorage.setItem(PLAN_KEY, code); }catch(err){}
+}
+function restoreRemembered(){
+  var code=null;
+  try{ code=sessionStorage.getItem(PLAN_KEY); }catch(err){}
+  if(!code) return false;
+  var t=readPlanCode(code);
+  if(!t){ forgetPlan(); return false; }
+  restoredTally=t;
+  qi=Q.length+1;
+  renderQ();
+  return true;
+}
+
+/* What the page opens on, in order: a plan link, which wins and becomes what the tab
+   remembers; an answer handed over from the home page, which is somebody beginning again, so
+   the remembered plan goes; the remembered plan; and otherwise question one. A broken plan
+   link gets question one, not the remembered plan: the address asked for something else. */
 (function(){
   var handed=takeHandoff();
   if(applyPlanHash()) return;
+  if(handed) forgetPlan();
+  else if(!isPlanHash() && restoreRemembered()) return;
   renderQ();
   if(handed && answers[0]===Q[0].o.length){ var ta0=$("ownText"); if(ta0 && ta0.focus) ta0.focus({preventScroll:true}); }
 })();

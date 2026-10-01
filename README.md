@@ -151,6 +151,12 @@ assets, and everything else reaches the Worker. There is no build step.
 
 Pushes to `main` redeploy automatically. To deploy by hand: `npx wrangler deploy`.
 
+To test a branch on real devices without touching production, `preview/` holds a second,
+throwaway Worker: `npx wrangler deploy --config preview/wrangler.jsonc` puts the working tree
+at `justnotthering-preview.<account>.workers.dev`, with `X-Robots-Tag: noindex` on every
+response, its own empty rate limiter and no secrets (so the email route answers 503 and sends
+nothing). Remove it with `npx wrangler delete --config preview/wrangler.jsonc`.
+
 Everything in `public/` is served to the world; `node tools/check-stories.mjs` fails on any file
 there it does not expect. `html_handling` is `auto-trailing-slash`: a section is served at
 `/diamonds/` and `/diamonds` redirects to it, story URLs are extensionless (`/stories/<slug>`)
@@ -195,8 +201,10 @@ calls an LLM API with your own key, and have `assets/trip.js` call that route in
   `composeResult()` assembles the recommendation; `planLink()` and `applyPlanHash()` write and
   read `#plan=` links. The home page's question-one tile hands the tapped option's index to
   the quiz page through `sessionStorage` (`jntr-q1`), read once and removed; nothing typed is
-  ever stored. The result itself lives in memory only, so links inside it open in a new tab
-  and the plan link is the way back to it.
+  ever stored. While a result is on screen its plan (the share link's own payload: scores,
+  ids and city, never answers or text) is kept in `sessionStorage` (`jntr-plan`) for that tab,
+  so it is still there after a look at another page; "Start over" removes it. The plan is
+  never written into the address bar by the page.
 - **Trip** — `assets/trip.js`: link builders for the booking hand-offs; `buildNote()` holds the
   outreach templates.
 - **Locations, hire, when, budget** — `lens.js`, `hire.js`, `timeline.js`, `budget.js`, one

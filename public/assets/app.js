@@ -1,7 +1,8 @@
 /* Just Not The Ring — Dusk Gallery: motion and interactions shared by every page.
    Each block only runs when its markup is on the page. No network, no storage of anything typed.
-   The one thing stored is on the home page: the number of the option tapped on question one,
-   kept for this tab only so the quiz page can open with it selected (see "home quiz tile"). */
+   The one thing this file stores is on the home page: the number of the option tapped on
+   question one, kept for this tab only so the quiz page can open with it selected (see "home
+   quiz tile"). The quiz page keeps one more thing for the tab, the plan; that is in quiz.js. */
 (function () {
   "use strict";
   var D = window.SITE || {};
@@ -136,6 +137,10 @@
     if (!cinematic) { trav.hidden = true; return; }
     trav.hidden = false; H = docRect(hs); TW = Math.max(H.w, 1);
     trav.style.width = TW + "px"; trav.style.height = TW + "px";
+    // Place it now rather than on the next animation frame. Until it has a position the stone is
+    // a fixed square over the top-left of the window, taking the taps meant for whatever is under
+    // it, and a tab opened in the background gets no animation frame until it is looked at.
+    travTick();
   }
   function travTick() {
     if (!trav || trav.hidden || !H) return;

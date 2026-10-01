@@ -69,7 +69,7 @@ const ALL = walk(PUB);
 
 /* ---------- nothing is loaded from, sent to, or stored anywhere it should not be ---------- */
 /* The privacy page says loading a page asks no other company for anything, that two buttons
-   are the only things that send, and that one number is the only thing stored. Code can make
+   are the only things that send, and that two things are the only ones stored. Code can make
    any of those false in a dozen spellings, so rather than hunt for each spelling this counts
    what is allowed and fails on anything else. It is a tripwire, not a proof: it reads source
    text, and something assembled at run time from pieces would get past it. */
@@ -89,7 +89,8 @@ const ALL = walk(PUB);
   const STORES = /\b(?:localStorage|sessionStorage|indexedDB|document\.cookie|caches\.open|navigator\.serviceWorker)\b/g;
   /* What each script is known to do. Anything not listed is expected to do none of it. */
   const MAY = {
-    "assets/quiz.js": { fetch: ['fetch("/api/plan-email",{'], stores: ["sessionStorage", "sessionStorage"] },  // read jntr-q1, remove it
+    /* quiz.js: read jntr-q1, remove it; remove, set and read jntr-plan */
+    "assets/quiz.js": { fetch: ['fetch("/api/plan-email",{'], stores: ["sessionStorage", "sessionStorage", "sessionStorage", "sessionStorage", "sessionStorage"] },
     "assets/app.js": { stores: ["sessionStorage", "sessionStorage", "sessionStorage"] },                        // the handoff helper: get, remove, set
   };
   for (const f of ALL.filter((f) => /\.(html|css|js)$/.test(f))) {
@@ -107,18 +108,19 @@ const ALL = walk(PUB);
     const sends = scripts.match(SENDERS) || [];
     if (sends.length) fail(rel(f), `uses ${[...new Set(sends)].join(", ")}: a way of sending or loading that nothing here is meant to use`); else ok();
     const stores = scripts.match(STORES) || [];
-    if (JSON.stringify(stores) !== JSON.stringify(may.stores || [])) fail(rel(f), `touches storage ${stores.length} time(s) (${[...new Set(stores)].join(", ") || "none"}), expected ${(may.stores || []).length}. The one thing stored is the question-one option index, jntr-q1; anything more needs the privacy page changed first.`); else ok();
+    if (JSON.stringify(stores) !== JSON.stringify(may.stores || [])) fail(rel(f), `touches storage ${stores.length} time(s) (${[...new Set(stores)].join(", ") || "none"}), expected ${(may.stores || []).length}. Two things are stored, both in sessionStorage: the tab's plan (jntr-plan) and the question-one option index (jntr-q1). Anything more needs the privacy page changed first.`); else ok();
   }
   const QUIZ = exists(path.join(PUB, "assets/quiz.js")) ? read(path.join(PUB, "assets/quiz.js")) : "";
   if (!QUIZ.includes("body:JSON.stringify({ email:addr, plan:currentPlanCode(), optIn: !!(note && note.checked) })")) fail("public/assets/quiz.js", "the plan email's request body must be exactly { email, plan, optIn }: the privacy page lists those three and nothing else"); else ok();
   const keys = [...new Set(ALL.filter((f) => f.endsWith(".js")).flatMap((f) => [...read(f).matchAll(/["'](jntr-[a-z0-9-]+)["']/g)].map((m) => m[1])))];
-  if (JSON.stringify(keys) !== '["jntr-q1"]') fail("public/assets", `storage keys in use are ${JSON.stringify(keys)}; the only one is jntr-q1`); else ok();
+  if (JSON.stringify(keys.sort()) !== '["jntr-plan","jntr-q1"]') fail("public/assets", `storage keys in use are ${JSON.stringify(keys)}; the only two are jntr-plan and jntr-q1`); else ok();
+  /* what the tab remembers is the link's own payload, checked by the link's own reader, and it goes on Start over */
+  if (!/function rememberPlan\(\)\{\s*var code=currentPlanCode\(\);/.test(QUIZ)) fail("public/assets/quiz.js", "rememberPlan() must store currentPlanCode(), the string the share link carries, and nothing else"); else ok();
+  if (!/var t=readPlanCode\(code\);/.test(QUIZ)) fail("public/assets/quiz.js", "the remembered plan must be read back through readPlanCode(), the same checks a plan link gets"); else ok();
+  if (!/\$\("restart"\)\.addEventListener\("click",function\(\)\{[\s\S]{0,600}?forgetPlan\(\);/.test(QUIZ)) fail("public/assets/quiz.js", "Start over must call forgetPlan(): the privacy page says it deletes the stored plan"); else ok();
+  if (/history\.(?:push|replace)State\([^)]*#plan=|location\.hash\s*=/.test(QUIZ)) fail("public/assets/quiz.js", "the plan must not be written into the address bar: it would stay in the browser's history"); else ok();
   /* the two boxes a partner is described in must not be handed to a browser's spellcheck service */
   for (const id of ["ownText", "saidText"]) { if (!new RegExp(`id="${id}"[^>]*spellcheck="false"`).test(QUIZ)) fail("public/assets/quiz.js", `#${id} needs spellcheck="false": some browsers' spellcheckers send what is typed to their maker`); else ok(); }
-  /* the result lives in memory, so a link out of it must not take this tab away */
-  const inResult = [...QUIZ.matchAll(/<a\b[^>]*href="[^"]*"[^>]*>/g)].map((m) => m[0]);
-  const stay = inResult.filter((a) => !/target="_blank" rel="noopener"/.test(a));
-  if (!inResult.length || stay.length) fail("public/assets/quiz.js", `a link in the result navigates the tab away and throws the result out: ${(stay[0] || "none found").slice(0, 80)}. Give it target="_blank" rel="noopener".`); else ok();
 }
 
 /* ---------- links written by the scripts go somewhere too ---------- */

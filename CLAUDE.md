@@ -37,6 +37,8 @@ public/stories/og/<slug>.png  the 1200x630 preview card for a story with no phot
 tools/check-stories.mjs       the verifier; run before every commit that touches public/
 tools/og-card.mjs             makes an og/<slug>.png with headless Chrome
 tools/story-template.html     copy this to start a story
+preview/wrangler.jsonc        a throwaway Worker, justnotthering-preview on workers.dev, for testing a branch
+preview/worker.js             its entry: the production Worker plus X-Robots-Tag: noindex on every response
 ```
 
 Everything in `public/` is served to the world. The verifier fails on any file there that is
@@ -93,7 +95,7 @@ and script resolves (links written by the scripts included), that every design t
 defined, that the home page's question-one tile reads as `data.js` does, the sitemap, the
 Worker's plan link, and for stories the og tags, images and the two tags against the quiz's
 libraries. It also keeps three short lists and fails on anything outside them: the outside
-hosts the site may name, the one `fetch`, and the one storage key. Those are tripwires that
+hosts the site may name, the one `fetch`, and the two storage keys. Those are tripwires that
 read source text, not proofs; they catch the ordinary ways a tracker or a new request gets
 added, not a determined one. A failed line here is what a skipped manual step looks like.
 
@@ -103,6 +105,14 @@ Cloudflare Workers: static assets from `public/`, plus a `main` at `src/index.js
 routes, `POST /api/plan-email` and `/api/unsubscribe`. Any push to `main` redeploys automatically. Manual deploy:
 `npx wrangler deploy`. Secrets (`RESEND_API_KEY`) are set with `wrangler secret put` and never
 committed; the README lists the full environment.
+
+**To put a branch in front of real phones before it merges**, deploy the preview Worker, never
+production: `npx wrangler deploy --config preview/wrangler.jsonc`, and remove it afterwards
+with `npx wrangler delete --config preview/wrangler.jsonc`. It is a separate Worker with its
+own name and limiter and no secrets, so its email route answers 503 and it can send nothing;
+every response carries `X-Robots-Tag: noindex`. `wrangler versions upload` gives no preview
+URL here, because Cloudflare makes none for a Worker that implements a Durable Object.
+Deploying it creates something public in the owner's Cloudflare account: ask first.
 
 **The Cloudflare dashboard has two separate variable panels for this Worker: build-time and
 runtime.** Anything the code reads through `env` must be in the runtime one (Settings →
@@ -170,21 +180,29 @@ email, not in a log. Nothing that transmits or stores them is acceptable, for an
 no feature is worth an exception. The plan code carries scores and a city, never the text. If
 a change seems to need them server-side, stop and ask.
 
-**Not in storage either.** The one thing the site stores is on the way from the home page's
-question-one tile to the quiz page: the index of the option tapped (0 to 4), in
-`sessionStorage` under `jntr-q1`, removed as the quiz reads it. Never carry typed text between
-pages. Anything else that must cross pages goes in a URL fragment, the way the plan link and
-the result's link to Locations (`/locations/#lens=…&city=…`) do, because a fragment is never
-sent in a request. Never a query string.
+**Not in storage either.** Answers and typed text live in the page's memory and nowhere
+else. The site stores exactly two things, both in `sessionStorage`, so both are one tab's and
+go when it closes:
 
-**The quiz result lives in memory and nowhere else**, which is the price of the two rules
-above now that the quiz is its own page: leave the page by a link and the answers are gone
-(Back usually restores them, from the browser's own page cache). So every link inside the
-result opens in a new tab, the result says the plan link is the way back, and the two boxes
-people describe their partner in carry `spellcheck="false"`, because some browsers'
-spellcheckers send what is typed to their maker. Keeping the result across pages would mean
-storing the plan or writing it into the address bar; either is a privacy-page decision, so
-stop and ask rather than add it.
+- `jntr-plan` — the plan a result came to: the same string the share link carries after
+  `#plan=` (scores, closed-vocabulary ids, the city), never an answer and never free text.
+  Written whenever a result is shown or adjusted, read when `/quiz/` loads with no `#plan=`
+  fragment, removed by "Start over" and by starting again from the home page's tile. It is
+  read back through `readPlanCode()`, the same checks a link gets. Decided 1 October 2026,
+  so a result survives a look at another page.
+- `jntr-q1` — the index (0 to 4) of the option tapped on the home page's question-one tile,
+  removed as the quiz reads it.
+
+**Never write the plan into the address bar.** A `#plan=` put there by the page would sit in
+browser history, and history on a shared laptop is how a surprise gets found. A plan reaches
+the address only when a person opens a link. Never carry typed text between pages. Anything
+else that must cross pages goes in a URL fragment, the way the plan link and the result's
+link to Locations (`/locations/#lens=…&city=…`) do, because a fragment is never sent in a
+request. Never a query string. A third stored thing, or a longer-lived one (`localStorage`,
+a cookie), is a privacy-page decision: stop and ask.
+
+The two boxes people describe their partner in carry `spellcheck="false"`, because some
+browsers' spellcheckers send what is typed to their maker.
 
 The site has a privacy page at `/privacy/` — unnumbered, linked from the menu's foot, the
 footer and the email panel, and deliberately not one of the nine in the nav. **Any change to
